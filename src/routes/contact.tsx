@@ -1,0 +1,101 @@
+import { createFileRoute } from "@tanstack/react-router";
+import { SiteLayout } from "@/components/site/SiteLayout";
+import { Section } from "@/components/site/Section";
+import { Button } from "@/components/ui/button";
+import { Facebook, Instagram, Mail, Phone, MapPin } from "lucide-react";
+import { useState } from "react";
+
+export const Route = createFileRoute("/contact")({
+  head: () => ({ meta: [
+    { title: "Contact — Najeeb Digital Hub" },
+    { name: "description", content: "Reach NDH by WhatsApp, email or contact form. We respond within 24 hours." },
+    { property: "og:title", content: "Contact NDH" },
+    { property: "og:description", content: "Talk to a Project Manager today." },
+  ]}),
+  component: ContactPage,
+});
+
+const emails = ["support@ndh.com.ng","admin@ndh.com.ng","info@ndh.com.ng","hello@ndh.com.ng","academy@ndh.com.ng","talents@ndh.com.ng","billing@ndh.com.ng"];
+
+function ContactPage() {
+  const [sent, setSent] = useState(false);
+  return (
+    <SiteLayout>
+      <section className="bg-hero py-20 text-white">
+        <div className="mx-auto max-w-7xl px-6">
+          <div className="text-xs font-semibold uppercase tracking-widest text-white/70">Contact</div>
+          <h1 className="mt-3 max-w-3xl text-4xl font-extrabold sm:text-5xl">Let's build something great.</h1>
+          <p className="mt-4 max-w-2xl text-white/75">Tell us about your project — a Project Manager replies within 24 hours.</p>
+        </div>
+      </section>
+
+      <Section>
+        <div className="grid gap-10 lg:grid-cols-[1.2fr_1fr]">
+          <form onSubmit={(e) => { e.preventDefault(); setSent(true); }} className="rounded-2xl border border-border bg-card p-6 sm:p-8">
+            {sent ? (
+              <div className="text-center">
+                <div className="mx-auto grid h-14 w-14 place-items-center rounded-full bg-gradient-brand text-white">✓</div>
+                <h3 className="mt-4 text-xl font-bold">Message received.</h3>
+                <p className="mt-2 text-sm text-muted-foreground">A PM will reach out shortly.</p>
+              </div>
+            ) : (
+              <div className="grid gap-4">
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <Field label="Full name" name="name" required />
+                  <Field label="Email" name="email" type="email" required />
+                </div>
+                <Field label="Company (optional)" name="company" />
+                <div>
+                  <label className="text-sm font-medium">Service</label>
+                  <select className="mt-1 w-full rounded-lg border border-border bg-background px-3 py-2.5 text-sm">
+                    <option>Design</option><option>Development</option><option>Content</option>
+                    <option>Marketing</option><option>Media</option><option>AI & Tech</option><option>Other</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="text-sm font-medium">Project brief</label>
+                  <textarea rows={5} required className="mt-1 w-full rounded-lg border border-border bg-background px-3 py-2.5 text-sm" placeholder="Tell us about your goal, timeline and any references." />
+                </div>
+                <Button type="submit" variant="brand" size="lg">Send message</Button>
+              </div>
+            )}
+          </form>
+
+          <div className="space-y-6">
+            <div className="rounded-2xl border border-border bg-card p-6">
+              <h3 className="font-bold">Talk to us directly</h3>
+              <ul className="mt-4 space-y-3 text-sm">
+                <li className="flex items-center gap-3"><Phone className="h-4 w-4" /> +234 902 993 2794</li>
+                <li className="flex items-center gap-3"><MapPin className="h-4 w-4" /> Nigeria · Serving worldwide</li>
+              </ul>
+              <div className="mt-5 flex gap-3">
+                <a href="https://www.facebook.com/share/1Be6HN8zjS/" target="_blank" rel="noreferrer" aria-label="Facebook" className="grid h-10 w-10 place-items-center rounded-full border border-border hover:bg-gradient-brand hover:text-white"><Facebook className="h-4 w-4" /></a>
+                <a href="https://www.instagram.com/njb_digital_hub" target="_blank" rel="noreferrer" aria-label="Instagram" className="grid h-10 w-10 place-items-center rounded-full border border-border hover:bg-gradient-brand hover:text-white"><Instagram className="h-4 w-4" /></a>
+              </div>
+            </div>
+            <div className="rounded-2xl border border-border bg-card p-6">
+              <h3 className="font-bold">Email departments</h3>
+              <ul className="mt-4 grid grid-cols-1 gap-2 text-sm">
+                {emails.map((e) => (
+                  <li key={e}><a className="flex items-center gap-2 hover:text-foreground" href={`mailto:${e}`}><Mail className="h-3.5 w-3.5" /> {e}</a></li>
+                ))}
+              </ul>
+            </div>
+            <div className="overflow-hidden rounded-2xl border border-border">
+              <iframe title="Nigeria map" className="h-56 w-full" src="https://www.google.com/maps?q=Nigeria&output=embed" loading="lazy" />
+            </div>
+          </div>
+        </div>
+      </Section>
+    </SiteLayout>
+  );
+}
+
+function Field({ label, name, type = "text", required }: { label: string; name: string; type?: string; required?: boolean }) {
+  return (
+    <div>
+      <label className="text-sm font-medium" htmlFor={name}>{label}</label>
+      <input id={name} name={name} type={type} required={required} className="mt-1 w-full rounded-lg border border-border bg-background px-3 py-2.5 text-sm" />
+    </div>
+  );
+}
