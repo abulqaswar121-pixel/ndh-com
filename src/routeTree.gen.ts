@@ -34,6 +34,7 @@ import { Route as AboutRouteImport } from './routes/about'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
+import { Route as VerifyIdRouteImport } from './routes/verify.$id'
 import { Route as EmailUnsubscribeRouteImport } from './routes/email/unsubscribe'
 import { Route as AuthAcceptRouteImport } from './routes/auth.accept'
 import { Route as AdminStudentAffairsRouteImport } from './routes/admin.student-affairs'
@@ -184,6 +185,11 @@ const AdminIndexRoute = AdminIndexRouteImport.update({
   id: '/admin/',
   path: '/admin/',
   getParentRoute: () => rootRouteImport,
+} as any)
+const VerifyIdRoute = VerifyIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => VerifyRoute,
 } as any)
 const EmailUnsubscribeRoute = EmailUnsubscribeRouteImport.update({
   id: '/email/unsubscribe',
@@ -353,7 +359,7 @@ export interface FileRoutesByFullPath {
   '/talent-login': typeof TalentLoginRoute
   '/team': typeof TeamRoute
   '/terms': typeof TermsRoute
-  '/verify': typeof VerifyRoute
+  '/verify': typeof VerifyRouteWithChildren
   '/academy/certificate-programs': typeof AcademyCertificateProgramsRoute
   '/academy/diploma-programs': typeof AcademyDiplomaProgramsRoute
   '/academy/professional-programs': typeof AcademyProfessionalProgramsRoute
@@ -366,6 +372,7 @@ export interface FileRoutesByFullPath {
   '/admin/student-affairs': typeof AdminStudentAffairsRoute
   '/auth/accept': typeof AuthAcceptRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
+  '/verify/$id': typeof VerifyIdRoute
   '/admin/': typeof AdminIndexRoute
   '/dashboard/admin': typeof AuthenticatedDashboardAdminRoute
   '/dashboard/client': typeof AuthenticatedDashboardClientRoute
@@ -405,7 +412,7 @@ export interface FileRoutesByTo {
   '/talent-login': typeof TalentLoginRoute
   '/team': typeof TeamRoute
   '/terms': typeof TermsRoute
-  '/verify': typeof VerifyRoute
+  '/verify': typeof VerifyRouteWithChildren
   '/academy/certificate-programs': typeof AcademyCertificateProgramsRoute
   '/academy/diploma-programs': typeof AcademyDiplomaProgramsRoute
   '/academy/professional-programs': typeof AcademyProfessionalProgramsRoute
@@ -418,6 +425,7 @@ export interface FileRoutesByTo {
   '/admin/student-affairs': typeof AdminStudentAffairsRoute
   '/auth/accept': typeof AuthAcceptRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
+  '/verify/$id': typeof VerifyIdRoute
   '/admin': typeof AdminIndexRoute
   '/dashboard/admin': typeof AuthenticatedDashboardAdminRoute
   '/dashboard/client': typeof AuthenticatedDashboardClientRoute
@@ -459,7 +467,7 @@ export interface FileRoutesById {
   '/talent-login': typeof TalentLoginRoute
   '/team': typeof TeamRoute
   '/terms': typeof TermsRoute
-  '/verify': typeof VerifyRoute
+  '/verify': typeof VerifyRouteWithChildren
   '/academy/certificate-programs': typeof AcademyCertificateProgramsRoute
   '/academy/diploma-programs': typeof AcademyDiplomaProgramsRoute
   '/academy/professional-programs': typeof AcademyProfessionalProgramsRoute
@@ -472,6 +480,7 @@ export interface FileRoutesById {
   '/admin/student-affairs': typeof AdminStudentAffairsRoute
   '/auth/accept': typeof AuthAcceptRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
+  '/verify/$id': typeof VerifyIdRoute
   '/admin/': typeof AdminIndexRoute
   '/_authenticated/dashboard/admin': typeof AuthenticatedDashboardAdminRoute
   '/_authenticated/dashboard/client': typeof AuthenticatedDashboardClientRoute
@@ -526,6 +535,7 @@ export interface FileRouteTypes {
     | '/admin/student-affairs'
     | '/auth/accept'
     | '/email/unsubscribe'
+    | '/verify/$id'
     | '/admin/'
     | '/dashboard/admin'
     | '/dashboard/client'
@@ -578,6 +588,7 @@ export interface FileRouteTypes {
     | '/admin/student-affairs'
     | '/auth/accept'
     | '/email/unsubscribe'
+    | '/verify/$id'
     | '/admin'
     | '/dashboard/admin'
     | '/dashboard/client'
@@ -631,6 +642,7 @@ export interface FileRouteTypes {
     | '/admin/student-affairs'
     | '/auth/accept'
     | '/email/unsubscribe'
+    | '/verify/$id'
     | '/admin/'
     | '/_authenticated/dashboard/admin'
     | '/_authenticated/dashboard/client'
@@ -672,7 +684,7 @@ export interface RootRouteChildren {
   TalentLoginRoute: typeof TalentLoginRoute
   TeamRoute: typeof TeamRoute
   TermsRoute: typeof TermsRoute
-  VerifyRoute: typeof VerifyRoute
+  VerifyRoute: typeof VerifyRouteWithChildren
   AdminAcademyRoute: typeof AdminAcademyRoute
   AdminFinanceRoute: typeof AdminFinanceRoute
   AdminHodRoute: typeof AdminHodRoute
@@ -866,6 +878,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/admin/'
       preLoaderRoute: typeof AdminIndexRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/verify/$id': {
+      id: '/verify/$id'
+      path: '/$id'
+      fullPath: '/verify/$id'
+      preLoaderRoute: typeof VerifyIdRouteImport
+      parentRoute: typeof VerifyRoute
     }
     '/email/unsubscribe': {
       id: '/email/unsubscribe'
@@ -1094,6 +1113,17 @@ const AcademyRouteChildren: AcademyRouteChildren = {
 const AcademyRouteWithChildren =
   AcademyRoute._addFileChildren(AcademyRouteChildren)
 
+interface VerifyRouteChildren {
+  VerifyIdRoute: typeof VerifyIdRoute
+}
+
+const VerifyRouteChildren: VerifyRouteChildren = {
+  VerifyIdRoute: VerifyIdRoute,
+}
+
+const VerifyRouteWithChildren =
+  VerifyRoute._addFileChildren(VerifyRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
@@ -1118,7 +1148,7 @@ const rootRouteChildren: RootRouteChildren = {
   TalentLoginRoute: TalentLoginRoute,
   TeamRoute: TeamRoute,
   TermsRoute: TermsRoute,
-  VerifyRoute: VerifyRoute,
+  VerifyRoute: VerifyRouteWithChildren,
   AdminAcademyRoute: AdminAcademyRoute,
   AdminFinanceRoute: AdminFinanceRoute,
   AdminHodRoute: AdminHodRoute,
