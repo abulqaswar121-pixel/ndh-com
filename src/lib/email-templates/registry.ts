@@ -5,6 +5,7 @@ import { PmAssignedTemplate } from './PmAssignedTemplate'
 import { QuoteSentTemplate } from './QuoteSentTemplate'
 import { PaymentReceivedTemplate } from './PaymentReceivedTemplate'
 import { TaskDeliveredTemplate } from './TaskDeliveredTemplate'
+import { EnrollmentConfirmedTemplate } from './EnrollmentConfirmedTemplate'
 import { template as talentInvitation } from './TalentInvitationTemplate'
 import { template as talentTaskAssigned } from './TalentTaskAssignedTemplate'
 import { template as talentRevision } from './TalentRevisionTemplate'
@@ -90,6 +91,19 @@ export const TEMPLATES: Record<string, TemplateEntry> = {
       clientName: 'Aisha',
       taskTitle: 'New brand identity',
       pmName: 'Yusuf',
+    },
+  },
+  enrollment_confirmed: {
+    component: EnrollmentConfirmedTemplate,
+    subject: (d: Record<string, any>) => `You're enrolled — ${d.programName || 'NDH Academy'}`,
+    displayName: 'Enrolment Confirmed',
+    previewData: {
+      studentName: 'Aisha',
+      programName: 'Diploma in Digital Marketing',
+      programType: 'Diploma',
+      duration: '6 months',
+      amount: '₦120,000',
+      reference: 'NDH-ENR-1736000000-AB12CD',
     },
   },
   talent_invitation: talentInvitation,

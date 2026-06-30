@@ -28,9 +28,18 @@ function SignupPage() {
   const { user, role: currentRole } = useAuth();
   const navigate = useNavigate();
 
+  // Optional ?next=/safe/path to send the user somewhere specific after signup
+  // (e.g. /academy/apply/<slug>). Same-origin paths only.
+  const nextPath = (() => {
+    if (typeof window === "undefined") return null;
+    const raw = new URLSearchParams(window.location.search).get("next");
+    if (!raw) return null;
+    return raw.startsWith("/") ? raw : null;
+  })();
+
   useEffect(() => {
-    if (user && currentRole) navigate({ to: roleHome(currentRole) });
-  }, [user, currentRole, navigate]);
+    if (user && currentRole) navigate({ to: nextPath || roleHome(currentRole) });
+  }, [user, currentRole, navigate, nextPath]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

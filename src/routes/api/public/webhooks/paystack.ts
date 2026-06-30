@@ -52,13 +52,54 @@ export const Route = createFileRoute("/api/public/webhooks/paystack")({
             .from("payments")
             .update({ status: "paid" })
             .eq("transaction_ref", reference)
-            .select("task_id, client_id, amount, currency")
+            .select("task_id, enrollment_id, client_id, amount, currency")
             .maybeSingle();
           if (error) {
             console.error("paystack webhook update failed", error);
             return new Response("DB error", { status: 500 });
           }
-          // Move task forward
+
+          // ---------- Enrolment (academy) flow ----------
+          if (updated?.enrollment_id) {
+            const { data: enr } = await supabaseAdmin
+              .from("enrollments")
+              .update({ status: "active", payment_status: "paid", payment_id: undefined })
+              .eq("id", updated.enrollment_id)
+              .select("student_id, course_id")
+              .maybeSingle();
+            if (enr?.student_id) {
+              try {
+                const [{ data: student }, { data: course }] = await Promise.all([
+                  supabaseAdmin.from("profiles").select("email, full_name").eq("id", enr.student_id).maybeSingle(),
+                  enr.course_id
+                    ? supabaseAdmin
+                        .from("courses")
+                        .select("program_name, program_type, duration")
+                        .eq("id", enr.course_id)
+                        .maybeSingle()
+                    : Promise.resolve({ data: null }),
+                ]);
+                if (student?.email && course) {
+                  const { sendSystemEmail } = await import("@/lib/email/send-system.server");
+                  const amount = `${updated.currency || "NGN"} ${Number(updated.amount || 0).toLocaleString()}`;
+                  await sendSystemEmail(supabaseAdmin, "enrollment_confirmed", student.email, {
+                    studentName: student.full_name || undefined,
+                    programName: course.program_name,
+                    programType: course.program_type,
+                    duration: course.duration || undefined,
+                    amount,
+                    reference,
+                    dashboardUrl: "https://ndh.com.ng/dashboard/student",
+                  });
+                }
+              } catch (e) {
+                console.error("enrollment_confirmed email failed", e);
+              }
+            }
+            return new Response("ok");
+          }
+
+          // ---------- Bureau (task) flow ----------
           let taskTitle = "your task";
           if (updated?.task_id) {
             const { data: t } = await supabaseAdmin
