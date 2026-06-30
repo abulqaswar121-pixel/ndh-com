@@ -6,6 +6,7 @@ import { QuoteSentTemplate } from './QuoteSentTemplate'
 import { PaymentReceivedTemplate } from './PaymentReceivedTemplate'
 import { TaskDeliveredTemplate } from './TaskDeliveredTemplate'
 import { EnrollmentConfirmedTemplate } from './EnrollmentConfirmedTemplate'
+import { CertificateIssuedTemplate } from './CertificateIssuedTemplate'
 import { template as talentInvitation } from './TalentInvitationTemplate'
 import { template as talentTaskAssigned } from './TalentTaskAssignedTemplate'
 import { template as talentRevision } from './TalentRevisionTemplate'
@@ -104,6 +105,19 @@ export const TEMPLATES: Record<string, TemplateEntry> = {
       duration: '6 months',
       amount: '₦120,000',
       reference: 'NDH-ENR-1736000000-AB12CD',
+    },
+  },
+  certificate_issued: {
+    component: CertificateIssuedTemplate,
+    subject: (d: Record<string, any>) => `Your NDH certificate — ${d.programName || 'NDH Academy'}`,
+    displayName: 'Certificate Issued',
+    previewData: {
+      studentName: 'Aisha',
+      programName: 'Diploma in Digital Marketing',
+      certificateNumber: 'NDH-CERT-2026-000142',
+      grade: 'Distinction',
+      issueDate: 'June 30, 2026',
+      verifyUrl: 'https://ndh.com.ng/verify/NDH-CERT-2026-000142',
     },
   },
   talent_invitation: talentInvitation,
