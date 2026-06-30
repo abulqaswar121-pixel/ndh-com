@@ -43,6 +43,7 @@ import { Route as AdminOperationsRouteImport } from './routes/admin.operations'
 import { Route as AdminHodRouteImport } from './routes/admin.hod'
 import { Route as AdminFinanceRouteImport } from './routes/admin.finance'
 import { Route as AdminAcademyRouteImport } from './routes/admin.academy'
+import { Route as AcademyDiplomaProgramsRouteImport } from './routes/academy.diploma-programs'
 import { Route as AcademyCertificateProgramsRouteImport } from './routes/academy.certificate-programs'
 import { Route as LovableEmailSuppressionRouteImport } from './routes/lovable/email/suppression'
 import { Route as AuthenticatedDashboardTalentRouteImport } from './routes/_authenticated/dashboard/talent'
@@ -227,6 +228,11 @@ const AdminAcademyRoute = AdminAcademyRouteImport.update({
   path: '/admin/academy',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AcademyDiplomaProgramsRoute = AcademyDiplomaProgramsRouteImport.update({
+  id: '/diploma-programs',
+  path: '/diploma-programs',
+  getParentRoute: () => AcademyRoute,
+} as any)
 const AcademyCertificateProgramsRoute =
   AcademyCertificateProgramsRouteImport.update({
     id: '/certificate-programs',
@@ -336,6 +342,7 @@ export interface FileRoutesByFullPath {
   '/terms': typeof TermsRoute
   '/verify': typeof VerifyRoute
   '/academy/certificate-programs': typeof AcademyCertificateProgramsRoute
+  '/academy/diploma-programs': typeof AcademyDiplomaProgramsRoute
   '/admin/academy': typeof AdminAcademyRoute
   '/admin/finance': typeof AdminFinanceRoute
   '/admin/hod': typeof AdminHodRoute
@@ -385,6 +392,7 @@ export interface FileRoutesByTo {
   '/terms': typeof TermsRoute
   '/verify': typeof VerifyRoute
   '/academy/certificate-programs': typeof AcademyCertificateProgramsRoute
+  '/academy/diploma-programs': typeof AcademyDiplomaProgramsRoute
   '/admin/academy': typeof AdminAcademyRoute
   '/admin/finance': typeof AdminFinanceRoute
   '/admin/hod': typeof AdminHodRoute
@@ -436,6 +444,7 @@ export interface FileRoutesById {
   '/terms': typeof TermsRoute
   '/verify': typeof VerifyRoute
   '/academy/certificate-programs': typeof AcademyCertificateProgramsRoute
+  '/academy/diploma-programs': typeof AcademyDiplomaProgramsRoute
   '/admin/academy': typeof AdminAcademyRoute
   '/admin/finance': typeof AdminFinanceRoute
   '/admin/hod': typeof AdminHodRoute
@@ -487,6 +496,7 @@ export interface FileRouteTypes {
     | '/terms'
     | '/verify'
     | '/academy/certificate-programs'
+    | '/academy/diploma-programs'
     | '/admin/academy'
     | '/admin/finance'
     | '/admin/hod'
@@ -536,6 +546,7 @@ export interface FileRouteTypes {
     | '/terms'
     | '/verify'
     | '/academy/certificate-programs'
+    | '/academy/diploma-programs'
     | '/admin/academy'
     | '/admin/finance'
     | '/admin/hod'
@@ -586,6 +597,7 @@ export interface FileRouteTypes {
     | '/terms'
     | '/verify'
     | '/academy/certificate-programs'
+    | '/academy/diploma-programs'
     | '/admin/academy'
     | '/admin/finance'
     | '/admin/hod'
@@ -893,6 +905,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminAcademyRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/academy/diploma-programs': {
+      id: '/academy/diploma-programs'
+      path: '/diploma-programs'
+      fullPath: '/academy/diploma-programs'
+      preLoaderRoute: typeof AcademyDiplomaProgramsRouteImport
+      parentRoute: typeof AcademyRoute
+    }
     '/academy/certificate-programs': {
       id: '/academy/certificate-programs'
       path: '/certificate-programs'
@@ -1021,10 +1040,12 @@ const AuthenticatedRouteRouteWithChildren =
 
 interface AcademyRouteChildren {
   AcademyCertificateProgramsRoute: typeof AcademyCertificateProgramsRoute
+  AcademyDiplomaProgramsRoute: typeof AcademyDiplomaProgramsRoute
 }
 
 const AcademyRouteChildren: AcademyRouteChildren = {
   AcademyCertificateProgramsRoute: AcademyCertificateProgramsRoute,
+  AcademyDiplomaProgramsRoute: AcademyDiplomaProgramsRoute,
 }
 
 const AcademyRouteWithChildren =
