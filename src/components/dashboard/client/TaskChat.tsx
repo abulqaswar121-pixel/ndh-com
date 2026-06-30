@@ -102,6 +102,7 @@ export function TaskChat({ taskId, pmId }: { taskId: string; pmId: string | null
   const send = async () => {
     if (!user) return;
     if (!text.trim() && files.length === 0) return;
+    if (!pmId) { toast.error("Chat unavailable until a PM is assigned."); return; }
     setSending(true);
     try {
       const uploaded: { name: string; path: string }[] = [];
@@ -113,7 +114,7 @@ export function TaskChat({ taskId, pmId }: { taskId: string; pmId: string | null
       const { error } = await supabase.from("messages").insert({
         task_id: taskId,
         sender_id: user.id,
-        receiver_id: pmId,
+        receiver_id: pmId as string,
         content: text.trim() || "(attachment)",
         attachments: uploaded.length ? uploaded : null,
       });
