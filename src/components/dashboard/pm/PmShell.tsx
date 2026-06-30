@@ -8,6 +8,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import { useRouterState } from "@tanstack/react-router";
 import { InviteTalentDialog } from "@/components/dashboard/InviteTalentDialog";
+import { InvitePmDialog } from "@/components/dashboard/InvitePmDialog";
 import { PmTaskDialog } from "./PmTaskDialog";
 
 const NAV: NavItem[] = [
@@ -25,6 +26,7 @@ const NAV: NavItem[] = [
 ];
 
 export function PmShell({ title = "PM Portal" }: { title?: string }) {
+  const isAdminView = title.toLowerCase().includes("admin");
   const search = useRouterState({ select: (r) => r.location.search as { tab?: string } });
   const tab = search.tab ?? "overview";
   const { user } = useAuth();
@@ -48,7 +50,10 @@ export function PmShell({ title = "PM Portal" }: { title?: string }) {
 
   return (
     <DashboardShell title={title} items={NAV}>
-      <DeptBadge dept={dept} />
+      <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+        <DeptBadge dept={dept} />
+        {isAdminView && <InvitePmDialog />}
+      </div>
       {tab === "overview"   && <Overview deptId={dept?.id} onOpen={open} key={`o-${refreshTick}`} />}
       {tab === "incoming"   && <TaskList deptId={dept?.id} statuses={["pending"]} title="Incoming tasks" onOpen={open} key={`i-${refreshTick}`} />}
       {tab === "active"     && <TaskList deptId={dept?.id} statuses={["quoted","in_progress","revision_required"]} title="Active tasks" onOpen={open} key={`a-${refreshTick}`} />}
