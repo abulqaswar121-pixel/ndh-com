@@ -30,6 +30,7 @@ import { Route as CareersRouteImport } from './routes/careers'
 import { Route as BlogRouteImport } from './routes/blog'
 import { Route as AcademyRouteImport } from './routes/academy'
 import { Route as AboutRouteImport } from './routes/about'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as AdminStudentAffairsRouteImport } from './routes/admin.student-affairs'
@@ -39,6 +40,7 @@ import { Route as AdminOperationsRouteImport } from './routes/admin.operations'
 import { Route as AdminHodRouteImport } from './routes/admin.hod'
 import { Route as AdminFinanceRouteImport } from './routes/admin.finance'
 import { Route as AdminAcademyRouteImport } from './routes/admin.academy'
+import { Route as AuthenticatedDashboardClientRouteImport } from './routes/_authenticated/dashboard.client'
 
 const VerifyRoute = VerifyRouteImport.update({
   id: '/verify',
@@ -145,6 +147,10 @@ const AboutRoute = AboutRouteImport.update({
   path: '/about',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -190,6 +196,12 @@ const AdminAcademyRoute = AdminAcademyRouteImport.update({
   path: '/admin/academy',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedDashboardClientRoute =
+  AuthenticatedDashboardClientRouteImport.update({
+    id: '/dashboard/client',
+    path: '/dashboard/client',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -222,6 +234,7 @@ export interface FileRoutesByFullPath {
   '/admin/registrar': typeof AdminRegistrarRoute
   '/admin/student-affairs': typeof AdminStudentAffairsRoute
   '/admin/': typeof AdminIndexRoute
+  '/dashboard/client': typeof AuthenticatedDashboardClientRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -254,10 +267,12 @@ export interface FileRoutesByTo {
   '/admin/registrar': typeof AdminRegistrarRoute
   '/admin/student-affairs': typeof AdminStudentAffairsRoute
   '/admin': typeof AdminIndexRoute
+  '/dashboard/client': typeof AuthenticatedDashboardClientRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/about': typeof AboutRoute
   '/academy': typeof AcademyRoute
   '/blog': typeof BlogRoute
@@ -287,6 +302,7 @@ export interface FileRoutesById {
   '/admin/registrar': typeof AdminRegistrarRoute
   '/admin/student-affairs': typeof AdminStudentAffairsRoute
   '/admin/': typeof AdminIndexRoute
+  '/_authenticated/dashboard/client': typeof AuthenticatedDashboardClientRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -321,6 +337,7 @@ export interface FileRouteTypes {
     | '/admin/registrar'
     | '/admin/student-affairs'
     | '/admin/'
+    | '/dashboard/client'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -353,9 +370,11 @@ export interface FileRouteTypes {
     | '/admin/registrar'
     | '/admin/student-affairs'
     | '/admin'
+    | '/dashboard/client'
   id:
     | '__root__'
     | '/'
+    | '/_authenticated'
     | '/about'
     | '/academy'
     | '/blog'
@@ -385,10 +404,12 @@ export interface FileRouteTypes {
     | '/admin/registrar'
     | '/admin/student-affairs'
     | '/admin/'
+    | '/_authenticated/dashboard/client'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AboutRoute: typeof AboutRoute
   AcademyRoute: typeof AcademyRoute
   BlogRoute: typeof BlogRoute
@@ -569,6 +590,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AboutRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -632,11 +660,30 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminAcademyRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/dashboard/client': {
+      id: '/_authenticated/dashboard/client'
+      path: '/dashboard/client'
+      fullPath: '/dashboard/client'
+      preLoaderRoute: typeof AuthenticatedDashboardClientRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
+interface AuthenticatedRouteRouteChildren {
+  AuthenticatedDashboardClientRoute: typeof AuthenticatedDashboardClientRoute
+}
+
+const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedDashboardClientRoute: AuthenticatedDashboardClientRoute,
+}
+
+const AuthenticatedRouteRouteWithChildren =
+  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AboutRoute: AboutRoute,
   AcademyRoute: AcademyRoute,
   BlogRoute: BlogRoute,
