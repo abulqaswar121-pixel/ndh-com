@@ -1,9 +1,14 @@
 import { useEffect, useState } from "react";
-import { Link } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
+import { useServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Award, Loader2 } from "lucide-react";
+import { issueCertificate } from "@/lib/academy/certificate.functions";
+import { toast } from "sonner";
 
 type Enrollment = {
   id: string;
@@ -18,6 +23,10 @@ export function MyCourses() {
   const { user } = useAuth();
   const [enrolls, setEnrolls] = useState<Enrollment[]>([]);
   const [loading, setLoading] = useState(true);
+  const [claiming, setClaiming] = useState<string | null>(null);
+  const [certByCourse, setCertByCourse] = useState<Record<string, string>>({});
+  const issueFn = useServerFn(issueCertificate);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (!user) return;
@@ -31,6 +40,29 @@ export function MyCourses() {
         setLoading(false);
       });
   }, [user]);
+
+  useEffect(() => {
+    if (!user) return;
+    supabase.from("certificates").select("course_id, certificate_number").eq("student_id", user.id)
+      .then(({ data }) => {
+        const map: Record<string, string> = {};
+        for (const r of data || []) if (r.course_id) map[r.course_id] = r.certificate_number;
+        setCertByCourse(map);
+      });
+  }, [user, claiming]);
+
+  async function claim(enrollmentId: string) {
+    setClaiming(enrollmentId);
+    try {
+      await issueFn({ data: { enrollmentId } });
+      toast.success("Certificate issued! Check your Certificates tab.");
+      navigate({ to: "/dashboard/student", search: { tab: "certificates" } });
+    } catch (err: any) {
+      toast.error(err?.message || "Could not issue certificate");
+    } finally {
+      setClaiming(null);
+    }
+  }
 
   if (loading) return <div className="text-sm text-muted-foreground">Loading your courses…</div>;
 
@@ -69,6 +101,19 @@ export function MyCourses() {
                       <span>Payment: {e.payment_status || "pending"}</span>
                     )}
                   </div>
+                  {e.status === "active" && (e.progress ?? 0) >= 100 && (
+                    <div className="mt-3">
+                      {certByCourse[e.course.id] ? (
+                        <Link to="/dashboard/student" search={{ tab: "certificates" }} className="inline-flex items-center gap-1 text-xs font-semibold text-primary hover:underline">
+                          <Award className="h-3.5 w-3.5" /> View certificate {certByCourse[e.course.id]}
+                        </Link>
+                      ) : (
+                        <Button size="sm" variant="brand" onClick={() => claim(e.id)} disabled={claiming === e.id}>
+                          {claiming === e.id ? <><Loader2 className="mr-2 h-3.5 w-3.5 animate-spin" /> Issuing…</> : <><Award className="mr-2 h-3.5 w-3.5" /> Claim certificate</>}
+                        </Button>
+                      )}
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
