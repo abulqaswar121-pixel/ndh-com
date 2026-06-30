@@ -119,7 +119,6 @@ function TeamPage() {
           </div>
           <div className="flex flex-wrap gap-3 md:justify-end">
             <Link to="/careers"><Button variant="brand" size="lg">See open roles</Button></Link>
-            <Link to="/talent-application"><Button variant="hero" size="lg">Apply to Talent Pool</Button></Link>
           </div>
         </div>
       </section>

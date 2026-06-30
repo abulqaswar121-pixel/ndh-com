@@ -46,9 +46,6 @@ function LoginPage() {
         <p className="text-center text-sm text-muted-foreground">
           Don't have an account? <Link to="/signup" className="font-semibold text-foreground">Create one</Link>
         </p>
-        <p className="rounded-lg border border-dashed border-border bg-secondary/40 p-3 text-xs text-muted-foreground">
-          <strong>Talents, Instructors and Admins</strong> receive their portal access via email — there is no public sign-up for those roles.
-        </p>
       </form>
     </AuthShell>
   );

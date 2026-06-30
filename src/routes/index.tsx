@@ -2,8 +2,9 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   ArrowRight, Sparkles, Palette, Code2, PenTool, Megaphone, Clapperboard, Brain,
   ShieldCheck, Clock, Globe2, Award, Quote, CheckCircle2,
-  Send,
+  Send, ChevronDown, Heart, Target, Rocket,
 } from "lucide-react";
+import { useEffect, useState } from "react";
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { Section } from "@/components/site/Section";
 import { Counter } from "@/components/site/Counter";
@@ -36,7 +37,7 @@ const services = [
 ];
 
 const steps = [
-  { n: "01", title: "Submit a Task", desc: "Tell us your goal, tier and timeline. No price guesswork." },
+  { n: "01", title: "Sign Up & Brief", desc: "Create your account and tell us your goal, tier and timeline." },
   { n: "02", title: "We Match & Build", desc: "A dedicated Project Manager assigns vetted in-house talents and oversees quality." },
   { n: "03", title: "Review & Deliver", desc: "We QA, refine and hand over polished work — directly to you." },
 ];
@@ -53,22 +54,52 @@ const testimonials = [
   { name: "James Rowe", role: "Operations, London", quote: "The PM model is gold — one contact, world-class delivery.", q: "british businessman portrait" },
   { name: "Tunde Adeyemi", role: "CEO, Abuja", quote: "From brand to web to ads, every piece felt premium.", q: "african businessman portrait suit" },
   { name: "Maryam Ibrahim", role: "Brand Manager, Dubai", quote: "World-class output with zero project management overhead.", q: "muslim woman professional office" },
+  { name: "Chinedu Okafor", role: "Founder, Enugu", quote: "Their PMs treated my product like their own. Shipped fast.", q: "nigerian man portrait business" },
+  { name: "Sarah Mitchell", role: "Marketing, Toronto", quote: "Best agency-feel I've had at startup pricing. Hire them.", q: "canadian woman professional smiling" },
 ];
 
-// A reliable Mixkit MP4 used as the looping hero bg video.
+const team = [
+  { name: "Najeeb Aliyu", role: "Founder & CEO", q: "nigerian muslim man entrepreneur portrait" },
+  { name: "Fatima Bello", role: "Head of Academy", q: "nigerian hijabi woman professional portrait" },
+  { name: "Emmanuel Adeyemi", role: "Head of Design", q: "nigerian christian man designer portrait" },
+  { name: "Halima Suleiman", role: "Head of Tech", q: "northern nigerian woman engineer portrait" },
+  { name: "Chinwe Okeke", role: "Head of Marketing", q: "southern nigerian woman marketing portrait" },
+  { name: "Yusuf Abdullahi", role: "Head of Operations", q: "nigerian muslim professional man portrait" },
+];
+
+const programs = [
+  { tier: "Certificate", duration: "4–8 weeks", q: "online certificate program student", desc: "Short, focused skill-ups in design, code, content, marketing and media." },
+  { tier: "Diploma", duration: "3–6 months", q: "diploma graduation online learning", desc: "Career-ready diplomas with mentorship, projects and capstone." },
+  { tier: "Professional", duration: "6–12 months", q: "professional training program african", desc: "Elite, cohort-based training. Top grads earn a seat in the NDH talent pool." },
+];
+
+const portfolio = [
+  { tag: "Web", title: "Fintech onboarding flow", q: "fintech mobile app ui design" },
+  { tag: "Brand", title: "Ramadan rebrand for retail", q: "luxury brand identity packaging" },
+  { tag: "Marketing", title: "Diaspora launch campaign", q: "social media campaign creative" },
+  { tag: "Product", title: "EdTech course platform", q: "edtech web app dashboard" },
+  { tag: "Media", title: "Founder podcast series", q: "podcast studio recording african" },
+  { tag: "AI", title: "Customer-support assistant", q: "ai chatbot dashboard interface" },
+];
+
+const faqs = [
+  { q: "How fast can NDH start on my project?", a: "Most projects kick off within 48 hours of sign-up. A PM scopes your brief for free and lines up the right talent." },
+  { q: "Do you work with international clients?", a: "Yes — we serve clients in Nigeria, the UK, US, Canada, Europe and the UAE. Pay in your local currency." },
+  { q: "How is NDH different from Fiverr or Upwork?", a: "We're a managed bureau, not a marketplace. You get one PM and an in-house team — no freelancer roulette." },
+  { q: "What does NDH Academy cost?", a: "Pricing varies by program and country. Certificates start small; diplomas and professional tracks include mentorship and projects." },
+  { q: "Can I hire NDH for a one-off task?", a: "Absolutely. Sign up, brief us, and we'll deliver. Retainers are also available." },
+  { q: "Is my work confidential?", a: "Always. We sign NDAs on request and our talents only see the project, not your personal contact." },
+];
+
 const HERO_VIDEO = "https://assets.mixkit.co/videos/4828/4828-720.mp4";
 
 function Index() {
   return (
     <SiteLayout>
-      {/* HERO with video bg */}
-      <VideoHero
-        videoSrc={HERO_VIDEO}
-        posterQuery="african team office collaboration digital"
-        posterAlt="NDH team collaborating"
-      >
+      {/* HERO */}
+      <VideoHero videoSrc={HERO_VIDEO} posterQuery="african team office collaboration digital" posterAlt="NDH team collaborating">
         <AnimatedBlobs />
-        <div className="relative mx-auto max-w-7xl px-6 py-24 sm:py-32 lg:py-40">
+        <div className="relative mx-auto flex min-h-[88vh] max-w-7xl flex-col justify-center px-6 py-24 sm:py-32">
           <Reveal>
             <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1 text-xs font-semibold uppercase tracking-widest text-white/85 backdrop-blur">
               <Sparkles className="h-3.5 w-3.5" /> Digital Bureau · Academy · Talent
@@ -78,10 +109,7 @@ function Index() {
             <h1 className="mt-5 max-w-4xl text-4xl font-extrabold leading-[1.04] tracking-tight text-white sm:text-6xl lg:text-7xl">
               Where <span className="text-gradient-brand">Digital Excellence</span> Meets{" "}
               <span className="block">
-                <TypingHeadline
-                  phrases={["Opportunity.", "Global Brands.", "African Talent.", "Real Results."]}
-                  className="text-gradient-brand"
-                />
+                <TypingHeadline phrases={["Opportunity.", "Global Brands.", "African Talent.", "Real Results."]} className="text-gradient-brand" />
               </span>
             </h1>
           </Reveal>
@@ -92,8 +120,7 @@ function Index() {
           </Reveal>
           <Reveal delay={0.3}>
             <div className="mt-8 flex flex-wrap gap-3">
-              <Link to="/submit-task"><Button variant="brand" size="xl">Submit a Task <ArrowRight className="h-4 w-4" /></Button></Link>
-              <Link to="/talent-application"><Button variant="hero" size="xl">Apply to Join Talent Pool</Button></Link>
+              <Link to="/signup"><Button variant="brand" size="xl">Sign Up <ArrowRight className="h-4 w-4" /></Button></Link>
               <Link to="/academy"><Button variant="hero" size="xl">Enroll in Academy</Button></Link>
             </div>
           </Reveal>
@@ -104,6 +131,7 @@ function Index() {
               <span className="flex items-center gap-2"><CheckCircle2 className="h-3.5 w-3.5 text-[oklch(0.78_0.13_180)]" /> 18+ countries served</span>
             </div>
           </Reveal>
+          <div className="mt-12 flex justify-center text-white/50"><ChevronDown className="h-6 w-6 animate-bounce" /></div>
         </div>
 
         {/* Stats */}
@@ -129,17 +157,14 @@ function Index() {
         <Stagger className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {services.map((s) => (
             <StaggerItem key={s.title}>
-              <Link
-                to="/services"
-                className="group relative block h-full overflow-hidden rounded-2xl border border-border bg-card p-6 transition-all duration-300 hover:-translate-y-2 hover:rotate-[-0.4deg] hover:shadow-glow"
-              >
+              <Link to="/services" className="group relative block h-full overflow-hidden rounded-2xl border border-border bg-card p-6 transition-all duration-300 hover:-translate-y-2 hover:rotate-[-0.4deg] hover:shadow-glow">
                 <div className="mb-5 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-brand text-white shadow-glow transition-transform duration-300 group-hover:scale-110">
                   <s.icon className="h-5 w-5" />
                 </div>
                 <h3 className="text-lg font-bold">{s.title}</h3>
                 <p className="mt-2 text-sm text-muted-foreground">{s.desc}</p>
                 <div className="mt-5 inline-flex items-center gap-1 text-sm font-semibold text-foreground/80 group-hover:text-foreground">
-                  Request a quote <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                  Learn more <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                 </div>
                 <div className="pointer-events-none absolute -right-12 -top-12 h-32 w-32 rounded-full bg-gradient-brand opacity-0 blur-2xl transition-opacity group-hover:opacity-30" />
               </Link>
@@ -190,70 +215,186 @@ function Index() {
         </div>
       </Section>
 
-      {/* ACADEMY PROMO */}
-      <section className="relative mx-6 my-10 overflow-hidden rounded-3xl border border-border">
-        <UnsplashImg q="african students laptop graduation" alt="NDH Academy students" w={1600} h={900} className="absolute inset-0 h-full w-full object-cover" />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#0A0E2A]/95 via-[#0A0E2A]/80 to-transparent" />
-        <div className="relative mx-auto grid max-w-7xl gap-8 px-6 py-16 text-white md:grid-cols-2 md:py-24">
-          <div>
-            <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3 py-1 text-xs font-semibold uppercase tracking-widest">
-              <Sparkles className="h-3.5 w-3.5" /> NDH Academy
+      {/* ABOUT */}
+      <Section eyebrow="About NDH" title="Born in Sokoto. Built for the world.">
+        <div className="grid gap-10 lg:grid-cols-2">
+          <Reveal>
+            <div className="space-y-5 text-muted-foreground">
+              <p className="text-lg leading-relaxed text-foreground/90">
+                Najeeb Digital Hub started as a small studio in Sokoto with one belief: African talent deserves a stage as global as its ambition.
+              </p>
+              <p>Today, NDH is a full digital services bureau and an academy — delivering premium work for clients across Nigeria and the diaspora while training the next generation of creators, coders and marketers.</p>
+              <div className="grid gap-4 sm:grid-cols-2">
+                <div className="rounded-xl border border-border bg-card p-5">
+                  <Target className="h-5 w-5 text-[oklch(0.65_0.19_252)]" />
+                  <div className="mt-3 font-bold">Our Mission</div>
+                  <p className="mt-1 text-sm text-muted-foreground">Make world-class digital work accessible — and turn talent into livelihood.</p>
+                </div>
+                <div className="rounded-xl border border-border bg-card p-5">
+                  <Rocket className="h-5 w-5 text-[oklch(0.62_0.21_290)]" />
+                  <div className="mt-3 font-bold">Our Vision</div>
+                  <p className="mt-1 text-sm text-muted-foreground">Africa's most trusted digital bureau, exporting craft to every continent.</p>
+                </div>
+              </div>
+              <Link to="/about" className="inline-flex items-center gap-1 text-sm font-semibold text-foreground hover:underline">
+                Read full story <ArrowRight className="h-4 w-4" />
+              </Link>
             </div>
-            <h2 className="mt-4 text-3xl font-extrabold sm:text-4xl">Learn. Get certified. Get hired by NDH.</h2>
-            <p className="mt-4 max-w-lg text-white/75">
-              Real curricula across Design, Tech, Content, Marketing and Media. Top graduates earn a seat in our talent pool.
-            </p>
-            <div className="mt-3 flex flex-wrap gap-2 text-xs text-white/70">
-              <span className="rounded-full border border-white/15 bg-white/5 px-3 py-1">Learn</span><ArrowRight className="h-4 w-4 self-center" />
-              <span className="rounded-full border border-white/15 bg-white/5 px-3 py-1">Get Certified</span><ArrowRight className="h-4 w-4 self-center" />
-              <span className="rounded-full border border-white/15 bg-white/5 px-3 py-1">Join Talent Pool</span><ArrowRight className="h-4 w-4 self-center" />
-              <span className="rounded-full border border-white/15 bg-white/5 px-3 py-1">Earn</span>
+          </Reveal>
+          <Reveal delay={0.1}>
+            <div className="relative overflow-hidden rounded-3xl border border-border shadow-elegant">
+              <UnsplashImg q="sokoto nigeria architecture culture" alt="NDH headquarters in Sokoto" w={1000} h={1200} className="h-full w-full object-cover" />
             </div>
-            <div className="mt-7 flex flex-wrap gap-3">
-              <Link to="/academy"><Button variant="brand" size="lg">Explore Academy</Button></Link>
-              <Link to="/verify"><Button variant="hero" size="lg">Verify a Certificate</Button></Link>
-            </div>
-          </div>
+          </Reveal>
         </div>
-      </section>
+      </Section>
 
-      {/* TESTIMONIALS */}
-      <Section eyebrow="Loved by founders" title="Trusted across Nigeria and the diaspora." center>
-        <Stagger className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-          {testimonials.map((t) => (
-            <StaggerItem key={t.name}>
-              <div className="h-full rounded-2xl border border-border bg-card p-6 transition-all hover:-translate-y-1 hover:shadow-elegant">
-                <Quote className="h-6 w-6 text-[oklch(0.62_0.21_290)]" />
-                <p className="mt-3 text-sm text-foreground/90">"{t.quote}"</p>
-                <div className="mt-5 flex items-center gap-3">
-                  <UnsplashImg q={t.q} alt={t.name} w={80} h={80} sig={t.name} className="h-10 w-10 rounded-full object-cover" />
-                  <div>
-                    <div className="text-sm font-semibold">{t.name}</div>
-                    <div className="text-xs text-muted-foreground">{t.role}</div>
-                  </div>
+      {/* TEAM PREVIEW */}
+      <Section eyebrow="Our team" title="The people behind NDH." subtitle="Diverse leaders from across Nigeria, united by one craft standard." center>
+        <Stagger className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {team.map((m) => (
+            <StaggerItem key={m.name}>
+              <div className="group overflow-hidden rounded-2xl border border-border bg-card transition-all hover:-translate-y-1 hover:shadow-glow">
+                <div className="aspect-[4/5] overflow-hidden">
+                  <UnsplashImg q={m.q} alt={m.name} w={600} h={750} sig={m.name} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" />
+                </div>
+                <div className="p-5">
+                  <div className="font-bold">{m.name}</div>
+                  <div className="text-sm text-muted-foreground">{m.role}</div>
                 </div>
               </div>
             </StaggerItem>
           ))}
         </Stagger>
+        <div className="mt-10 text-center">
+          <Link to="/team"><Button variant="outline" size="lg">Meet the Full Team <ArrowRight className="h-4 w-4" /></Button></Link>
+        </div>
       </Section>
 
-      {/* CTA / Newsletter */}
+      {/* ACADEMY PREVIEW */}
+      <Section eyebrow="NDH Academy" title="Learn. Get certified. Get hired." subtitle="Three program tiers, real projects, real careers." center>
+        <Stagger className="grid gap-5 md:grid-cols-3">
+          {programs.map((p) => (
+            <StaggerItem key={p.tier}>
+              <div className="group relative h-full overflow-hidden rounded-2xl border border-border bg-card transition-all hover:-translate-y-2 hover:shadow-glow">
+                <div className="aspect-[16/9] overflow-hidden">
+                  <UnsplashImg q={p.q} alt={p.tier} w={800} h={450} sig={p.tier} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" />
+                </div>
+                <div className="p-6">
+                  <div className="inline-flex rounded-full bg-gradient-brand px-3 py-1 text-xs font-bold uppercase tracking-widest text-white">{p.tier}</div>
+                  <div className="mt-3 text-sm text-muted-foreground">{p.duration}</div>
+                  <p className="mt-3 text-sm">{p.desc}</p>
+                </div>
+              </div>
+            </StaggerItem>
+          ))}
+        </Stagger>
+        <div className="mt-10 text-center">
+          <Link to="/academy"><Button variant="brand" size="lg">Explore Academy <ArrowRight className="h-4 w-4" /></Button></Link>
+        </div>
+      </Section>
+
+      {/* PORTFOLIO */}
+      <Section eyebrow="Portfolio" title="A taste of what NDH ships.">
+        <Stagger className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {portfolio.map((p) => (
+            <StaggerItem key={p.title}>
+              <div className="group relative aspect-[4/3] overflow-hidden rounded-2xl border border-border">
+                <UnsplashImg q={p.q} alt={p.title} w={800} h={600} sig={p.title} className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent" />
+                <div className="absolute bottom-0 p-5 text-white">
+                  <div className="text-xs font-semibold uppercase tracking-widest text-white/70">{p.tag}</div>
+                  <div className="mt-1 text-lg font-bold">{p.title}</div>
+                </div>
+              </div>
+            </StaggerItem>
+          ))}
+        </Stagger>
+        <div className="mt-10 text-center">
+          <Link to="/services"><Button variant="outline" size="lg">See All Work <ArrowRight className="h-4 w-4" /></Button></Link>
+        </div>
+      </Section>
+
+      {/* TESTIMONIALS */}
+      <Section eyebrow="Loved by founders" title="Trusted across Nigeria and the diaspora." center>
+        <TestimonialsCarousel />
+      </Section>
+
+      {/* FAQ */}
+      <Section eyebrow="FAQ" title="Quick answers to common questions." center>
+        <div className="mx-auto max-w-3xl space-y-3">
+          {faqs.map((f, i) => (
+            <FaqItem key={f.q} q={f.q} a={f.a} defaultOpen={i === 0} />
+          ))}
+        </div>
+      </Section>
+
+      {/* FINAL CTA */}
+      <section className="relative mx-6 my-10 overflow-hidden rounded-3xl border border-border bg-hero p-10 text-white sm:p-16">
+        <AnimatedBlobs />
+        <div className="relative mx-auto max-w-3xl text-center">
+          <Heart className="mx-auto h-8 w-8 text-[oklch(0.78_0.13_180)]" />
+          <h3 className="mt-4 text-3xl font-extrabold sm:text-5xl">Ready to build something exceptional?</h3>
+          <p className="mx-auto mt-4 max-w-2xl text-white/80">Create your free NDH account in 30 seconds. A PM responds within 24 hours.</p>
+          <div className="mt-8 flex flex-wrap justify-center gap-3">
+            <Link to="/signup"><Button variant="brand" size="xl">Sign Up <ArrowRight className="h-4 w-4" /></Button></Link>
+            <Link to="/academy"><Button variant="hero" size="xl">Enroll in Academy</Button></Link>
+          </div>
+        </div>
+      </section>
+
+      {/* NEWSLETTER */}
       <section className="mx-6 mb-16 overflow-hidden rounded-3xl bg-hero p-10 text-white">
         <div className="mx-auto grid max-w-7xl gap-8 md:grid-cols-2 md:items-center">
           <div>
-            <h3 className="text-2xl font-extrabold sm:text-3xl">Ready to build something exceptional?</h3>
-            <p className="mt-3 text-white/75">Tell us your goal — a PM gets back within 24 hours with a tailored plan.</p>
+            <h3 className="text-2xl font-extrabold sm:text-3xl">Get sharp ideas in your inbox.</h3>
+            <p className="mt-3 text-white/75">Monthly insights on digital craft, freelancing and NDH Academy updates. No spam.</p>
           </div>
-          <form
-            onSubmit={(e) => { e.preventDefault(); }}
-            className="flex flex-col gap-3 sm:flex-row"
-          >
+          <form onSubmit={(e) => { e.preventDefault(); }} className="flex flex-col gap-3 sm:flex-row">
             <input type="email" required placeholder="you@company.com" className="flex-1 rounded-lg border border-white/15 bg-white/10 px-4 py-3 text-sm text-white placeholder:text-white/50 focus:outline-none focus:ring-2 focus:ring-[oklch(0.65_0.19_252)]" />
-            <Button type="submit" variant="brand" size="xl">Get started <Send className="h-4 w-4" /></Button>
+            <Button type="submit" variant="brand" size="xl">Subscribe <Send className="h-4 w-4" /></Button>
           </form>
         </div>
       </section>
     </SiteLayout>
+  );
+}
+
+function TestimonialsCarousel() {
+  const [i, setI] = useState(0);
+  useEffect(() => {
+    const id = setInterval(() => setI((v) => (v + 1) % testimonials.length), 4500);
+    return () => clearInterval(id);
+  }, []);
+  const visible = [0, 1, 2].map((o) => testimonials[(i + o) % testimonials.length]);
+  return (
+    <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      {visible.map((t) => (
+        <div key={t.name + i} className="h-full animate-fade-in rounded-2xl border border-border bg-card p-6 transition-all hover:-translate-y-1 hover:shadow-elegant">
+          <Quote className="h-6 w-6 text-[oklch(0.62_0.21_290)]" />
+          <p className="mt-3 text-sm text-foreground/90">"{t.quote}"</p>
+          <div className="mt-5 flex items-center gap-3">
+            <UnsplashImg q={t.q} alt={t.name} w={80} h={80} sig={t.name} className="h-10 w-10 rounded-full object-cover" />
+            <div>
+              <div className="text-sm font-semibold">{t.name}</div>
+              <div className="text-xs text-muted-foreground">{t.role}</div>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function FaqItem({ q, a, defaultOpen }: { q: string; a: string; defaultOpen?: boolean }) {
+  const [open, setOpen] = useState(!!defaultOpen);
+  return (
+    <div className="rounded-2xl border border-border bg-card">
+      <button onClick={() => setOpen((v) => !v)} className="flex w-full items-center justify-between gap-4 p-5 text-left">
+        <span className="font-semibold">{q}</span>
+        <ChevronDown className={`h-5 w-5 shrink-0 text-muted-foreground transition-transform ${open ? "rotate-180" : ""}`} />
+      </button>
+      {open && <div className="px-5 pb-5 text-sm text-muted-foreground">{a}</div>}
+    </div>
   );
 }

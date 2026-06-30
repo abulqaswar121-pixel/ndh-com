@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { Link } from "@tanstack/react-router";
+import { ArrowLeft } from "lucide-react";
 import { Logo } from "./Logo";
 import { AnimatedBlobs } from "./AnimatedBlobs";
 import { UnsplashImg } from "./UnsplashImg";
@@ -51,6 +52,12 @@ export function AuthShell({
 
       {/* Right form panel */}
       <div className="relative flex items-center justify-center px-6 py-12 sm:px-12">
+        <Link
+          to="/"
+          className="absolute left-4 top-4 inline-flex items-center gap-1.5 rounded-full border border-border bg-background/80 px-3 py-1.5 text-xs font-semibold text-muted-foreground backdrop-blur transition hover:text-foreground sm:left-8 sm:top-8"
+        >
+          <ArrowLeft className="h-3.5 w-3.5" /> Back to Homepage
+        </Link>
         <div className="w-full max-w-md">
           <Link to="/" className="mb-8 inline-flex items-center gap-3 lg:hidden">
             <Logo className="h-10 w-10" />

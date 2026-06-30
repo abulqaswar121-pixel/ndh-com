@@ -1,7 +1,8 @@
 import { Link } from "@tanstack/react-router";
-import { Facebook, Instagram, Mail, MapPin, Phone, Send } from "lucide-react";
+import { Facebook, Instagram, Mail, MapPin, Phone, Send, Clock } from "lucide-react";
 import { Logo } from "./Logo";
 import { Button } from "@/components/ui/button";
+import { CurrencySwitcher } from "@/lib/currency";
 
 const cols = [
   {
@@ -19,9 +20,9 @@ const cols = [
     links: [
       { to: "/services", label: "Design" },
       { to: "/services", label: "Development" },
-      { to: "/services", label: "Content" },
-      { to: "/services", label: "Marketing" },
-      { to: "/services", label: "Media" },
+      { to: "/services", label: "Content Writing" },
+      { to: "/services", label: "Digital Marketing" },
+      { to: "/services", label: "Media Production" },
       { to: "/services", label: "AI & Tech" },
     ],
   },
@@ -40,9 +41,9 @@ const cols = [
     links: [
       { to: "/faq", label: "Help Center" },
       { to: "/faq", label: "FAQ" },
-      { to: "/submit-task", label: "Submit a Task" },
-      { to: "/talent-application", label: "Talent Application" },
-      { to: "/terms", label: "Terms & Privacy" },
+      { to: "/careers", label: "Talent Application" },
+      { to: "/terms", label: "Terms of Service" },
+      { to: "/privacy", label: "Privacy Policy" },
     ],
   },
 ] as const;
@@ -102,6 +103,9 @@ export function Footer() {
               <Mail className="h-4 w-4 shrink-0 text-[oklch(0.65_0.19_252)]" />
               <a className="hover:text-foreground" href="mailto:info@ndh.com.ng">info@ndh.com.ng</a>
             </li>
+            <li className="flex items-center gap-2">
+              <Clock className="h-4 w-4 shrink-0 text-[oklch(0.65_0.19_252)]" /> Mon – Sat, 24 hours · Sun closed
+            </li>
           </ul>
           <div className="mt-5 flex items-center gap-3">
             <a href="https://www.facebook.com/share/1Be6HN8zjS/" target="_blank" rel="noreferrer" aria-label="Facebook" className="grid h-10 w-10 place-items-center rounded-full border border-border transition hover:bg-gradient-brand hover:text-white">
@@ -130,12 +134,11 @@ export function Footer() {
       </div>
 
       <div className="border-t border-border">
-        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-2 px-6 py-5 text-xs text-muted-foreground sm:flex-row">
+        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-3 px-6 py-5 text-xs text-muted-foreground sm:flex-row">
           <div>© {new Date().getFullYear()} Najeeb Digital Hub. All rights reserved.</div>
-          <div className="flex flex-wrap items-center justify-center gap-3">
+          <div className="flex flex-wrap items-center justify-center gap-4">
             <span>Built by NDH in Sokoto, Nigeria</span>
-            <span className="hidden sm:inline">·</span>
-            <span>ndh.com.ng</span>
+            <CurrencySwitcher />
           </div>
         </div>
       </div>

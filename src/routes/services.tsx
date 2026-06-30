@@ -65,8 +65,8 @@ function ServicesPage() {
                   <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
                     {c.items.map((i) => <li key={i} className="flex gap-2"><span className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-gradient-brand" />{i}</li>)}
                   </ul>
-                  <Link to="/submit-task" className="mt-5 inline-flex items-center gap-1 text-sm font-semibold text-foreground">
-                    Request a Quote <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                  <Link to="/signup" className="mt-5 inline-flex items-center gap-1 text-sm font-semibold text-foreground">
+                    Get Started <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                   </Link>
                 </div>
               </div>
@@ -96,7 +96,7 @@ function ServicesPage() {
         <div className="rounded-3xl border border-border bg-secondary/50 p-8 text-center">
           <h3 className="text-2xl font-extrabold">Not sure what you need?</h3>
           <p className="mx-auto mt-2 max-w-xl text-sm text-muted-foreground">Send us a brief — a PM will scope it for free and respond within 24 hours with a tailored plan.</p>
-          <Link to="/submit-task" className="mt-5 inline-block"><Button variant="brand" size="lg">Submit a Task</Button></Link>
+          <Link to="/signup" className="mt-5 inline-block"><Button variant="brand" size="lg">Sign up to brief us</Button></Link>
         </div>
       </Section>
     </SiteLayout>
