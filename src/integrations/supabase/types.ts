@@ -133,6 +133,42 @@ export type Database = {
           },
         ]
       }
+      announcements: {
+        Row: {
+          audience: string
+          body: string
+          created_at: string
+          created_by: string | null
+          expires_at: string | null
+          id: string
+          publish_at: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          audience?: string
+          body: string
+          created_at?: string
+          created_by?: string | null
+          expires_at?: string | null
+          id?: string
+          publish_at?: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          audience?: string
+          body?: string
+          created_at?: string
+          created_by?: string | null
+          expires_at?: string | null
+          id?: string
+          publish_at?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       certificates: {
         Row: {
           certificate_number: string
@@ -239,6 +275,48 @@ export type Database = {
           phone?: string | null
           updated_at?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      complaints: {
+        Row: {
+          assignee: string | null
+          body: string
+          category: string
+          created_at: string
+          id: string
+          resolution: string | null
+          resolved_at: string | null
+          status: string
+          student_id: string
+          subject: string
+          updated_at: string
+        }
+        Insert: {
+          assignee?: string | null
+          body: string
+          category?: string
+          created_at?: string
+          id?: string
+          resolution?: string | null
+          resolved_at?: string | null
+          status?: string
+          student_id: string
+          subject: string
+          updated_at?: string
+        }
+        Update: {
+          assignee?: string | null
+          body?: string
+          category?: string
+          created_at?: string
+          id?: string
+          resolution?: string | null
+          resolved_at?: string | null
+          status?: string
+          student_id?: string
+          subject?: string
+          updated_at?: string
         }
         Relationships: []
       }
@@ -679,6 +757,85 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "exam_schedules_course_id_fkey"
+            columns: ["course_id"]
+            isOneToOne: false
+            referencedRelation: "courses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      forum_posts: {
+        Row: {
+          author_id: string
+          body: string
+          created_at: string
+          hidden: boolean
+          id: string
+          thread_id: string
+          updated_at: string
+        }
+        Insert: {
+          author_id: string
+          body: string
+          created_at?: string
+          hidden?: boolean
+          id?: string
+          thread_id: string
+          updated_at?: string
+        }
+        Update: {
+          author_id?: string
+          body?: string
+          created_at?: string
+          hidden?: boolean
+          id?: string
+          thread_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "forum_posts_thread_id_fkey"
+            columns: ["thread_id"]
+            isOneToOne: false
+            referencedRelation: "forum_threads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      forum_threads: {
+        Row: {
+          author_id: string
+          course_id: string | null
+          created_at: string
+          id: string
+          locked: boolean
+          pinned: boolean
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          author_id: string
+          course_id?: string | null
+          created_at?: string
+          id?: string
+          locked?: boolean
+          pinned?: boolean
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          author_id?: string
+          course_id?: string | null
+          created_at?: string
+          id?: string
+          locked?: boolean
+          pinned?: boolean
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "forum_threads_course_id_fkey"
             columns: ["course_id"]
             isOneToOne: false
             referencedRelation: "courses"
