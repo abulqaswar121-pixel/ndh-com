@@ -78,13 +78,13 @@ export const upsertDepartment = createServerFn({ method: "POST" })
     await assertAdmin(context.supabase, context.userId);
     if (data.id) {
       const { error } = await context.supabase.from("departments")
-        .update({ slug: data.slug, name: data.name, description: data.description, hod_id: data.hod_id ?? null })
+        .update({ slug: data.slug, name: data.name, description: data.description ?? null, hod_id: data.hod_id ?? null } as any)
         .eq("id", data.id);
       if (error) throw new Error(error.message);
     } else {
       const { error } = await context.supabase.from("departments").insert({
-        slug: data.slug, name: data.name, description: data.description, hod_id: data.hod_id ?? null,
-      });
+        slug: data.slug, name: data.name, description: data.description ?? null, hod_id: data.hod_id ?? null,
+      } as any);
       if (error) throw new Error(error.message);
     }
     return { ok: true };
