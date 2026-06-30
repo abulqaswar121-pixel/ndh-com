@@ -169,6 +169,45 @@ export type Database = {
         }
         Relationships: []
       }
+      broadcasts: {
+        Row: {
+          audience: string[]
+          body: string
+          channels: string[]
+          created_at: string
+          created_by: string | null
+          id: string
+          recipient_count: number
+          sent_at: string | null
+          status: string
+          title: string
+        }
+        Insert: {
+          audience?: string[]
+          body: string
+          channels?: string[]
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          recipient_count?: number
+          sent_at?: string | null
+          status?: string
+          title: string
+        }
+        Update: {
+          audience?: string[]
+          body?: string
+          channels?: string[]
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          recipient_count?: number
+          sent_at?: string | null
+          status?: string
+          title?: string
+        }
+        Relationships: []
+      }
       certificates: {
         Row: {
           certificate_number: string
@@ -1541,6 +1580,30 @@ export type Database = {
         }
         Relationships: []
       }
+      platform_settings: {
+        Row: {
+          description: string | null
+          key: string
+          updated_at: string
+          updated_by: string | null
+          value: Json
+        }
+        Insert: {
+          description?: string | null
+          key: string
+          updated_at?: string
+          updated_by?: string | null
+          value?: Json
+        }
+        Update: {
+          description?: string | null
+          key?: string
+          updated_at?: string
+          updated_by?: string | null
+          value?: Json
+        }
+        Relationships: []
+      }
       pm_invitations: {
         Row: {
           accepted_at: string | null
@@ -1799,6 +1862,33 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      site_pages: {
+        Row: {
+          blocks: Json
+          published: boolean
+          slug: string
+          title: string
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          blocks?: Json
+          published?: boolean
+          slug: string
+          title: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          blocks?: Json
+          published?: boolean
+          slug?: string
+          title?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: []
       }
       students: {
         Row: {

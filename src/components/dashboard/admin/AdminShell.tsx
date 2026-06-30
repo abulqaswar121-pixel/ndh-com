@@ -13,7 +13,10 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useServerFn } from "@tanstack/react-start";
 import { grantRole, revokeRole, upsertDepartment, deleteDepartment } from "@/lib/admin/admin.functions";
+import { updateSetting, deleteSetting, upsertSitePage, deleteSitePage, sendBroadcast } from "@/lib/admin/platform.functions";
 import { toast } from "sonner";
+import { Switch } from "@/components/ui/switch";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 
 const ROLES = [
   "client","talent","student","instructor","pm","hod","finance","admin","super_admin",
@@ -308,13 +311,333 @@ function ActivityTab() {
 
 function PlatformTab() {
   return (
+    <Tabs defaultValue="settings" className="space-y-4">
+      <TabsList>
+        <TabsTrigger value="settings">Settings</TabsTrigger>
+        <TabsTrigger value="permissions">Permissions</TabsTrigger>
+        <TabsTrigger value="content">Content</TabsTrigger>
+        <TabsTrigger value="broadcasts">Broadcasts</TabsTrigger>
+      </TabsList>
+      <TabsContent value="settings"><SettingsPanel /></TabsContent>
+      <TabsContent value="permissions"><PermissionsPanel /></TabsContent>
+      <TabsContent value="content"><ContentPanel /></TabsContent>
+      <TabsContent value="broadcasts"><BroadcastsPanel /></TabsContent>
+    </Tabs>
+  );
+}
+
+// ============= Settings =============
+type Setting = { key: string; value: any; description: string | null };
+
+function SettingsPanel() {
+  const [rows, setRows] = useState<Setting[]>([]);
+  const [newKey, setNewKey] = useState("");
+  const [newVal, setNewVal] = useState("");
+  const upd = useServerFn(updateSetting);
+  const del = useServerFn(deleteSetting);
+
+  const load = async () => {
+    const { data } = await supabase.from("platform_settings").select("*").order("key");
+    setRows((data as Setting[]) || []);
+  };
+  useEffect(() => { load(); }, []);
+
+  const save = async (s: Setting, raw: string) => {
+    let parsed: any = raw;
+    try { parsed = JSON.parse(raw); } catch { /* keep as string */ }
+    try { await upd({ data: { key: s.key, value: parsed, description: s.description ?? undefined } }); toast.success("Saved"); load(); }
+    catch (e: any) { toast.error(e.message); }
+  };
+
+  return (
     <Card className="p-6">
-      <h3 className="mb-2 text-lg font-bold">Platform controls</h3>
-      <p className="text-sm text-muted-foreground">
-        Sensitive controls live here. Only Super Admins can grant Admin, Super Admin, or Finance roles
-        or delete departments. Audit trails are recorded in <code>task_events</code> and
-        <code> finance_ledger</code>.
-      </p>
+      <h3 className="mb-1 text-lg font-bold">Platform settings</h3>
+      <p className="mb-4 text-xs text-muted-foreground">Values are stored as JSON. Strings need quotes, booleans use <code>true</code>/<code>false</code>.</p>
+      <div className="grid gap-3">
+        {rows.map((s) => (
+          <SettingRow key={s.key} setting={s} onSave={(v) => save(s, v)} onDelete={async () => {
+            if (!confirm(`Delete ${s.key}?`)) return;
+            try { await del({ data: { key: s.key } }); toast.success("Deleted"); load(); } catch (e: any) { toast.error(e.message); }
+          }} />
+        ))}
+      </div>
+      <div className="mt-6 rounded-lg border border-dashed border-border p-4">
+        <div className="mb-2 text-sm font-semibold">Add setting</div>
+        <div className="flex flex-wrap gap-2">
+          <Input className="w-56" placeholder="namespace.key" value={newKey} onChange={(e) => setNewKey(e.target.value)} />
+          <Input className="flex-1 min-w-[200px] font-mono text-xs" placeholder='JSON value, e.g. "hello" or 42 or true' value={newVal} onChange={(e) => setNewVal(e.target.value)} />
+          <Button onClick={async () => {
+            if (!newKey) return;
+            let parsed: any = newVal;
+            try { parsed = JSON.parse(newVal); } catch { /* string */ }
+            try { await upd({ data: { key: newKey, value: parsed } }); toast.success("Added"); setNewKey(""); setNewVal(""); load(); }
+            catch (e: any) { toast.error(e.message); }
+          }}>Add</Button>
+        </div>
+      </div>
+    </Card>
+  );
+}
+
+function SettingRow({ setting, onSave, onDelete }: { setting: Setting; onSave: (v: string) => void; onDelete: () => void }) {
+  const initial = JSON.stringify(setting.value);
+  const [val, setVal] = useState(initial);
+  const isBool = typeof setting.value === "boolean";
+  return (
+    <div className="grid gap-2 rounded-lg border border-border p-3 sm:grid-cols-[1fr_auto]">
+      <div>
+        <div className="font-mono text-sm font-semibold">{setting.key}</div>
+        {setting.description && <div className="text-xs text-muted-foreground">{setting.description}</div>}
+        <div className="mt-2 flex items-center gap-2">
+          {isBool ? (
+            <>
+              <Switch checked={val === "true"} onCheckedChange={(c) => setVal(c ? "true" : "false")} />
+              <span className="text-xs text-muted-foreground">{val}</span>
+            </>
+          ) : (
+            <Input className="font-mono text-xs" value={val} onChange={(e) => setVal(e.target.value)} />
+          )}
+        </div>
+      </div>
+      <div className="flex items-end gap-2">
+        <Button size="sm" onClick={() => onSave(val)} disabled={val === initial}>Save</Button>
+        <Button size="sm" variant="outline" onClick={onDelete}><Trash2 className="h-4 w-4" /></Button>
+      </div>
+    </div>
+  );
+}
+
+// ============= Permissions =============
+function PermissionsPanel() {
+  const matrix: Array<{ area: string; client?: boolean; talent?: boolean; student?: boolean; instructor?: boolean; pm?: boolean; hod?: boolean; finance?: boolean; admin?: boolean; super_admin?: boolean }> = [
+    { area: "Submit tasks",       client: true, admin: true, super_admin: true },
+    { area: "Accept tasks",       talent: true, admin: true, super_admin: true },
+    { area: "Browse academy",     client: true, talent: true, student: true, instructor: true, pm: true, hod: true, finance: true, admin: true, super_admin: true },
+    { area: "Author courses",     instructor: true, hod: true, admin: true, super_admin: true },
+    { area: "Assign talent",      pm: true, admin: true, super_admin: true },
+    { area: "Approve invoices",   finance: true, super_admin: true },
+    { area: "Run payroll",        finance: true, super_admin: true },
+    { area: "Manage users/roles", admin: true, super_admin: true },
+    { area: "Grant admin/finance", super_admin: true },
+    { area: "Edit platform settings", super_admin: true },
+    { area: "Send broadcasts",    super_admin: true },
+  ];
+  const cols: Array<{ k: keyof (typeof matrix)[number]; label: string }> = [
+    { k: "client", label: "Client" }, { k: "talent", label: "Talent" }, { k: "student", label: "Student" },
+    { k: "instructor", label: "Instructor" }, { k: "pm", label: "PM" }, { k: "hod", label: "HOD" },
+    { k: "finance", label: "Finance" }, { k: "admin", label: "Admin" }, { k: "super_admin", label: "Super" },
+  ];
+  return (
+    <Card className="p-6 overflow-x-auto">
+      <h3 className="mb-3 text-lg font-bold">Role permissions</h3>
+      <table className="w-full min-w-[700px] text-sm">
+        <thead>
+          <tr className="border-b border-border text-left text-xs uppercase text-muted-foreground">
+            <th className="py-2">Capability</th>
+            {cols.map((c) => <th key={String(c.k)} className="px-2 py-2 text-center">{c.label}</th>)}
+          </tr>
+        </thead>
+        <tbody>
+          {matrix.map((row) => (
+            <tr key={row.area} className="border-b border-border/60">
+              <td className="py-2 font-medium">{row.area}</td>
+              {cols.map((c) => (
+                <td key={String(c.k)} className="px-2 py-2 text-center">
+                  {row[c.k] ? <span className="text-primary">●</span> : <span className="text-muted-foreground/30">○</span>}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <p className="mt-3 text-xs text-muted-foreground">Capabilities are enforced by RLS + server-function guards. This matrix documents intent for ops review.</p>
+    </Card>
+  );
+}
+
+// ============= Content (site pages) =============
+type SitePage = { slug: string; title: string; blocks: any[]; published: boolean; updated_at: string };
+
+function ContentPanel() {
+  const [rows, setRows] = useState<SitePage[]>([]);
+  const [editing, setEditing] = useState<SitePage | null>(null);
+  const [open, setOpen] = useState(false);
+  const [form, setForm] = useState({ slug: "", title: "", blocks: "[]", published: true });
+  const upsert = useServerFn(upsertSitePage);
+  const del = useServerFn(deleteSitePage);
+
+  const load = async () => {
+    const { data } = await supabase.from("site_pages").select("*").order("slug");
+    setRows((data as SitePage[]) || []);
+  };
+  useEffect(() => { load(); }, []);
+
+  const openNew = () => { setEditing(null); setForm({ slug: "", title: "", blocks: "[]", published: true }); setOpen(true); };
+  const openEdit = (p: SitePage) => { setEditing(p); setForm({ slug: p.slug, title: p.title, blocks: JSON.stringify(p.blocks, null, 2), published: p.published }); setOpen(true); };
+
+  return (
+    <Card className="p-6">
+      <div className="mb-4 flex items-center justify-between">
+        <h3 className="text-lg font-bold">Site content</h3>
+        <Button size="sm" onClick={openNew}><Plus className="mr-1 h-4 w-4" /> New page</Button>
+      </div>
+      {rows.length === 0 ? (
+        <div className="text-sm text-muted-foreground">No pages yet. Create one to power editable marketing blocks.</div>
+      ) : (
+        <div className="grid gap-2">
+          {rows.map((p) => (
+            <div key={p.slug} className="flex flex-wrap items-center justify-between gap-2 rounded-lg border border-border p-3">
+              <div>
+                <div className="font-semibold">{p.title} <span className="text-xs text-muted-foreground">/{p.slug}</span></div>
+                <div className="text-xs text-muted-foreground">
+                  {p.blocks?.length || 0} blocks · {p.published ? "Published" : "Draft"} · updated {new Date(p.updated_at).toLocaleDateString()}
+                </div>
+              </div>
+              <div className="flex gap-2">
+                <Button size="sm" variant="outline" onClick={() => openEdit(p)}>Edit</Button>
+                <Button size="sm" variant="destructive" onClick={async () => {
+                  if (!confirm(`Delete ${p.slug}?`)) return;
+                  try { await del({ data: { slug: p.slug } }); toast.success("Deleted"); load(); } catch (e: any) { toast.error(e.message); }
+                }}><Trash2 className="h-4 w-4" /></Button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader><DialogTitle>{editing ? `Edit /${editing.slug}` : "New page"}</DialogTitle></DialogHeader>
+          <form className="grid gap-3" onSubmit={async (e) => {
+            e.preventDefault();
+            let blocks: any[] = [];
+            try { blocks = JSON.parse(form.blocks); if (!Array.isArray(blocks)) throw new Error(); }
+            catch { toast.error("Blocks must be a JSON array"); return; }
+            try {
+              await upsert({ data: { slug: form.slug, title: form.title, blocks, published: form.published } });
+              toast.success("Saved"); setOpen(false); load();
+            } catch (er: any) { toast.error(er.message); }
+          }}>
+            <div className="grid grid-cols-2 gap-3">
+              <div><Label>Slug</Label><Input value={form.slug} onChange={(e) => setForm({ ...form, slug: e.target.value })} required disabled={!!editing} /></div>
+              <div><Label>Title</Label><Input value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} required /></div>
+            </div>
+            <div>
+              <Label>Blocks (JSON array)</Label>
+              <Textarea className="font-mono text-xs min-h-[220px]" value={form.blocks} onChange={(e) => setForm({ ...form, blocks: e.target.value })} />
+              <p className="mt-1 text-xs text-muted-foreground">Each block is an object, e.g. {`{"kind":"hero","heading":"...","body":"..."}`}.</p>
+            </div>
+            <div className="flex items-center gap-2">
+              <Switch checked={form.published} onCheckedChange={(c) => setForm({ ...form, published: c })} />
+              <Label>Published</Label>
+            </div>
+            <DialogFooter><Button type="submit">Save</Button></DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
+    </Card>
+  );
+}
+
+// ============= Broadcasts =============
+type Broadcast = { id: string; title: string; body: string; audience: string[]; channels: string[]; status: string; sent_at: string | null; recipient_count: number; created_at: string };
+
+function BroadcastsPanel() {
+  const [rows, setRows] = useState<Broadcast[]>([]);
+  const [open, setOpen] = useState(false);
+  const [form, setForm] = useState({ title: "", body: "", audience: ["all"] as string[], channels: ["in_app"] as string[] });
+  const send = useServerFn(sendBroadcast);
+
+  const load = async () => {
+    const { data } = await supabase.from("broadcasts").select("*").order("created_at", { ascending: false }).limit(50);
+    setRows((data as Broadcast[]) || []);
+  };
+  useEffect(() => { load(); }, []);
+
+  const AUD = ["all","client","talent","student","instructor","pm","hod","finance","admin","super_admin"];
+  const toggle = (key: "audience" | "channels", v: string) => {
+    setForm((f) => {
+      const cur = f[key];
+      return { ...f, [key]: cur.includes(v) ? cur.filter((x) => x !== v) : [...cur, v] };
+    });
+  };
+
+  return (
+    <Card className="p-6">
+      <div className="mb-4 flex items-center justify-between">
+        <h3 className="text-lg font-bold">Broadcasts</h3>
+        <Button size="sm" onClick={() => { setForm({ title: "", body: "", audience: ["all"], channels: ["in_app"] }); setOpen(true); }}>
+          <Plus className="mr-1 h-4 w-4" /> New broadcast
+        </Button>
+      </div>
+      {rows.length === 0 ? (
+        <div className="text-sm text-muted-foreground">No broadcasts sent yet.</div>
+      ) : (
+        <div className="grid gap-2">
+          {rows.map((b) => (
+            <div key={b.id} className="rounded-lg border border-border p-3">
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <div className="font-semibold">{b.title}</div>
+                <div className="flex items-center gap-2">
+                  <Badge variant="outline">{b.status}</Badge>
+                  <span className="text-xs text-muted-foreground">{b.recipient_count} recipients</span>
+                </div>
+              </div>
+              <div className="mt-1 text-sm text-muted-foreground line-clamp-2">{b.body}</div>
+              <div className="mt-2 flex flex-wrap gap-1 text-xs">
+                {b.audience.map((a) => <Badge key={a} variant="secondary">{a}</Badge>)}
+                {b.channels.map((c) => <Badge key={c} variant="outline">{c}</Badge>)}
+                <span className="ml-auto text-muted-foreground">
+                  {b.sent_at ? new Date(b.sent_at).toLocaleString() : new Date(b.created_at).toLocaleString()}
+                </span>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader><DialogTitle>New broadcast</DialogTitle></DialogHeader>
+          <form className="grid gap-3" onSubmit={async (e) => {
+            e.preventDefault();
+            if (form.audience.length === 0) { toast.error("Pick at least one audience"); return; }
+            if (form.channels.length === 0) { toast.error("Pick at least one channel"); return; }
+            try {
+              const res = await send({ data: form as any });
+              toast.success(`Sent to ${res.recipients} users`);
+              setOpen(false); load();
+            } catch (er: any) { toast.error(er.message); }
+          }}>
+            <div><Label>Title</Label><Input value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} required maxLength={160} /></div>
+            <div><Label>Body</Label><Textarea value={form.body} onChange={(e) => setForm({ ...form, body: e.target.value })} required maxLength={4000} className="min-h-[120px]" /></div>
+            <div>
+              <Label>Audience</Label>
+              <div className="mt-1 flex flex-wrap gap-1">
+                {AUD.map((a) => (
+                  <button type="button" key={a} onClick={() => toggle("audience", a)}
+                    className={`rounded-full border px-3 py-1 text-xs ${form.audience.includes(a) ? "border-primary bg-primary/10 text-primary" : "border-border text-muted-foreground"}`}>
+                    {a}
+                  </button>
+                ))}
+              </div>
+            </div>
+            <div>
+              <Label>Channels</Label>
+              <div className="mt-1 flex flex-wrap gap-1">
+                {["in_app","email"].map((c) => (
+                  <button type="button" key={c} onClick={() => toggle("channels", c)}
+                    className={`rounded-full border px-3 py-1 text-xs ${form.channels.includes(c) ? "border-primary bg-primary/10 text-primary" : "border-border text-muted-foreground"}`}>
+                    {c}
+                  </button>
+                ))}
+              </div>
+              <p className="mt-1 text-xs text-muted-foreground">In-app notifications deliver instantly. Email fan-out runs through the notify pipeline.</p>
+            </div>
+            <DialogFooter><Button type="submit">Send broadcast</Button></DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
     </Card>
   );
 }
