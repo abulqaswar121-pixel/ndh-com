@@ -48,6 +48,7 @@ import { Route as AuthenticatedDashboardInstructorRouteImport } from './routes/_
 import { Route as AuthenticatedDashboardHodRouteImport } from './routes/_authenticated/dashboard.hod'
 import { Route as AuthenticatedDashboardClientRouteImport } from './routes/_authenticated/dashboard.client'
 import { Route as AuthenticatedDashboardAdminRouteImport } from './routes/_authenticated/dashboard.admin'
+import { Route as LovableEmailQueueProcessRouteImport } from './routes/lovable/email/queue/process'
 
 const VerifyRoute = VerifyRouteImport.update({
   id: '/verify',
@@ -251,6 +252,12 @@ const AuthenticatedDashboardAdminRoute =
     path: '/dashboard/admin',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const LovableEmailQueueProcessRoute =
+  LovableEmailQueueProcessRouteImport.update({
+    id: '/lovable/email/queue/process',
+    path: '/lovable/email/queue/process',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -291,6 +298,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/student': typeof AuthenticatedDashboardStudentRoute
   '/dashboard/super-admin': typeof AuthenticatedDashboardSuperAdminRoute
   '/dashboard/talent': typeof AuthenticatedDashboardTalentRoute
+  '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -331,6 +339,7 @@ export interface FileRoutesByTo {
   '/dashboard/student': typeof AuthenticatedDashboardStudentRoute
   '/dashboard/super-admin': typeof AuthenticatedDashboardSuperAdminRoute
   '/dashboard/talent': typeof AuthenticatedDashboardTalentRoute
+  '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -373,6 +382,7 @@ export interface FileRoutesById {
   '/_authenticated/dashboard/student': typeof AuthenticatedDashboardStudentRoute
   '/_authenticated/dashboard/super-admin': typeof AuthenticatedDashboardSuperAdminRoute
   '/_authenticated/dashboard/talent': typeof AuthenticatedDashboardTalentRoute
+  '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -415,6 +425,7 @@ export interface FileRouteTypes {
     | '/dashboard/student'
     | '/dashboard/super-admin'
     | '/dashboard/talent'
+    | '/lovable/email/queue/process'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -455,6 +466,7 @@ export interface FileRouteTypes {
     | '/dashboard/student'
     | '/dashboard/super-admin'
     | '/dashboard/talent'
+    | '/lovable/email/queue/process'
   id:
     | '__root__'
     | '/'
@@ -496,6 +508,7 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard/student'
     | '/_authenticated/dashboard/super-admin'
     | '/_authenticated/dashboard/talent'
+    | '/lovable/email/queue/process'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -530,6 +543,7 @@ export interface RootRouteChildren {
   AdminRegistrarRoute: typeof AdminRegistrarRoute
   AdminStudentAffairsRoute: typeof AdminStudentAffairsRoute
   AdminIndexRoute: typeof AdminIndexRoute
+  LovableEmailQueueProcessRoute: typeof LovableEmailQueueProcessRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -807,6 +821,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardAdminRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/lovable/email/queue/process': {
+      id: '/lovable/email/queue/process'
+      path: '/lovable/email/queue/process'
+      fullPath: '/lovable/email/queue/process'
+      preLoaderRoute: typeof LovableEmailQueueProcessRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -867,6 +888,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminRegistrarRoute: AdminRegistrarRoute,
   AdminStudentAffairsRoute: AdminStudentAffairsRoute,
   AdminIndexRoute: AdminIndexRoute,
+  LovableEmailQueueProcessRoute: LovableEmailQueueProcessRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
