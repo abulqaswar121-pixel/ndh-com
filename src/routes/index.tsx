@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   ArrowRight, Sparkles, Palette, Code2, PenTool, Megaphone, Clapperboard, Brain,
   ShieldCheck, Clock, Globe2, Award, Quote, CheckCircle2,
+  Send,
 } from "lucide-react";
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { Section } from "@/components/site/Section";
