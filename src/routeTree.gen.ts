@@ -11,10 +11,14 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as VerifyRouteImport } from './routes/verify'
 import { Route as TermsRouteImport } from './routes/terms'
+import { Route as TeamRouteImport } from './routes/team'
+import { Route as TalentApplicationRouteImport } from './routes/talent-application'
+import { Route as SubmitTaskRouteImport } from './routes/submit-task'
 import { Route as ServicesRouteImport } from './routes/services'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as FaqRouteImport } from './routes/faq'
 import { Route as ContactRouteImport } from './routes/contact'
+import { Route as CareersRouteImport } from './routes/careers'
 import { Route as BlogRouteImport } from './routes/blog'
 import { Route as AcademyRouteImport } from './routes/academy'
 import { Route as AboutRouteImport } from './routes/about'
@@ -28,6 +32,21 @@ const VerifyRoute = VerifyRouteImport.update({
 const TermsRoute = TermsRouteImport.update({
   id: '/terms',
   path: '/terms',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TeamRoute = TeamRouteImport.update({
+  id: '/team',
+  path: '/team',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TalentApplicationRoute = TalentApplicationRouteImport.update({
+  id: '/talent-application',
+  path: '/talent-application',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SubmitTaskRoute = SubmitTaskRouteImport.update({
+  id: '/submit-task',
+  path: '/submit-task',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ServicesRoute = ServicesRouteImport.update({
@@ -48,6 +67,11 @@ const FaqRoute = FaqRouteImport.update({
 const ContactRoute = ContactRouteImport.update({
   id: '/contact',
   path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CareersRoute = CareersRouteImport.update({
+  id: '/careers',
+  path: '/careers',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BlogRoute = BlogRouteImport.update({
@@ -76,10 +100,14 @@ export interface FileRoutesByFullPath {
   '/about': typeof AboutRoute
   '/academy': typeof AcademyRoute
   '/blog': typeof BlogRoute
+  '/careers': typeof CareersRoute
   '/contact': typeof ContactRoute
   '/faq': typeof FaqRoute
   '/privacy': typeof PrivacyRoute
   '/services': typeof ServicesRoute
+  '/submit-task': typeof SubmitTaskRoute
+  '/talent-application': typeof TalentApplicationRoute
+  '/team': typeof TeamRoute
   '/terms': typeof TermsRoute
   '/verify': typeof VerifyRoute
 }
@@ -88,10 +116,14 @@ export interface FileRoutesByTo {
   '/about': typeof AboutRoute
   '/academy': typeof AcademyRoute
   '/blog': typeof BlogRoute
+  '/careers': typeof CareersRoute
   '/contact': typeof ContactRoute
   '/faq': typeof FaqRoute
   '/privacy': typeof PrivacyRoute
   '/services': typeof ServicesRoute
+  '/submit-task': typeof SubmitTaskRoute
+  '/talent-application': typeof TalentApplicationRoute
+  '/team': typeof TeamRoute
   '/terms': typeof TermsRoute
   '/verify': typeof VerifyRoute
 }
@@ -101,10 +133,14 @@ export interface FileRoutesById {
   '/about': typeof AboutRoute
   '/academy': typeof AcademyRoute
   '/blog': typeof BlogRoute
+  '/careers': typeof CareersRoute
   '/contact': typeof ContactRoute
   '/faq': typeof FaqRoute
   '/privacy': typeof PrivacyRoute
   '/services': typeof ServicesRoute
+  '/submit-task': typeof SubmitTaskRoute
+  '/talent-application': typeof TalentApplicationRoute
+  '/team': typeof TeamRoute
   '/terms': typeof TermsRoute
   '/verify': typeof VerifyRoute
 }
@@ -115,10 +151,14 @@ export interface FileRouteTypes {
     | '/about'
     | '/academy'
     | '/blog'
+    | '/careers'
     | '/contact'
     | '/faq'
     | '/privacy'
     | '/services'
+    | '/submit-task'
+    | '/talent-application'
+    | '/team'
     | '/terms'
     | '/verify'
   fileRoutesByTo: FileRoutesByTo
@@ -127,10 +167,14 @@ export interface FileRouteTypes {
     | '/about'
     | '/academy'
     | '/blog'
+    | '/careers'
     | '/contact'
     | '/faq'
     | '/privacy'
     | '/services'
+    | '/submit-task'
+    | '/talent-application'
+    | '/team'
     | '/terms'
     | '/verify'
   id:
@@ -139,10 +183,14 @@ export interface FileRouteTypes {
     | '/about'
     | '/academy'
     | '/blog'
+    | '/careers'
     | '/contact'
     | '/faq'
     | '/privacy'
     | '/services'
+    | '/submit-task'
+    | '/talent-application'
+    | '/team'
     | '/terms'
     | '/verify'
   fileRoutesById: FileRoutesById
@@ -152,10 +200,14 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRoute
   AcademyRoute: typeof AcademyRoute
   BlogRoute: typeof BlogRoute
+  CareersRoute: typeof CareersRoute
   ContactRoute: typeof ContactRoute
   FaqRoute: typeof FaqRoute
   PrivacyRoute: typeof PrivacyRoute
   ServicesRoute: typeof ServicesRoute
+  SubmitTaskRoute: typeof SubmitTaskRoute
+  TalentApplicationRoute: typeof TalentApplicationRoute
+  TeamRoute: typeof TeamRoute
   TermsRoute: typeof TermsRoute
   VerifyRoute: typeof VerifyRoute
 }
@@ -174,6 +226,27 @@ declare module '@tanstack/react-router' {
       path: '/terms'
       fullPath: '/terms'
       preLoaderRoute: typeof TermsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/team': {
+      id: '/team'
+      path: '/team'
+      fullPath: '/team'
+      preLoaderRoute: typeof TeamRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/talent-application': {
+      id: '/talent-application'
+      path: '/talent-application'
+      fullPath: '/talent-application'
+      preLoaderRoute: typeof TalentApplicationRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/submit-task': {
+      id: '/submit-task'
+      path: '/submit-task'
+      fullPath: '/submit-task'
+      preLoaderRoute: typeof SubmitTaskRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/services': {
@@ -202,6 +275,13 @@ declare module '@tanstack/react-router' {
       path: '/contact'
       fullPath: '/contact'
       preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/careers': {
+      id: '/careers'
+      path: '/careers'
+      fullPath: '/careers'
+      preLoaderRoute: typeof CareersRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/blog': {
@@ -240,10 +320,14 @@ const rootRouteChildren: RootRouteChildren = {
   AboutRoute: AboutRoute,
   AcademyRoute: AcademyRoute,
   BlogRoute: BlogRoute,
+  CareersRoute: CareersRoute,
   ContactRoute: ContactRoute,
   FaqRoute: FaqRoute,
   PrivacyRoute: PrivacyRoute,
   ServicesRoute: ServicesRoute,
+  SubmitTaskRoute: SubmitTaskRoute,
+  TalentApplicationRoute: TalentApplicationRoute,
+  TeamRoute: TeamRoute,
   TermsRoute: TermsRoute,
   VerifyRoute: VerifyRoute,
 }
