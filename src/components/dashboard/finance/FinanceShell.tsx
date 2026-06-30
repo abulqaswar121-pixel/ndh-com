@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { DashboardShell, type NavItem } from "@/components/dashboard/Sidebar";
-import { LayoutDashboard, FileText, Receipt, RefreshCcw, BookOpen, Plus, Trash2 } from "lucide-react";
+import { LayoutDashboard, FileText, Receipt, RefreshCcw, BookOpen, Plus, Trash2, Wallet, Download, PlayCircle, CheckCircle2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useRouterState } from "@tanstack/react-router";
 import { Card } from "@/components/ui/card";
@@ -16,12 +16,17 @@ import {
   createInvoice, updateInvoiceStatus,
   upsertExpense, decideExpense, decideRefund,
 } from "@/lib/finance/finance.functions";
+import {
+  generatePayrollRun, approvePayrollRun, processPayrollRun, markPayrollItemPaid,
+} from "@/lib/finance/payroll.functions";
+import { getInvoicePdf } from "@/lib/finance/invoice-pdf.functions";
 import { toast } from "sonner";
 
 const NAV: NavItem[] = [
   { label: "Overview", to: "/dashboard/finance", icon: LayoutDashboard },
   { label: "Invoices", to: "/dashboard/finance", search: { tab: "invoices" }, icon: FileText },
   { label: "Expenses", to: "/dashboard/finance", search: { tab: "expenses" }, icon: Receipt },
+  { label: "Payroll", to: "/dashboard/finance", search: { tab: "payroll" }, icon: Wallet },
   { label: "Refunds", to: "/dashboard/finance", search: { tab: "refunds" }, icon: RefreshCcw },
   { label: "Ledger", to: "/dashboard/finance", search: { tab: "ledger" }, icon: BookOpen },
 ];
@@ -37,6 +42,7 @@ export function FinanceShell() {
       {tab === "overview" && <Overview />}
       {tab === "invoices" && <Invoices />}
       {tab === "expenses" && <Expenses />}
+      {tab === "payroll" && <Payroll />}
       {tab === "refunds" && <Refunds />}
       {tab === "ledger" && <Ledger />}
     </DashboardShell>
