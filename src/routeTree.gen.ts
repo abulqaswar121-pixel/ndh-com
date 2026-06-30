@@ -13,7 +13,6 @@ import { Route as VerifyRouteImport } from './routes/verify'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as ServicesRouteImport } from './routes/services'
 import { Route as PrivacyRouteImport } from './routes/privacy'
-import { Route as JoinTalentRouteImport } from './routes/join-talent'
 import { Route as FaqRouteImport } from './routes/faq'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as BlogRouteImport } from './routes/blog'
@@ -39,11 +38,6 @@ const ServicesRoute = ServicesRouteImport.update({
 const PrivacyRoute = PrivacyRouteImport.update({
   id: '/privacy',
   path: '/privacy',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const JoinTalentRoute = JoinTalentRouteImport.update({
-  id: '/join-talent',
-  path: '/join-talent',
   getParentRoute: () => rootRouteImport,
 } as any)
 const FaqRoute = FaqRouteImport.update({
@@ -84,7 +78,6 @@ export interface FileRoutesByFullPath {
   '/blog': typeof BlogRoute
   '/contact': typeof ContactRoute
   '/faq': typeof FaqRoute
-  '/join-talent': typeof JoinTalentRoute
   '/privacy': typeof PrivacyRoute
   '/services': typeof ServicesRoute
   '/terms': typeof TermsRoute
@@ -97,7 +90,6 @@ export interface FileRoutesByTo {
   '/blog': typeof BlogRoute
   '/contact': typeof ContactRoute
   '/faq': typeof FaqRoute
-  '/join-talent': typeof JoinTalentRoute
   '/privacy': typeof PrivacyRoute
   '/services': typeof ServicesRoute
   '/terms': typeof TermsRoute
@@ -111,7 +103,6 @@ export interface FileRoutesById {
   '/blog': typeof BlogRoute
   '/contact': typeof ContactRoute
   '/faq': typeof FaqRoute
-  '/join-talent': typeof JoinTalentRoute
   '/privacy': typeof PrivacyRoute
   '/services': typeof ServicesRoute
   '/terms': typeof TermsRoute
@@ -126,7 +117,6 @@ export interface FileRouteTypes {
     | '/blog'
     | '/contact'
     | '/faq'
-    | '/join-talent'
     | '/privacy'
     | '/services'
     | '/terms'
@@ -139,7 +129,6 @@ export interface FileRouteTypes {
     | '/blog'
     | '/contact'
     | '/faq'
-    | '/join-talent'
     | '/privacy'
     | '/services'
     | '/terms'
@@ -152,7 +141,6 @@ export interface FileRouteTypes {
     | '/blog'
     | '/contact'
     | '/faq'
-    | '/join-talent'
     | '/privacy'
     | '/services'
     | '/terms'
@@ -166,7 +154,6 @@ export interface RootRouteChildren {
   BlogRoute: typeof BlogRoute
   ContactRoute: typeof ContactRoute
   FaqRoute: typeof FaqRoute
-  JoinTalentRoute: typeof JoinTalentRoute
   PrivacyRoute: typeof PrivacyRoute
   ServicesRoute: typeof ServicesRoute
   TermsRoute: typeof TermsRoute
@@ -201,13 +188,6 @@ declare module '@tanstack/react-router' {
       path: '/privacy'
       fullPath: '/privacy'
       preLoaderRoute: typeof PrivacyRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/join-talent': {
-      id: '/join-talent'
-      path: '/join-talent'
-      fullPath: '/join-talent'
-      preLoaderRoute: typeof JoinTalentRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/faq': {
@@ -262,7 +242,6 @@ const rootRouteChildren: RootRouteChildren = {
   BlogRoute: BlogRoute,
   ContactRoute: ContactRoute,
   FaqRoute: FaqRoute,
-  JoinTalentRoute: JoinTalentRoute,
   PrivacyRoute: PrivacyRoute,
   ServicesRoute: ServicesRoute,
   TermsRoute: TermsRoute,
