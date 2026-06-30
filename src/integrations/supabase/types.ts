@@ -21,8 +21,10 @@ export type Database = {
           grade: string | null
           id: string
           issue_date: string
+          pdf_url: string | null
           qr_code: string | null
           student_id: string
+          verification_token: string | null
         }
         Insert: {
           certificate_number: string
@@ -30,8 +32,10 @@ export type Database = {
           grade?: string | null
           id?: string
           issue_date?: string
+          pdf_url?: string | null
           qr_code?: string | null
           student_id: string
+          verification_token?: string | null
         }
         Update: {
           certificate_number?: string
@@ -39,8 +43,10 @@ export type Database = {
           grade?: string | null
           id?: string
           issue_date?: string
+          pdf_url?: string | null
           qr_code?: string | null
           student_id?: string
+          verification_token?: string | null
         }
         Relationships: [
           {
@@ -87,46 +93,79 @@ export type Database = {
       }
       courses: {
         Row: {
+          certification_text: string | null
           cover_image: string | null
           created_at: string
           department_id: string | null
           description: string | null
           duration: string | null
+          duration_months: number | null
+          entry_requirements: string | null
           id: string
           instructor_id: string | null
           is_published: boolean | null
+          learning_outcomes: Json | null
           modules: Json | null
+          overview: string | null
           program_name: string
           program_type: Database["public"]["Enums"]["program_type"]
+          rating: number | null
+          schedule_text: string | null
+          slug: string | null
+          students_count: number | null
           tuition_ngn: number
+          updated_at: string
+          what_youll_learn: Json | null
         }
         Insert: {
+          certification_text?: string | null
           cover_image?: string | null
           created_at?: string
           department_id?: string | null
           description?: string | null
           duration?: string | null
+          duration_months?: number | null
+          entry_requirements?: string | null
           id?: string
           instructor_id?: string | null
           is_published?: boolean | null
+          learning_outcomes?: Json | null
           modules?: Json | null
+          overview?: string | null
           program_name: string
           program_type: Database["public"]["Enums"]["program_type"]
+          rating?: number | null
+          schedule_text?: string | null
+          slug?: string | null
+          students_count?: number | null
           tuition_ngn?: number
+          updated_at?: string
+          what_youll_learn?: Json | null
         }
         Update: {
+          certification_text?: string | null
           cover_image?: string | null
           created_at?: string
           department_id?: string | null
           description?: string | null
           duration?: string | null
+          duration_months?: number | null
+          entry_requirements?: string | null
           id?: string
           instructor_id?: string | null
           is_published?: boolean | null
+          learning_outcomes?: Json | null
           modules?: Json | null
+          overview?: string | null
           program_name?: string
           program_type?: Database["public"]["Enums"]["program_type"]
+          rating?: number | null
+          schedule_text?: string | null
+          slug?: string | null
+          students_count?: number | null
           tuition_ngn?: number
+          updated_at?: string
+          what_youll_learn?: Json | null
         }
         Relationships: [
           {
@@ -254,31 +293,49 @@ export type Database = {
       }
       enrollments: {
         Row: {
+          completed_at: string | null
           course_id: string
           created_at: string
+          education_background: Json | null
           id: string
+          motivation_essay: string | null
           payment_id: string | null
+          payment_status: string
+          personal_info: Json | null
           progress: number | null
           status: string
           student_id: string
+          updated_at: string
         }
         Insert: {
+          completed_at?: string | null
           course_id: string
           created_at?: string
+          education_background?: Json | null
           id?: string
+          motivation_essay?: string | null
           payment_id?: string | null
+          payment_status?: string
+          personal_info?: Json | null
           progress?: number | null
           status?: string
           student_id: string
+          updated_at?: string
         }
         Update: {
+          completed_at?: string | null
           course_id?: string
           created_at?: string
+          education_background?: Json | null
           id?: string
+          motivation_essay?: string | null
           payment_id?: string | null
+          payment_status?: string
+          personal_info?: Json | null
           progress?: number | null
           status?: string
           student_id?: string
+          updated_at?: string
         }
         Relationships: [
           {
@@ -326,6 +383,113 @@ export type Database = {
           },
         ]
       }
+      lesson_progress: {
+        Row: {
+          completed: boolean
+          completed_at: string | null
+          course_id: string
+          created_at: string
+          id: string
+          lesson_id: string
+          notes: string | null
+          student_id: string
+          updated_at: string
+        }
+        Insert: {
+          completed?: boolean
+          completed_at?: string | null
+          course_id: string
+          created_at?: string
+          id?: string
+          lesson_id: string
+          notes?: string | null
+          student_id: string
+          updated_at?: string
+        }
+        Update: {
+          completed?: boolean
+          completed_at?: string | null
+          course_id?: string
+          created_at?: string
+          id?: string
+          lesson_id?: string
+          notes?: string | null
+          student_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lesson_progress_course_id_fkey"
+            columns: ["course_id"]
+            isOneToOne: false
+            referencedRelation: "courses"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "lesson_progress_lesson_id_fkey"
+            columns: ["lesson_id"]
+            isOneToOne: false
+            referencedRelation: "lessons"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      lessons: {
+        Row: {
+          content_text: string | null
+          content_url: string | null
+          created_at: string
+          description: string | null
+          duration_minutes: number | null
+          id: string
+          is_preview: boolean
+          module_id: string
+          position: number
+          resources: Json | null
+          title: string
+          type: Database["public"]["Enums"]["lesson_type"]
+          updated_at: string
+        }
+        Insert: {
+          content_text?: string | null
+          content_url?: string | null
+          created_at?: string
+          description?: string | null
+          duration_minutes?: number | null
+          id?: string
+          is_preview?: boolean
+          module_id: string
+          position?: number
+          resources?: Json | null
+          title: string
+          type?: Database["public"]["Enums"]["lesson_type"]
+          updated_at?: string
+        }
+        Update: {
+          content_text?: string | null
+          content_url?: string | null
+          created_at?: string
+          description?: string | null
+          duration_minutes?: number | null
+          id?: string
+          is_preview?: boolean
+          module_id?: string
+          position?: number
+          resources?: Json | null
+          title?: string
+          type?: Database["public"]["Enums"]["lesson_type"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lessons_module_id_fkey"
+            columns: ["module_id"]
+            isOneToOne: false
+            referencedRelation: "modules"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       messages: {
         Row: {
           attachments: Json | null
@@ -363,6 +527,44 @@ export type Database = {
             columns: ["task_id"]
             isOneToOne: false
             referencedRelation: "tasks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      modules: {
+        Row: {
+          course_id: string
+          created_at: string
+          description: string | null
+          id: string
+          position: number
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          course_id: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          position?: number
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          course_id?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          position?: number
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "modules_course_id_fkey"
+            columns: ["course_id"]
+            isOneToOne: false
+            referencedRelation: "courses"
             referencedColumns: ["id"]
           },
         ]
@@ -984,6 +1186,30 @@ export type Database = {
         Args: { payload: Json; queue_name: string }
         Returns: number
       }
+      get_lesson_content: {
+        Args: { _lesson_id: string }
+        Returns: {
+          content_text: string | null
+          content_url: string | null
+          created_at: string
+          description: string | null
+          duration_minutes: number | null
+          id: string
+          is_preview: boolean
+          module_id: string
+          position: number
+          resources: Json | null
+          title: string
+          type: Database["public"]["Enums"]["lesson_type"]
+          updated_at: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "lessons"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       get_talent_task: {
         Args: { _task_id: string }
         Returns: {
@@ -1098,6 +1324,7 @@ export type Database = {
         | "hod"
         | "admin"
         | "super_admin"
+      lesson_type: "video" | "pdf" | "text" | "quiz"
       payment_status: "pending" | "paid" | "failed" | "refunded"
       program_type: "certificate" | "diploma" | "professional"
       service_category:
@@ -1256,6 +1483,7 @@ export const Constants = {
         "admin",
         "super_admin",
       ],
+      lesson_type: ["video", "pdf", "text", "quiz"],
       payment_status: ["pending", "paid", "failed", "refunded"],
       program_type: ["certificate", "diploma", "professional"],
       service_category: [
