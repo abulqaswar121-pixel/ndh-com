@@ -13,18 +13,30 @@ import { Route as VerifyRouteImport } from './routes/verify'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as TeamRouteImport } from './routes/team'
 import { Route as TalentApplicationRouteImport } from './routes/talent-application'
+import { Route as TalentRouteImport } from './routes/talent'
 import { Route as SubmitTaskRouteImport } from './routes/submit-task'
+import { Route as StudentRouteImport } from './routes/student'
 import { Route as SignupRouteImport } from './routes/signup'
 import { Route as ServicesRouteImport } from './routes/services'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as InstructorRouteImport } from './routes/instructor'
 import { Route as FaqRouteImport } from './routes/faq'
 import { Route as ContactRouteImport } from './routes/contact'
+import { Route as ClientRouteImport } from './routes/client'
 import { Route as CareersRouteImport } from './routes/careers'
 import { Route as BlogRouteImport } from './routes/blog'
+import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AcademyRouteImport } from './routes/academy'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AdminStudentAffairsRouteImport } from './routes/admin.student-affairs'
+import { Route as AdminRegistrarRouteImport } from './routes/admin.registrar'
+import { Route as AdminPmRouteImport } from './routes/admin.pm'
+import { Route as AdminOperationsRouteImport } from './routes/admin.operations'
+import { Route as AdminHodRouteImport } from './routes/admin.hod'
+import { Route as AdminFinanceRouteImport } from './routes/admin.finance'
+import { Route as AdminAcademyRouteImport } from './routes/admin.academy'
 
 const VerifyRoute = VerifyRouteImport.update({
   id: '/verify',
@@ -46,9 +58,19 @@ const TalentApplicationRoute = TalentApplicationRouteImport.update({
   path: '/talent-application',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TalentRoute = TalentRouteImport.update({
+  id: '/talent',
+  path: '/talent',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SubmitTaskRoute = SubmitTaskRouteImport.update({
   id: '/submit-task',
   path: '/submit-task',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StudentRoute = StudentRouteImport.update({
+  id: '/student',
+  path: '/student',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SignupRoute = SignupRouteImport.update({
@@ -71,6 +93,11 @@ const LoginRoute = LoginRouteImport.update({
   path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
+const InstructorRoute = InstructorRouteImport.update({
+  id: '/instructor',
+  path: '/instructor',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const FaqRoute = FaqRouteImport.update({
   id: '/faq',
   path: '/faq',
@@ -81,6 +108,11 @@ const ContactRoute = ContactRouteImport.update({
   path: '/contact',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ClientRoute = ClientRouteImport.update({
+  id: '/client',
+  path: '/client',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CareersRoute = CareersRouteImport.update({
   id: '/careers',
   path: '/careers',
@@ -89,6 +121,11 @@ const CareersRoute = CareersRouteImport.update({
 const BlogRoute = BlogRouteImport.update({
   id: '/blog',
   path: '/blog',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AcademyRoute = AcademyRouteImport.update({
@@ -106,61 +143,132 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminStudentAffairsRoute = AdminStudentAffairsRouteImport.update({
+  id: '/student-affairs',
+  path: '/student-affairs',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminRegistrarRoute = AdminRegistrarRouteImport.update({
+  id: '/registrar',
+  path: '/registrar',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminPmRoute = AdminPmRouteImport.update({
+  id: '/pm',
+  path: '/pm',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminOperationsRoute = AdminOperationsRouteImport.update({
+  id: '/operations',
+  path: '/operations',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminHodRoute = AdminHodRouteImport.update({
+  id: '/hod',
+  path: '/hod',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminFinanceRoute = AdminFinanceRouteImport.update({
+  id: '/finance',
+  path: '/finance',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminAcademyRoute = AdminAcademyRouteImport.update({
+  id: '/academy',
+  path: '/academy',
+  getParentRoute: () => AdminRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/academy': typeof AcademyRoute
+  '/admin': typeof AdminRouteWithChildren
   '/blog': typeof BlogRoute
   '/careers': typeof CareersRoute
+  '/client': typeof ClientRoute
   '/contact': typeof ContactRoute
   '/faq': typeof FaqRoute
+  '/instructor': typeof InstructorRoute
   '/login': typeof LoginRoute
   '/privacy': typeof PrivacyRoute
   '/services': typeof ServicesRoute
   '/signup': typeof SignupRoute
+  '/student': typeof StudentRoute
   '/submit-task': typeof SubmitTaskRoute
+  '/talent': typeof TalentRoute
   '/talent-application': typeof TalentApplicationRoute
   '/team': typeof TeamRoute
   '/terms': typeof TermsRoute
   '/verify': typeof VerifyRoute
+  '/admin/academy': typeof AdminAcademyRoute
+  '/admin/finance': typeof AdminFinanceRoute
+  '/admin/hod': typeof AdminHodRoute
+  '/admin/operations': typeof AdminOperationsRoute
+  '/admin/pm': typeof AdminPmRoute
+  '/admin/registrar': typeof AdminRegistrarRoute
+  '/admin/student-affairs': typeof AdminStudentAffairsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/academy': typeof AcademyRoute
+  '/admin': typeof AdminRouteWithChildren
   '/blog': typeof BlogRoute
   '/careers': typeof CareersRoute
+  '/client': typeof ClientRoute
   '/contact': typeof ContactRoute
   '/faq': typeof FaqRoute
+  '/instructor': typeof InstructorRoute
   '/login': typeof LoginRoute
   '/privacy': typeof PrivacyRoute
   '/services': typeof ServicesRoute
   '/signup': typeof SignupRoute
+  '/student': typeof StudentRoute
   '/submit-task': typeof SubmitTaskRoute
+  '/talent': typeof TalentRoute
   '/talent-application': typeof TalentApplicationRoute
   '/team': typeof TeamRoute
   '/terms': typeof TermsRoute
   '/verify': typeof VerifyRoute
+  '/admin/academy': typeof AdminAcademyRoute
+  '/admin/finance': typeof AdminFinanceRoute
+  '/admin/hod': typeof AdminHodRoute
+  '/admin/operations': typeof AdminOperationsRoute
+  '/admin/pm': typeof AdminPmRoute
+  '/admin/registrar': typeof AdminRegistrarRoute
+  '/admin/student-affairs': typeof AdminStudentAffairsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/academy': typeof AcademyRoute
+  '/admin': typeof AdminRouteWithChildren
   '/blog': typeof BlogRoute
   '/careers': typeof CareersRoute
+  '/client': typeof ClientRoute
   '/contact': typeof ContactRoute
   '/faq': typeof FaqRoute
+  '/instructor': typeof InstructorRoute
   '/login': typeof LoginRoute
   '/privacy': typeof PrivacyRoute
   '/services': typeof ServicesRoute
   '/signup': typeof SignupRoute
+  '/student': typeof StudentRoute
   '/submit-task': typeof SubmitTaskRoute
+  '/talent': typeof TalentRoute
   '/talent-application': typeof TalentApplicationRoute
   '/team': typeof TeamRoute
   '/terms': typeof TermsRoute
   '/verify': typeof VerifyRoute
+  '/admin/academy': typeof AdminAcademyRoute
+  '/admin/finance': typeof AdminFinanceRoute
+  '/admin/hod': typeof AdminHodRoute
+  '/admin/operations': typeof AdminOperationsRoute
+  '/admin/pm': typeof AdminPmRoute
+  '/admin/registrar': typeof AdminRegistrarRoute
+  '/admin/student-affairs': typeof AdminStudentAffairsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -168,70 +276,111 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/academy'
+    | '/admin'
     | '/blog'
     | '/careers'
+    | '/client'
     | '/contact'
     | '/faq'
+    | '/instructor'
     | '/login'
     | '/privacy'
     | '/services'
     | '/signup'
+    | '/student'
     | '/submit-task'
+    | '/talent'
     | '/talent-application'
     | '/team'
     | '/terms'
     | '/verify'
+    | '/admin/academy'
+    | '/admin/finance'
+    | '/admin/hod'
+    | '/admin/operations'
+    | '/admin/pm'
+    | '/admin/registrar'
+    | '/admin/student-affairs'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/about'
     | '/academy'
+    | '/admin'
     | '/blog'
     | '/careers'
+    | '/client'
     | '/contact'
     | '/faq'
+    | '/instructor'
     | '/login'
     | '/privacy'
     | '/services'
     | '/signup'
+    | '/student'
     | '/submit-task'
+    | '/talent'
     | '/talent-application'
     | '/team'
     | '/terms'
     | '/verify'
+    | '/admin/academy'
+    | '/admin/finance'
+    | '/admin/hod'
+    | '/admin/operations'
+    | '/admin/pm'
+    | '/admin/registrar'
+    | '/admin/student-affairs'
   id:
     | '__root__'
     | '/'
     | '/about'
     | '/academy'
+    | '/admin'
     | '/blog'
     | '/careers'
+    | '/client'
     | '/contact'
     | '/faq'
+    | '/instructor'
     | '/login'
     | '/privacy'
     | '/services'
     | '/signup'
+    | '/student'
     | '/submit-task'
+    | '/talent'
     | '/talent-application'
     | '/team'
     | '/terms'
     | '/verify'
+    | '/admin/academy'
+    | '/admin/finance'
+    | '/admin/hod'
+    | '/admin/operations'
+    | '/admin/pm'
+    | '/admin/registrar'
+    | '/admin/student-affairs'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
   AcademyRoute: typeof AcademyRoute
+  AdminRoute: typeof AdminRouteWithChildren
   BlogRoute: typeof BlogRoute
   CareersRoute: typeof CareersRoute
+  ClientRoute: typeof ClientRoute
   ContactRoute: typeof ContactRoute
   FaqRoute: typeof FaqRoute
+  InstructorRoute: typeof InstructorRoute
   LoginRoute: typeof LoginRoute
   PrivacyRoute: typeof PrivacyRoute
   ServicesRoute: typeof ServicesRoute
   SignupRoute: typeof SignupRoute
+  StudentRoute: typeof StudentRoute
   SubmitTaskRoute: typeof SubmitTaskRoute
+  TalentRoute: typeof TalentRoute
   TalentApplicationRoute: typeof TalentApplicationRoute
   TeamRoute: typeof TeamRoute
   TermsRoute: typeof TermsRoute
@@ -268,11 +417,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TalentApplicationRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/talent': {
+      id: '/talent'
+      path: '/talent'
+      fullPath: '/talent'
+      preLoaderRoute: typeof TalentRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/submit-task': {
       id: '/submit-task'
       path: '/submit-task'
       fullPath: '/submit-task'
       preLoaderRoute: typeof SubmitTaskRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/student': {
+      id: '/student'
+      path: '/student'
+      fullPath: '/student'
+      preLoaderRoute: typeof StudentRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/signup': {
@@ -303,6 +466,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/instructor': {
+      id: '/instructor'
+      path: '/instructor'
+      fullPath: '/instructor'
+      preLoaderRoute: typeof InstructorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/faq': {
       id: '/faq'
       path: '/faq'
@@ -317,6 +487,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ContactRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/client': {
+      id: '/client'
+      path: '/client'
+      fullPath: '/client'
+      preLoaderRoute: typeof ClientRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/careers': {
       id: '/careers'
       path: '/careers'
@@ -329,6 +506,13 @@ declare module '@tanstack/react-router' {
       path: '/blog'
       fullPath: '/blog'
       preLoaderRoute: typeof BlogRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/academy': {
@@ -352,22 +536,98 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/student-affairs': {
+      id: '/admin/student-affairs'
+      path: '/student-affairs'
+      fullPath: '/admin/student-affairs'
+      preLoaderRoute: typeof AdminStudentAffairsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/registrar': {
+      id: '/admin/registrar'
+      path: '/registrar'
+      fullPath: '/admin/registrar'
+      preLoaderRoute: typeof AdminRegistrarRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/pm': {
+      id: '/admin/pm'
+      path: '/pm'
+      fullPath: '/admin/pm'
+      preLoaderRoute: typeof AdminPmRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/operations': {
+      id: '/admin/operations'
+      path: '/operations'
+      fullPath: '/admin/operations'
+      preLoaderRoute: typeof AdminOperationsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/hod': {
+      id: '/admin/hod'
+      path: '/hod'
+      fullPath: '/admin/hod'
+      preLoaderRoute: typeof AdminHodRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/finance': {
+      id: '/admin/finance'
+      path: '/finance'
+      fullPath: '/admin/finance'
+      preLoaderRoute: typeof AdminFinanceRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/academy': {
+      id: '/admin/academy'
+      path: '/academy'
+      fullPath: '/admin/academy'
+      preLoaderRoute: typeof AdminAcademyRouteImport
+      parentRoute: typeof AdminRoute
+    }
   }
 }
+
+interface AdminRouteChildren {
+  AdminAcademyRoute: typeof AdminAcademyRoute
+  AdminFinanceRoute: typeof AdminFinanceRoute
+  AdminHodRoute: typeof AdminHodRoute
+  AdminOperationsRoute: typeof AdminOperationsRoute
+  AdminPmRoute: typeof AdminPmRoute
+  AdminRegistrarRoute: typeof AdminRegistrarRoute
+  AdminStudentAffairsRoute: typeof AdminStudentAffairsRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminAcademyRoute: AdminAcademyRoute,
+  AdminFinanceRoute: AdminFinanceRoute,
+  AdminHodRoute: AdminHodRoute,
+  AdminOperationsRoute: AdminOperationsRoute,
+  AdminPmRoute: AdminPmRoute,
+  AdminRegistrarRoute: AdminRegistrarRoute,
+  AdminStudentAffairsRoute: AdminStudentAffairsRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
   AcademyRoute: AcademyRoute,
+  AdminRoute: AdminRouteWithChildren,
   BlogRoute: BlogRoute,
   CareersRoute: CareersRoute,
+  ClientRoute: ClientRoute,
   ContactRoute: ContactRoute,
   FaqRoute: FaqRoute,
+  InstructorRoute: InstructorRoute,
   LoginRoute: LoginRoute,
   PrivacyRoute: PrivacyRoute,
   ServicesRoute: ServicesRoute,
   SignupRoute: SignupRoute,
+  StudentRoute: StudentRoute,
   SubmitTaskRoute: SubmitTaskRoute,
+  TalentRoute: TalentRoute,
   TalentApplicationRoute: TalentApplicationRoute,
   TeamRoute: TeamRoute,
   TermsRoute: TermsRoute,

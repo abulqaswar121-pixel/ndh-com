@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { DashboardStub } from "@/components/site/DashboardStub";
-export const Route = createFileRoute("/admin")({
+export const Route = createFileRoute("/admin/")({
   head: () => ({ meta: [{ title: "Super Admin — NDH" }] }),
   component: () => (
     <DashboardStub
