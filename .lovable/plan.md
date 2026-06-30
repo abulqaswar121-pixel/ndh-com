@@ -1,92 +1,66 @@
-# NDH Platform — Premium Rebuild Plan
+# Phase 3 — NDH Academy (LMS) + Student Portal
 
-This is a large multi-week scope. To ship quality (not a half-broken mega-PR), I'll execute in clearly-scoped phases. Approve the plan, then I'll start Phase 1 immediately. Each later phase ships in its own turn so you can review as we go.
-
----
-
-## Global decisions (apply to all phases)
-
-- **Animations**: Framer Motion + CSS. GSAP only where Framer can't (parallax pinning).
-- **Visuals**: All images via `https://source.unsplash.com/...` keyword URLs (no upload step). Background videos via direct Pexels/Mixkit/Coverr CDN MP4s. Lottie via `lottiefiles.com` JSON URLs rendered with `@lottiefiles/dotlottie-react`. Illustrations via Storyset CDN PNGs.
-  - Note: third-party hotlinking can occasionally rate-limit or break. Acceptable per your "auto-fetch everything" directive; we'll add graceful fallbacks (skeleton → solid gradient) so nothing renders as a broken image box.
-- **No floating WhatsApp button** — removed entirely. WhatsApp number is footer text only.
-- **Bureau vs Academy** are visually separated (different accent gradient, nav context, hero treatment).
-- **Backend**: Lovable Cloud (Supabase under the hood) — enabled in Phase 3 when we add auth + portals. Public site (Phases 1–2) ships without it.
-- **PWA**: manifest + icons only (installable, splash, app icon). Full offline + push deferred unless you explicitly want them — they add fragility and the PWA skill recommends manifest-only for "installable app" requests.
+This is a very large phase. I'll ship it in 4 reviewable sub-phases so you can test as we go, instead of one giant drop you can't validate.
 
 ---
 
-## Phase 1 — Foundation + Public Marketing Site (this turn)
+## Sub-phase 3A — Foundation (DB + Public Academy + Seed)
 
-1. **Design system upgrade** in `src/styles.css`: refined navy→purple→teal gradient tokens, glassmorphism utility, animated blob keyframes, smoother shadows, scroll-reveal utilities.
-2. **Install**: `framer-motion`, `@lottiefiles/dotlottie-react`, `react-intersection-observer`.
-3. **Shared shell**:
-   - New `Navbar` (glass on scroll, animated underline, Bureau/Academy mode switch, dark toggle).
-   - New `Footer` (5 columns exactly as spec, 2 emails, Sokoto location, FB+IG, WhatsApp as text, "Built by NDH in Sokoto, Nigeria").
-   - Delete `WhatsAppFab` and remove from layout.
-   - `AnimatedBlobs`, `Reveal` (fade+slide on scroll), `Counter` (already exists — upgrade to IntersectionObserver), `Marquee`, `TypingHeadline`, `LottiePlayer`, `UnsplashImg` (with skeleton+fallback), `VideoHero` components.
-4. **Pages rebuilt with premium design + auto-fetched media**:
-   - `/` Homepage — video hero, typing tagline, 3 CTAs, animated stats, 6 service cards, How It Works, Why NDH, Academy promo, testimonials carousel, final CTA, newsletter.
-   - `/services` — hero, 6 detailed services, portfolio mockups grid.
-   - `/about` — story, mission/vision/values, diaspora map visual, founder section, Sokoto office.
-   - `/team` — Founder + Leadership + 5 HODs + 5 PMs (diverse fictional profiles with Unsplash portraits).
-   - `/academy` — hero, why, how-it-works, full Certificate/Diploma/Professional program lists (every program from your spec), calendar, entry req, geo-priced tuition table, testimonials, verify-cert link.
-   - `/academy/courses/$slug` — dynamic course detail page (overview, curriculum modules, instructor, schedule, geo-pricing, apply).
-   - `/contact` — form, email/phone, Sokoto map embed, FB+IG, business hours.
-   - `/blog` — featured + grid, categories, search, newsletter.
-   - `/careers` — open roles, why work at NDH, application form, note about talents being email-recruited.
-   - `/verify` — cert ID/QR lookup UI.
-   - `/talent-application` — email-based application form (replaces old "Join Talent" sign-up).
-   - `/submit-task` — pre-portal task brief form.
-   - `/faq`, `/terms`, `/privacy` — restyled.
-   - `404` not-found page — animated.
-5. **PWA manifest + icons** (manifest-only, installable). Apple touch icon, theme color, splash.
-6. **SEO**: per-route `head()` with title/description/og.
+**Database migration** (one migration, with GRANTs + RLS on every new table):
+- Extend `courses` (slug, program_type enum certificate/diploma/professional, duration_months, tuition_ngn, thumbnail_url, overview, learning_outcomes jsonb, entry_requirements, schedule, status, instructor_id)
+- New: `modules`, `lessons` (type: video/pdf/text), `assignments`, `assignment_submissions`, `tests`, `test_questions`, `test_submissions`, `forum_threads`, `forum_replies`, `lesson_progress`, `live_classes`, `announcements`
+- Extend `enrollments` (progress_percentage, motivation_essay, personal_info jsonb, payment_status)
+- Extend `certificates` (certificate_number, grade enum, qr_code, pdf_url, verification_token)
+- Public read policies for courses/modules/lessons (preview only — full content gated); student-scoped policies for everything else; instructor policies for grading
 
-Deliverable: full marketing site live, no portals yet, no auth.
+**Seed** all 21 courses listed (8 Certificate, 8 Diploma, 5 Professional) with slugs, tuition, overview, 4-module placeholder curriculum each, Unsplash thumbnails.
+
+**Public pages:**
+- Expand `/academy` (hero, why, how-it-works, 3 program tiles, featured courses, testimonials, verify CTA)
+- New: `/academy/certificate-programs`, `/academy/diploma-programs`, `/academy/professional-programs`
+- New: `/academy/course/$slug` (overview, what you'll learn, curriculum accordion, instructor, schedule, requirements, geo-priced tuition, reviews, Apply Now)
+- Upgrade `/verify` to query real `certificates` table + add `/verify/$id` direct route
 
 ---
 
-## Phase 2 — Auth + Beautiful Sign-in (next turn)
+## Sub-phase 3B — Enrollment + Payment
 
-- Enable Lovable Cloud.
-- Split-screen auth pages (illustration left, form right, Google OAuth top, email below).
-- Roles table (`app_role` enum: client, talent, student, instructor, pm, hod, academy_director, finance, registrar, student_affairs, ops_manager, super_admin) + `has_role` SECURITY DEFINER per the user-roles rule.
-- `profiles` table with auto-create trigger.
-- Routes: `/login`, `/signup` (client + student only — talent/instructor/admin login-only), `/forgot-password`, `/reset-password`.
-- `_authenticated` route gate.
-
----
-
-## Phase 3 — Client Portal + Task Submission
-
-- Client dashboard, multi-step task submission wizard, task list with statuses, messaging (client ↔ PM only), invoices stub, profile settings.
-
-## Phase 4 — Talent Portal
-
-- Invite-only access (no signup UI), assigned tasks, submit work, earnings, tier progress, PM messaging. Client identity fully masked.
-
-## Phase 5 — Academy LMS (Student + Instructor)
-
-- Student signup, course player, assignments, exams, grades, downloadable cert with QR, forum, ID card, payments stub. Instructor dashboard (invite-only).
-
-## Phase 6 — Admin Panels
-
-- Super Admin, Ops Manager, PM (per dept), Finance, Academy Director, HODs, Registrar, Student Affairs. Role-gated layouts under `_authenticated/admin/*`.
-
-## Phase 7 — Payments, Payroll, Escrow, Notifications, PWA offline (optional)
+- Public apply flow at `/academy/apply/$slug` (5-step wizard: account → personal info → education → essay → review)
+- Sign-up assigns `student` role; creates `enrollment` (pending_payment)
+- Reuses Paystack server fn (extended to accept `enrollment_id` as well as `quote_id`)
+- Webhook activates enrollment on success
+- Emails: `enrollment_received`, `enrollment_payment_confirmed`
 
 ---
 
-## Technical notes (non-user-facing)
+## Sub-phase 3C — Student Dashboard / LMS Core
 
-- TanStack Start file-based routes. Dynamic course = `src/routes/academy.courses.$slug.tsx`.
-- All third-party media wrapped in error-boundary fallback to a gradient block so a failed Unsplash/Pexels request never shows a broken-image icon.
-- Framer Motion `LazyMotion` + `domAnimation` to keep bundle slim.
-- No Supabase mention to users — call it Lovable Cloud.
+Sidebar shell at `/dashboard/student` with tabs:
+- Overview (welcome, progress, next live class, deadlines, announcements)
+- My Courses
+- **Course Player** (3-pane: module tree • video/PDF/text viewer + mark-complete + notes • progress sidebar)
+- Live Classes (calendar + list, Zoom/Meet links, recordings)
+- Assignments (Pending/Submitted/Graded tabs, file upload to Storage)
+- Tests & Exams (timed test interface, MCQ + written)
+- Grades & Transcripts (per-course breakdown, GPA, PDF transcript)
+- Discussion Forum (per-course threads + replies, real-time)
+- Messages (real-time chat with instructor)
+- Payments (history, receipts)
+- Settings (profile, password, country/currency, notification prefs)
 
 ---
 
-## What I need from you
+## Sub-phase 3D — Certificates + ID Card + Verification
 
-**Reply "go" to start Phase 1.** Or tell me to adjust scope (e.g. "skip team page", "do auth in Phase 1 too", "drop PWA"). Phase 1 alone is a substantial build; trying to do Phases 1–6 in one turn would produce broken output.
+- Server fn `issueCertificate` triggered when course progress = 100% and passing grade — generates cert number `NDH-CERT-YYYY-NNNNNN`, QR code (data URL to `/verify/$id`), renders PDF (pdf-lib, Worker-compatible), uploads to `certificates` Storage bucket, inserts row, sends `certificate_issued` email with link
+- Certificates tab: list, download PDF, "Share on LinkedIn" deep link
+- Student ID Card tab: branded digital card (photo, student #, program, QR), download as PNG
+- `/verify/$id` public page resolves certificate, shows verified badge + details, or not-found state
+
+---
+
+## What I'll deliver in this turn
+
+**Sub-phase 3A only** (DB migration + seed + public academy pages + course detail pages + verify upgrade). That's already ~15 files plus the migration. After you confirm the migration looks right and the public pages render correctly, I'll proceed to 3B → 3C → 3D in subsequent turns.
+
+**Reply "go" to start with the 3A migration**, or tell me to compress/reorder (e.g. "skip forum and live classes for now", "do enrollment before public pages", "ship it all in one go and I'll review at the end").
