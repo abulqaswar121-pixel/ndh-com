@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as VerifyRouteImport } from './routes/verify'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as TeamRouteImport } from './routes/team'
+import { Route as TalentLoginRouteImport } from './routes/talent-login'
 import { Route as TalentApplicationRouteImport } from './routes/talent-application'
 import { Route as TalentRouteImport } from './routes/talent'
 import { Route as SubmitTaskRouteImport } from './routes/submit-task'
@@ -34,6 +35,7 @@ import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as EmailUnsubscribeRouteImport } from './routes/email/unsubscribe'
+import { Route as AuthAcceptRouteImport } from './routes/auth.accept'
 import { Route as AdminStudentAffairsRouteImport } from './routes/admin.student-affairs'
 import { Route as AdminRegistrarRouteImport } from './routes/admin.registrar'
 import { Route as AdminPmRouteImport } from './routes/admin.pm'
@@ -68,6 +70,11 @@ const TermsRoute = TermsRouteImport.update({
 const TeamRoute = TeamRouteImport.update({
   id: '/team',
   path: '/team',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TalentLoginRoute = TalentLoginRouteImport.update({
+  id: '/talent-login',
+  path: '/talent-login',
   getParentRoute: () => rootRouteImport,
 } as any)
 const TalentApplicationRoute = TalentApplicationRouteImport.update({
@@ -177,6 +184,11 @@ const AdminIndexRoute = AdminIndexRouteImport.update({
 const EmailUnsubscribeRoute = EmailUnsubscribeRouteImport.update({
   id: '/email/unsubscribe',
   path: '/email/unsubscribe',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthAcceptRoute = AuthAcceptRouteImport.update({
+  id: '/auth/accept',
+  path: '/auth/accept',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminStudentAffairsRoute = AdminStudentAffairsRouteImport.update({
@@ -312,6 +324,7 @@ export interface FileRoutesByFullPath {
   '/submit-task': typeof SubmitTaskRoute
   '/talent': typeof TalentRoute
   '/talent-application': typeof TalentApplicationRoute
+  '/talent-login': typeof TalentLoginRoute
   '/team': typeof TeamRoute
   '/terms': typeof TermsRoute
   '/verify': typeof VerifyRoute
@@ -322,6 +335,7 @@ export interface FileRoutesByFullPath {
   '/admin/pm': typeof AdminPmRoute
   '/admin/registrar': typeof AdminRegistrarRoute
   '/admin/student-affairs': typeof AdminStudentAffairsRoute
+  '/auth/accept': typeof AuthAcceptRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/admin/': typeof AdminIndexRoute
   '/dashboard/admin': typeof AuthenticatedDashboardAdminRoute
@@ -358,6 +372,7 @@ export interface FileRoutesByTo {
   '/submit-task': typeof SubmitTaskRoute
   '/talent': typeof TalentRoute
   '/talent-application': typeof TalentApplicationRoute
+  '/talent-login': typeof TalentLoginRoute
   '/team': typeof TeamRoute
   '/terms': typeof TermsRoute
   '/verify': typeof VerifyRoute
@@ -368,6 +383,7 @@ export interface FileRoutesByTo {
   '/admin/pm': typeof AdminPmRoute
   '/admin/registrar': typeof AdminRegistrarRoute
   '/admin/student-affairs': typeof AdminStudentAffairsRoute
+  '/auth/accept': typeof AuthAcceptRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/admin': typeof AdminIndexRoute
   '/dashboard/admin': typeof AuthenticatedDashboardAdminRoute
@@ -406,6 +422,7 @@ export interface FileRoutesById {
   '/submit-task': typeof SubmitTaskRoute
   '/talent': typeof TalentRoute
   '/talent-application': typeof TalentApplicationRoute
+  '/talent-login': typeof TalentLoginRoute
   '/team': typeof TeamRoute
   '/terms': typeof TermsRoute
   '/verify': typeof VerifyRoute
@@ -416,6 +433,7 @@ export interface FileRoutesById {
   '/admin/pm': typeof AdminPmRoute
   '/admin/registrar': typeof AdminRegistrarRoute
   '/admin/student-affairs': typeof AdminStudentAffairsRoute
+  '/auth/accept': typeof AuthAcceptRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/admin/': typeof AdminIndexRoute
   '/_authenticated/dashboard/admin': typeof AuthenticatedDashboardAdminRoute
@@ -454,6 +472,7 @@ export interface FileRouteTypes {
     | '/submit-task'
     | '/talent'
     | '/talent-application'
+    | '/talent-login'
     | '/team'
     | '/terms'
     | '/verify'
@@ -464,6 +483,7 @@ export interface FileRouteTypes {
     | '/admin/pm'
     | '/admin/registrar'
     | '/admin/student-affairs'
+    | '/auth/accept'
     | '/email/unsubscribe'
     | '/admin/'
     | '/dashboard/admin'
@@ -500,6 +520,7 @@ export interface FileRouteTypes {
     | '/submit-task'
     | '/talent'
     | '/talent-application'
+    | '/talent-login'
     | '/team'
     | '/terms'
     | '/verify'
@@ -510,6 +531,7 @@ export interface FileRouteTypes {
     | '/admin/pm'
     | '/admin/registrar'
     | '/admin/student-affairs'
+    | '/auth/accept'
     | '/email/unsubscribe'
     | '/admin'
     | '/dashboard/admin'
@@ -547,6 +569,7 @@ export interface FileRouteTypes {
     | '/submit-task'
     | '/talent'
     | '/talent-application'
+    | '/talent-login'
     | '/team'
     | '/terms'
     | '/verify'
@@ -557,6 +580,7 @@ export interface FileRouteTypes {
     | '/admin/pm'
     | '/admin/registrar'
     | '/admin/student-affairs'
+    | '/auth/accept'
     | '/email/unsubscribe'
     | '/admin/'
     | '/_authenticated/dashboard/admin'
@@ -595,6 +619,7 @@ export interface RootRouteChildren {
   SubmitTaskRoute: typeof SubmitTaskRoute
   TalentRoute: typeof TalentRoute
   TalentApplicationRoute: typeof TalentApplicationRoute
+  TalentLoginRoute: typeof TalentLoginRoute
   TeamRoute: typeof TeamRoute
   TermsRoute: typeof TermsRoute
   VerifyRoute: typeof VerifyRoute
@@ -605,6 +630,7 @@ export interface RootRouteChildren {
   AdminPmRoute: typeof AdminPmRoute
   AdminRegistrarRoute: typeof AdminRegistrarRoute
   AdminStudentAffairsRoute: typeof AdminStudentAffairsRoute
+  AuthAcceptRoute: typeof AuthAcceptRoute
   EmailUnsubscribeRoute: typeof EmailUnsubscribeRoute
   AdminIndexRoute: typeof AdminIndexRoute
   LovableEmailSuppressionRoute: typeof LovableEmailSuppressionRoute
@@ -635,6 +661,13 @@ declare module '@tanstack/react-router' {
       path: '/team'
       fullPath: '/team'
       preLoaderRoute: typeof TeamRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/talent-login': {
+      id: '/talent-login'
+      path: '/talent-login'
+      fullPath: '/talent-login'
+      preLoaderRoute: typeof TalentLoginRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/talent-application': {
@@ -789,6 +822,13 @@ declare module '@tanstack/react-router' {
       path: '/email/unsubscribe'
       fullPath: '/email/unsubscribe'
       preLoaderRoute: typeof EmailUnsubscribeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth/accept': {
+      id: '/auth/accept'
+      path: '/auth/accept'
+      fullPath: '/auth/accept'
+      preLoaderRoute: typeof AuthAcceptRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin/student-affairs': {
@@ -980,6 +1020,7 @@ const rootRouteChildren: RootRouteChildren = {
   SubmitTaskRoute: SubmitTaskRoute,
   TalentRoute: TalentRoute,
   TalentApplicationRoute: TalentApplicationRoute,
+  TalentLoginRoute: TalentLoginRoute,
   TeamRoute: TeamRoute,
   TermsRoute: TermsRoute,
   VerifyRoute: VerifyRoute,
@@ -990,6 +1031,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminPmRoute: AdminPmRoute,
   AdminRegistrarRoute: AdminRegistrarRoute,
   AdminStudentAffairsRoute: AdminStudentAffairsRoute,
+  AuthAcceptRoute: AuthAcceptRoute,
   EmailUnsubscribeRoute: EmailUnsubscribeRoute,
   AdminIndexRoute: AdminIndexRoute,
   LovableEmailSuppressionRoute: LovableEmailSuppressionRoute,

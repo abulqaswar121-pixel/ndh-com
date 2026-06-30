@@ -5,6 +5,10 @@ import { PmAssignedTemplate } from './PmAssignedTemplate'
 import { QuoteSentTemplate } from './QuoteSentTemplate'
 import { PaymentReceivedTemplate } from './PaymentReceivedTemplate'
 import { TaskDeliveredTemplate } from './TaskDeliveredTemplate'
+import { template as talentInvitation } from './TalentInvitationTemplate'
+import { template as talentTaskAssigned } from './TalentTaskAssignedTemplate'
+import { template as talentRevision } from './TalentRevisionTemplate'
+import { template as talentPayment } from './TalentPaymentTemplate'
 
 export interface TemplateEntry {
   component: ComponentType<any>
@@ -88,4 +92,8 @@ export const TEMPLATES: Record<string, TemplateEntry> = {
       pmName: 'Yusuf',
     },
   },
+  talent_invitation: talentInvitation,
+  talent_task_assigned: talentTaskAssigned,
+  talent_revision_required: talentRevision,
+  talent_payment_processed: talentPayment,
 }

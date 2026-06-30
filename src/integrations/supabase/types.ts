@@ -678,36 +678,160 @@ export type Database = {
         }
         Relationships: []
       }
+      talent_invitations: {
+        Row: {
+          accepted_at: string | null
+          accepted_user_id: string | null
+          created_at: string
+          department_id: string | null
+          email: string
+          expires_at: string
+          full_name: string
+          id: string
+          invited_by: string | null
+          skills: string[]
+          tier: number
+          token: string
+        }
+        Insert: {
+          accepted_at?: string | null
+          accepted_user_id?: string | null
+          created_at?: string
+          department_id?: string | null
+          email: string
+          expires_at?: string
+          full_name: string
+          id?: string
+          invited_by?: string | null
+          skills?: string[]
+          tier?: number
+          token: string
+        }
+        Update: {
+          accepted_at?: string | null
+          accepted_user_id?: string | null
+          created_at?: string
+          department_id?: string | null
+          email?: string
+          expires_at?: string
+          full_name?: string
+          id?: string
+          invited_by?: string | null
+          skills?: string[]
+          tier?: number
+          token?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "talent_invitations_department_id_fkey"
+            columns: ["department_id"]
+            isOneToOne: false
+            referencedRelation: "departments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      talent_reviews: {
+        Row: {
+          approved: boolean
+          communication_rating: number
+          created_at: string
+          id: string
+          notes: string | null
+          pm_id: string
+          quality_rating: number
+          talent_id: string
+          task_id: string
+          timeliness_rating: number
+        }
+        Insert: {
+          approved?: boolean
+          communication_rating: number
+          created_at?: string
+          id?: string
+          notes?: string | null
+          pm_id: string
+          quality_rating: number
+          talent_id: string
+          task_id: string
+          timeliness_rating: number
+        }
+        Update: {
+          approved?: boolean
+          communication_rating?: number
+          created_at?: string
+          id?: string
+          notes?: string | null
+          pm_id?: string
+          quality_rating?: number
+          talent_id?: string
+          task_id?: string
+          timeliness_rating?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "talent_reviews_task_id_fkey"
+            columns: ["task_id"]
+            isOneToOne: false
+            referencedRelation: "tasks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       talents: {
         Row: {
+          approval_rate: number
+          availability: string
           bank_details: Json | null
           created_at: string
           department_id: string | null
+          invited_at: string | null
+          invited_by: string | null
+          joined_at: string | null
+          max_active_tasks: number
           performance_score: number | null
+          phone: string | null
           skills: string[] | null
           status: string
+          tasks_completed: number
           tier: number
           total_earnings: number | null
           user_id: string
         }
         Insert: {
+          approval_rate?: number
+          availability?: string
           bank_details?: Json | null
           created_at?: string
           department_id?: string | null
+          invited_at?: string | null
+          invited_by?: string | null
+          joined_at?: string | null
+          max_active_tasks?: number
           performance_score?: number | null
+          phone?: string | null
           skills?: string[] | null
           status?: string
+          tasks_completed?: number
           tier?: number
           total_earnings?: number | null
           user_id: string
         }
         Update: {
+          approval_rate?: number
+          availability?: string
           bank_details?: Json | null
           created_at?: string
           department_id?: string | null
+          invited_at?: string | null
+          invited_by?: string | null
+          joined_at?: string | null
+          max_active_tasks?: number
           performance_score?: number | null
+          phone?: string | null
           skills?: string[] | null
           status?: string
+          tasks_completed?: number
           tier?: number
           total_earnings?: number | null
           user_id?: string
@@ -742,8 +866,14 @@ export type Database = {
           id: string
           open_to_negotiation: boolean | null
           reviewed: boolean | null
+          revision_count: number
+          revision_notes: string | null
           service_category: Database["public"]["Enums"]["service_category"]
           status: Database["public"]["Enums"]["task_status"]
+          talent_assigned_at: string | null
+          talent_pay_rate: number | null
+          talent_response: string | null
+          talent_response_deadline: string | null
           tier: Database["public"]["Enums"]["task_tier"]
           title: string
           updated_at: string
@@ -767,8 +897,14 @@ export type Database = {
           id?: string
           open_to_negotiation?: boolean | null
           reviewed?: boolean | null
+          revision_count?: number
+          revision_notes?: string | null
           service_category: Database["public"]["Enums"]["service_category"]
           status?: Database["public"]["Enums"]["task_status"]
+          talent_assigned_at?: string | null
+          talent_pay_rate?: number | null
+          talent_response?: string | null
+          talent_response_deadline?: string | null
           tier?: Database["public"]["Enums"]["task_tier"]
           title: string
           updated_at?: string
@@ -792,8 +928,14 @@ export type Database = {
           id?: string
           open_to_negotiation?: boolean | null
           reviewed?: boolean | null
+          revision_count?: number
+          revision_notes?: string | null
           service_category?: Database["public"]["Enums"]["service_category"]
           status?: Database["public"]["Enums"]["task_status"]
+          talent_assigned_at?: string | null
+          talent_pay_rate?: number | null
+          talent_response?: string | null
+          talent_response_deadline?: string | null
           tier?: Database["public"]["Enums"]["task_tier"]
           title?: string
           updated_at?: string
@@ -842,6 +984,72 @@ export type Database = {
         Args: { payload: Json; queue_name: string }
         Returns: number
       }
+      get_talent_task: {
+        Args: { _task_id: string }
+        Returns: {
+          assigned_pm_id: string | null
+          assigned_talent_id: string | null
+          budget_currency: string | null
+          budget_max: number | null
+          budget_min: number | null
+          client_id: string
+          completed_at: string | null
+          created_at: string
+          deadline: string | null
+          deliverables: Json | null
+          delivered_at: string | null
+          delivered_by: string | null
+          department_id: string | null
+          description: string | null
+          files: Json | null
+          id: string
+          open_to_negotiation: boolean | null
+          reviewed: boolean | null
+          revision_count: number
+          revision_notes: string | null
+          service_category: Database["public"]["Enums"]["service_category"]
+          status: Database["public"]["Enums"]["task_status"]
+          talent_assigned_at: string | null
+          talent_pay_rate: number | null
+          talent_response: string | null
+          talent_response_deadline: string | null
+          tier: Database["public"]["Enums"]["task_tier"]
+          title: string
+          updated_at: string
+        }[]
+        SetofOptions: {
+          from: "*"
+          to: "tasks"
+          isOneToOne: false
+          isSetofReturn: true
+        }
+      }
+      get_talent_tasks: {
+        Args: never
+        Returns: {
+          assigned_pm_id: string
+          assigned_talent_id: string
+          completed_at: string
+          created_at: string
+          deadline: string
+          deliverables: Json
+          delivered_at: string
+          description: string
+          files: Json
+          id: string
+          revision_count: number
+          revision_notes: string
+          service_category: Database["public"]["Enums"]["service_category"]
+          status: Database["public"]["Enums"]["task_status"]
+          talent_assigned_at: string
+          talent_pay_rate: number
+          talent_response: string
+          talent_response_deadline: string
+          tier: Database["public"]["Enums"]["task_tier"]
+          title: string
+          updated_at: string
+        }[]
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -870,6 +1078,14 @@ export type Database = {
           msg_id: number
           read_ct: number
         }[]
+      }
+      talent_respond_to_task: {
+        Args: { _accept: boolean; _task_id: string }
+        Returns: undefined
+      }
+      talent_submit_work: {
+        Args: { _deliverables: Json; _notes: string; _task_id: string }
+        Returns: undefined
       }
     }
     Enums: {
@@ -900,6 +1116,8 @@ export type Database = {
         | "delivered"
         | "completed"
         | "cancelled"
+        | "submitted_qa"
+        | "revision_required"
       task_tier: "basic" | "professional" | "premium"
     }
     CompositeTypes: {
@@ -1057,6 +1275,8 @@ export const Constants = {
         "delivered",
         "completed",
         "cancelled",
+        "submitted_qa",
+        "revision_required",
       ],
       task_tier: ["basic", "professional", "premium"],
     },
