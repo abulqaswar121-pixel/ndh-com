@@ -2115,6 +2115,7 @@ export type Database = {
         | "hod"
         | "admin"
         | "super_admin"
+        | "finance"
       curriculum_status:
         | "draft"
         | "pending_approval"
@@ -2278,6 +2279,7 @@ export const Constants = {
         "hod",
         "admin",
         "super_admin",
+        "finance",
       ],
       curriculum_status: [
         "draft",
