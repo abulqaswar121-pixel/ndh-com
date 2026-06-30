@@ -9,6 +9,7 @@
   "theme_color": "#0A0E2A",
   "orientation": "portrait-primary",
   "icons": [
-    { "src": "/__l5e/assets-v1/0/ndh-logo.png", "sizes": "any", "type": "image/png", "purpose": "any maskable" }
+    { "src": "/__l5e/assets-v1/e2b8c427-3850-4864-8770-e1dd30edd19b/ndh-logo.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/__l5e/assets-v1/e2b8c427-3850-4864-8770-e1dd30edd19b/ndh-logo.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
   ]
 }
