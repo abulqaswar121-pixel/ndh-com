@@ -36,12 +36,15 @@ export const resolveComplaint = createServerFn({ method: "POST" })
   )
   .handler(async ({ data, context }) => {
     await assertStaff(context.supabase, context.userId);
-    const patch: Record<string, unknown> = {
+    const patch = {
       status: data.status,
       resolution: data.resolution ?? null,
       assignee: context.userId,
+      resolved_at:
+        data.status === "resolved" || data.status === "dismissed"
+          ? new Date().toISOString()
+          : null,
     };
-    if (data.status === "resolved" || data.status === "dismissed") patch.resolved_at = new Date().toISOString();
     const { error } = await context.supabase.from("complaints").update(patch).eq("id", data.id);
     if (error) throw new Error(error.message);
     return { ok: true };
