@@ -19,7 +19,6 @@ import {
 import {
   generatePayrollRun, approvePayrollRun, processPayrollRun, markPayrollItemPaid,
 } from "@/lib/finance/payroll.functions";
-import { getInvoicePdf } from "@/lib/finance/invoice-pdf.functions";
 import { toast } from "sonner";
 
 const NAV: NavItem[] = [
