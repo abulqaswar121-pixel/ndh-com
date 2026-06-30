@@ -180,7 +180,7 @@ export const markPayrollItemPaid = createServerFn({ method: "POST" })
       type: "payroll",
       direction: "out",
       amount: row.total_amount,
-      currency: row.currency,
+      currency: row.currency ?? "NGN",
       reference_table: "payroll",
       reference_id: data.payroll_id,
       memo: "Payroll item paid",
