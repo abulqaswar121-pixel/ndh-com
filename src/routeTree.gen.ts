@@ -51,6 +51,7 @@ import { Route as LovableEmailSuppressionRouteImport } from './routes/lovable/em
 import { Route as AcademyCourseSlugRouteImport } from './routes/academy.course.$slug'
 import { Route as AuthenticatedDashboardTalentRouteImport } from './routes/_authenticated/dashboard/talent'
 import { Route as AuthenticatedDashboardSuperAdminRouteImport } from './routes/_authenticated/dashboard/super-admin'
+import { Route as AuthenticatedDashboardStudentRouteImport } from './routes/_authenticated/dashboard/student'
 import { Route as AuthenticatedDashboardPmRouteImport } from './routes/_authenticated/dashboard/pm'
 import { Route as AuthenticatedDashboardInstructorRouteImport } from './routes/_authenticated/dashboard/instructor'
 import { Route as AuthenticatedDashboardHodRouteImport } from './routes/_authenticated/dashboard/hod'
@@ -275,6 +276,12 @@ const AuthenticatedDashboardSuperAdminRoute =
     path: '/dashboard/super-admin',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedDashboardStudentRoute =
+  AuthenticatedDashboardStudentRouteImport.update({
+    id: '/dashboard/student',
+    path: '/dashboard/student',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedDashboardPmRoute =
   AuthenticatedDashboardPmRouteImport.update({
     id: '/dashboard/pm',
@@ -379,6 +386,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/hod': typeof AuthenticatedDashboardHodRoute
   '/dashboard/instructor': typeof AuthenticatedDashboardInstructorRoute
   '/dashboard/pm': typeof AuthenticatedDashboardPmRoute
+  '/dashboard/student': typeof AuthenticatedDashboardStudentRoute
   '/dashboard/super-admin': typeof AuthenticatedDashboardSuperAdminRoute
   '/dashboard/talent': typeof AuthenticatedDashboardTalentRoute
   '/academy/course/$slug': typeof AcademyCourseSlugRoute
@@ -432,6 +440,7 @@ export interface FileRoutesByTo {
   '/dashboard/hod': typeof AuthenticatedDashboardHodRoute
   '/dashboard/instructor': typeof AuthenticatedDashboardInstructorRoute
   '/dashboard/pm': typeof AuthenticatedDashboardPmRoute
+  '/dashboard/student': typeof AuthenticatedDashboardStudentRoute
   '/dashboard/super-admin': typeof AuthenticatedDashboardSuperAdminRoute
   '/dashboard/talent': typeof AuthenticatedDashboardTalentRoute
   '/academy/course/$slug': typeof AcademyCourseSlugRoute
@@ -487,6 +496,7 @@ export interface FileRoutesById {
   '/_authenticated/dashboard/hod': typeof AuthenticatedDashboardHodRoute
   '/_authenticated/dashboard/instructor': typeof AuthenticatedDashboardInstructorRoute
   '/_authenticated/dashboard/pm': typeof AuthenticatedDashboardPmRoute
+  '/_authenticated/dashboard/student': typeof AuthenticatedDashboardStudentRoute
   '/_authenticated/dashboard/super-admin': typeof AuthenticatedDashboardSuperAdminRoute
   '/_authenticated/dashboard/talent': typeof AuthenticatedDashboardTalentRoute
   '/academy/course/$slug': typeof AcademyCourseSlugRoute
@@ -542,6 +552,7 @@ export interface FileRouteTypes {
     | '/dashboard/hod'
     | '/dashboard/instructor'
     | '/dashboard/pm'
+    | '/dashboard/student'
     | '/dashboard/super-admin'
     | '/dashboard/talent'
     | '/academy/course/$slug'
@@ -595,6 +606,7 @@ export interface FileRouteTypes {
     | '/dashboard/hod'
     | '/dashboard/instructor'
     | '/dashboard/pm'
+    | '/dashboard/student'
     | '/dashboard/super-admin'
     | '/dashboard/talent'
     | '/academy/course/$slug'
@@ -649,6 +661,7 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard/hod'
     | '/_authenticated/dashboard/instructor'
     | '/_authenticated/dashboard/pm'
+    | '/_authenticated/dashboard/student'
     | '/_authenticated/dashboard/super-admin'
     | '/_authenticated/dashboard/talent'
     | '/academy/course/$slug'
@@ -998,6 +1011,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardSuperAdminRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/dashboard/student': {
+      id: '/_authenticated/dashboard/student'
+      path: '/dashboard/student'
+      fullPath: '/dashboard/student'
+      preLoaderRoute: typeof AuthenticatedDashboardStudentRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/dashboard/pm': {
       id: '/_authenticated/dashboard/pm'
       path: '/dashboard/pm'
@@ -1077,6 +1097,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedDashboardHodRoute: typeof AuthenticatedDashboardHodRoute
   AuthenticatedDashboardInstructorRoute: typeof AuthenticatedDashboardInstructorRoute
   AuthenticatedDashboardPmRoute: typeof AuthenticatedDashboardPmRoute
+  AuthenticatedDashboardStudentRoute: typeof AuthenticatedDashboardStudentRoute
   AuthenticatedDashboardSuperAdminRoute: typeof AuthenticatedDashboardSuperAdminRoute
   AuthenticatedDashboardTalentRoute: typeof AuthenticatedDashboardTalentRoute
   AuthenticatedAcademyApplySlugRoute: typeof AuthenticatedAcademyApplySlugRoute
@@ -1088,6 +1109,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDashboardHodRoute: AuthenticatedDashboardHodRoute,
   AuthenticatedDashboardInstructorRoute: AuthenticatedDashboardInstructorRoute,
   AuthenticatedDashboardPmRoute: AuthenticatedDashboardPmRoute,
+  AuthenticatedDashboardStudentRoute: AuthenticatedDashboardStudentRoute,
   AuthenticatedDashboardSuperAdminRoute: AuthenticatedDashboardSuperAdminRoute,
   AuthenticatedDashboardTalentRoute: AuthenticatedDashboardTalentRoute,
   AuthenticatedAcademyApplySlugRoute: AuthenticatedAcademyApplySlugRoute,
