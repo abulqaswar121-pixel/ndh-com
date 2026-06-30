@@ -9,7 +9,9 @@ const links = [
   { to: "/services", label: "Services" },
   { to: "/academy", label: "Academy" },
   { to: "/about", label: "About" },
+  { to: "/team", label: "Team" },
   { to: "/blog", label: "Blog" },
+  { to: "/careers", label: "Careers" },
   { to: "/contact", label: "Contact" },
 ] as const;
 
@@ -73,7 +75,10 @@ export function Navbar() {
           >
             {dark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
           </button>
-          <Link to="/contact" className="hidden md:block">
+          <Link to="/login" className="hidden md:block">
+            <Button variant="ghost" size="sm">Sign in</Button>
+          </Link>
+          <Link to="/submit-task" className="hidden md:block">
             <Button variant="brand" size="sm">Submit a Task</Button>
           </Link>
           <button
@@ -99,7 +104,10 @@ export function Navbar() {
                 {l.label}
               </Link>
             ))}
-            <Link to="/contact" onClick={() => setOpen(false)} className="mt-2">
+            <Link to="/login" onClick={() => setOpen(false)} className="mt-2">
+              <Button variant="outline" className="w-full">Sign in</Button>
+            </Link>
+            <Link to="/submit-task" onClick={() => setOpen(false)} className="mt-2">
               <Button variant="brand" className="w-full">Submit a Task</Button>
             </Link>
           </div>

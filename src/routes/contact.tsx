@@ -15,7 +15,7 @@ export const Route = createFileRoute("/contact")({
   component: ContactPage,
 });
 
-const emails = ["support@ndh.com.ng","admin@ndh.com.ng","info@ndh.com.ng","hello@ndh.com.ng","academy@ndh.com.ng","talents@ndh.com.ng","billing@ndh.com.ng"];
+const emails = ["support@ndh.com.ng", "info@ndh.com.ng"];
 
 function ContactPage() {
   const [sent, setSent] = useState(false);
@@ -66,23 +66,18 @@ function ContactPage() {
               <h3 className="font-bold">Talk to us directly</h3>
               <ul className="mt-4 space-y-3 text-sm">
                 <li className="flex items-center gap-3"><Phone className="h-4 w-4" /> +234 902 993 2794</li>
-                <li className="flex items-center gap-3"><MapPin className="h-4 w-4" /> Nigeria · Serving worldwide</li>
+                <li className="flex items-center gap-3"><MapPin className="h-4 w-4" /> Sokoto, Nigeria · Serving worldwide</li>
+                <li className="flex items-center gap-3"><Mail className="h-4 w-4" /> support@ndh.com.ng</li>
+                <li className="flex items-center gap-3"><Mail className="h-4 w-4" /> info@ndh.com.ng</li>
+                <li className="flex items-center gap-3 text-xs text-muted-foreground">Mon–Fri · 9:00–18:00 WAT</li>
               </ul>
               <div className="mt-5 flex gap-3">
                 <a href="https://www.facebook.com/share/1Be6HN8zjS/" target="_blank" rel="noreferrer" aria-label="Facebook" className="grid h-10 w-10 place-items-center rounded-full border border-border hover:bg-gradient-brand hover:text-white"><Facebook className="h-4 w-4" /></a>
                 <a href="https://www.instagram.com/njb_digital_hub" target="_blank" rel="noreferrer" aria-label="Instagram" className="grid h-10 w-10 place-items-center rounded-full border border-border hover:bg-gradient-brand hover:text-white"><Instagram className="h-4 w-4" /></a>
               </div>
             </div>
-            <div className="rounded-2xl border border-border bg-card p-6">
-              <h3 className="font-bold">Email departments</h3>
-              <ul className="mt-4 grid grid-cols-1 gap-2 text-sm">
-                {emails.map((e) => (
-                  <li key={e}><a className="flex items-center gap-2 hover:text-foreground" href={`mailto:${e}`}><Mail className="h-3.5 w-3.5" /> {e}</a></li>
-                ))}
-              </ul>
-            </div>
             <div className="overflow-hidden rounded-2xl border border-border">
-              <iframe title="Nigeria map" className="h-56 w-full" src="https://www.google.com/maps?q=Nigeria&output=embed" loading="lazy" />
+              <iframe title="Sokoto, Nigeria map" className="h-72 w-full" src="https://www.google.com/maps?q=Sokoto,Nigeria&output=embed" loading="lazy" />
             </div>
           </div>
         </div>

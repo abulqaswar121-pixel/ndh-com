@@ -1,16 +1,18 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { Link } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   ArrowRight, Sparkles, Palette, Code2, PenTool, Megaphone, Clapperboard, Brain,
-  ShieldCheck, Clock, Globe2, Award, Quote, Send, CheckCircle2,
+  ShieldCheck, Clock, Globe2, Award, Quote, CheckCircle2,
+  Send,
 } from "lucide-react";
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { Section } from "@/components/site/Section";
 import { Counter } from "@/components/site/Counter";
 import { Button } from "@/components/ui/button";
-import { Logo } from "@/components/site/Logo";
-import heroPro from "@/assets/hero-pro.jpg";
-import academyImg from "@/assets/academy.jpg";
+import { VideoHero } from "@/components/site/VideoHero";
+import { AnimatedBlobs } from "@/components/site/AnimatedBlobs";
+import { TypingHeadline } from "@/components/site/TypingHeadline";
+import { Reveal, Stagger, StaggerItem } from "@/components/site/Reveal";
+import { UnsplashImg } from "@/components/site/UnsplashImg";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -47,59 +49,66 @@ const features = [
 ];
 
 const testimonials = [
-  { name: "Aisha O.", role: "Founder, Lagos", quote: "NDH felt like an in-house team. Fast, sharp, and zero drama." },
-  { name: "James R.", role: "Operations, London", quote: "The PM model is gold — one contact, world-class delivery." },
-  { name: "Tunde A.", role: "CEO, Abuja", quote: "From brand to web to ads, every piece felt premium." },
+  { name: "Aisha Bello", role: "Founder, Lagos", quote: "NDH felt like an in-house team. Fast, sharp, and zero drama.", q: "hijabi woman professional nigeria" },
+  { name: "James Rowe", role: "Operations, London", quote: "The PM model is gold — one contact, world-class delivery.", q: "british businessman portrait" },
+  { name: "Tunde Adeyemi", role: "CEO, Abuja", quote: "From brand to web to ads, every piece felt premium.", q: "african businessman portrait suit" },
+  { name: "Maryam Ibrahim", role: "Brand Manager, Dubai", quote: "World-class output with zero project management overhead.", q: "muslim woman professional office" },
 ];
+
+// A reliable Mixkit MP4 used as the looping hero bg video.
+const HERO_VIDEO = "https://assets.mixkit.co/videos/4828/4828-720.mp4";
 
 function Index() {
   return (
     <SiteLayout>
-      {/* HERO */}
-      <section className="relative isolate overflow-hidden bg-hero text-white">
-        <div className="pointer-events-none absolute inset-0 opacity-30" style={{ backgroundImage: "radial-gradient(circle at 20% 20%, rgba(45,212,191,.4), transparent 40%), radial-gradient(circle at 80% 60%, rgba(139,92,246,.4), transparent 40%)" }} />
-        <div className="relative mx-auto grid max-w-7xl items-center gap-12 px-6 py-20 lg:grid-cols-2 lg:py-28">
-          <div>
-            <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3 py-1 text-xs font-semibold uppercase tracking-widest text-white/80 backdrop-blur">
+      {/* HERO with video bg */}
+      <VideoHero
+        videoSrc={HERO_VIDEO}
+        posterQuery="african team office collaboration digital"
+        posterAlt="NDH team collaborating"
+      >
+        <AnimatedBlobs />
+        <div className="relative mx-auto max-w-7xl px-6 py-24 sm:py-32 lg:py-40">
+          <Reveal>
+            <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1 text-xs font-semibold uppercase tracking-widest text-white/85 backdrop-blur">
               <Sparkles className="h-3.5 w-3.5" /> Digital Bureau · Academy · Talent
             </div>
-            <h1 className="mt-5 text-4xl font-extrabold leading-[1.05] tracking-tight sm:text-5xl lg:text-6xl">
-              Where <span className="text-gradient-brand">Digital Excellence</span> Meets Opportunity.
+          </Reveal>
+          <Reveal delay={0.1}>
+            <h1 className="mt-5 max-w-4xl text-4xl font-extrabold leading-[1.04] tracking-tight text-white sm:text-6xl lg:text-7xl">
+              Where <span className="text-gradient-brand">Digital Excellence</span> Meets{" "}
+              <span className="block">
+                <TypingHeadline
+                  phrases={["Opportunity.", "Global Brands.", "African Talent.", "Real Results."]}
+                  className="text-gradient-brand"
+                />
+              </span>
             </h1>
-            <p className="mt-5 max-w-xl text-base text-white/75 sm:text-lg">
-              NDH delivers design, development, content, marketing and media for ambitious brands worldwide — managed end-to-end by our vetted in-house talents.
+          </Reveal>
+          <Reveal delay={0.2}>
+            <p className="mt-6 max-w-2xl text-base text-white/80 sm:text-lg">
+              NDH delivers design, development, content, marketing and media for ambitious brands worldwide — managed end-to-end by our vetted in-house talents. Train at NDH Academy. Get hired into the bureau.
             </p>
+          </Reveal>
+          <Reveal delay={0.3}>
             <div className="mt-8 flex flex-wrap gap-3">
-              <Link to="/contact"><Button variant="brand" size="xl">Submit a Task <ArrowRight className="h-4 w-4" /></Button></Link>
-              <Link to="/join-talent"><Button variant="hero" size="xl">Join as Talent</Button></Link>
+              <Link to="/submit-task"><Button variant="brand" size="xl">Submit a Task <ArrowRight className="h-4 w-4" /></Button></Link>
+              <Link to="/talent-application"><Button variant="hero" size="xl">Apply to Join Talent Pool</Button></Link>
               <Link to="/academy"><Button variant="hero" size="xl">Enroll in Academy</Button></Link>
             </div>
-            <div className="mt-10 flex flex-wrap items-center gap-6 text-xs text-white/60">
+          </Reveal>
+          <Reveal delay={0.4}>
+            <div className="mt-10 flex flex-wrap items-center gap-6 text-xs text-white/65">
               <span className="flex items-center gap-2"><CheckCircle2 className="h-3.5 w-3.5 text-[oklch(0.78_0.13_180)]" /> Escrow protected</span>
-              <span className="flex items-center gap-2"><CheckCircle2 className="h-3.5 w-3.5 text-[oklch(0.78_0.13_180)]" /> Vetted talents</span>
-              <span className="flex items-center gap-2"><CheckCircle2 className="h-3.5 w-3.5 text-[oklch(0.78_0.13_180)]" /> Global delivery</span>
+              <span className="flex items-center gap-2"><CheckCircle2 className="h-3.5 w-3.5 text-[oklch(0.78_0.13_180)]" /> Vetted in-house talents</span>
+              <span className="flex items-center gap-2"><CheckCircle2 className="h-3.5 w-3.5 text-[oklch(0.78_0.13_180)]" /> 18+ countries served</span>
             </div>
-          </div>
-          <div className="relative">
-            <div className="absolute -inset-6 rounded-3xl bg-gradient-brand opacity-30 blur-3xl" />
-            <div className="relative overflow-hidden rounded-3xl border border-white/10 shadow-glow">
-              <img src={heroPro} alt="Digital professional at work" width={1536} height={1024} className="h-full w-full object-cover" />
-            </div>
-            <div className="glass absolute -bottom-6 -left-6 hidden rounded-2xl p-4 text-foreground shadow-elegant sm:block">
-              <div className="flex items-center gap-3">
-                <Logo className="h-9 w-9" />
-                <div>
-                  <div className="text-xs uppercase tracking-widest text-muted-foreground">Live · NDH PM</div>
-                  <div className="text-sm font-semibold">Project delivered ✦ on time</div>
-                </div>
-              </div>
-            </div>
-          </div>
+          </Reveal>
         </div>
 
         {/* Stats */}
         <div className="relative border-t border-white/10">
-          <div className="mx-auto grid max-w-7xl grid-cols-2 gap-y-6 px-6 py-8 text-center sm:grid-cols-4">
+          <div className="mx-auto grid max-w-7xl grid-cols-2 gap-y-6 px-6 py-10 text-center sm:grid-cols-4">
             {[
               { to: 1200, suffix: "+", label: "Tasks Delivered" },
               { to: 180, suffix: "+", label: "Vetted Talents" },
@@ -107,65 +116,83 @@ function Index() {
               { to: 18, suffix: "", label: "Countries Served" },
             ].map((s) => (
               <div key={s.label}>
-                <div className="text-3xl font-extrabold text-white sm:text-4xl"><Counter to={s.to} suffix={s.suffix} /></div>
+                <div className="text-3xl font-extrabold text-white sm:text-5xl"><Counter to={s.to} suffix={s.suffix} /></div>
                 <div className="mt-1 text-xs uppercase tracking-widest text-white/60">{s.label}</div>
               </div>
             ))}
           </div>
         </div>
-      </section>
+      </VideoHero>
 
       {/* SERVICES */}
       <Section eyebrow="What we do" title="A full digital stack, one trusted partner." subtitle="Six service lines, one dedicated PM. You brief us. We deliver.">
-        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        <Stagger className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {services.map((s) => (
-            <div key={s.title} className="group relative overflow-hidden rounded-2xl border border-border bg-card p-6 transition-all hover:-translate-y-1 hover:shadow-glow">
-              <div className="mb-5 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-brand text-white shadow-glow">
-                <s.icon className="h-5 w-5" />
-              </div>
-              <h3 className="text-lg font-bold">{s.title}</h3>
-              <p className="mt-2 text-sm text-muted-foreground">{s.desc}</p>
-              <Link to="/services" className="mt-5 inline-flex items-center gap-1 text-sm font-semibold text-foreground/80 group-hover:text-foreground">
-                Request a quote <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+            <StaggerItem key={s.title}>
+              <Link
+                to="/services"
+                className="group relative block h-full overflow-hidden rounded-2xl border border-border bg-card p-6 transition-all duration-300 hover:-translate-y-2 hover:rotate-[-0.4deg] hover:shadow-glow"
+              >
+                <div className="mb-5 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-brand text-white shadow-glow transition-transform duration-300 group-hover:scale-110">
+                  <s.icon className="h-5 w-5" />
+                </div>
+                <h3 className="text-lg font-bold">{s.title}</h3>
+                <p className="mt-2 text-sm text-muted-foreground">{s.desc}</p>
+                <div className="mt-5 inline-flex items-center gap-1 text-sm font-semibold text-foreground/80 group-hover:text-foreground">
+                  Request a quote <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                </div>
+                <div className="pointer-events-none absolute -right-12 -top-12 h-32 w-32 rounded-full bg-gradient-brand opacity-0 blur-2xl transition-opacity group-hover:opacity-30" />
               </Link>
-              <div className="pointer-events-none absolute -right-12 -top-12 h-32 w-32 rounded-full bg-gradient-brand opacity-0 blur-2xl transition-opacity group-hover:opacity-30" />
-            </div>
+            </StaggerItem>
           ))}
-        </div>
+        </Stagger>
       </Section>
 
       {/* HOW IT WORKS */}
       <Section eyebrow="How it works" title="A bureau model, not a marketplace." subtitle="You never have to chase a freelancer. Our PMs run every project end-to-end." center>
-        <div className="grid gap-5 md:grid-cols-3">
+        <Stagger className="grid gap-5 md:grid-cols-3">
           {steps.map((s, i) => (
-            <div key={s.n} className="relative rounded-2xl border border-border bg-card p-6">
-              <div className="text-gradient-brand text-5xl font-black">{s.n}</div>
-              <h3 className="mt-3 text-lg font-bold">{s.title}</h3>
-              <p className="mt-2 text-sm text-muted-foreground">{s.desc}</p>
-              {i < steps.length - 1 && (
-                <div className="absolute right-4 top-8 hidden text-muted-foreground md:block"><ArrowRight className="h-5 w-5" /></div>
-              )}
-            </div>
+            <StaggerItem key={s.n}>
+              <div className="relative h-full rounded-2xl border border-border bg-card p-6 transition-all hover:-translate-y-1 hover:shadow-elegant">
+                <div className="text-gradient-brand text-5xl font-black">{s.n}</div>
+                <h3 className="mt-3 text-lg font-bold">{s.title}</h3>
+                <p className="mt-2 text-sm text-muted-foreground">{s.desc}</p>
+                {i < steps.length - 1 && (
+                  <div className="absolute right-4 top-8 hidden text-muted-foreground md:block"><ArrowRight className="h-5 w-5" /></div>
+                )}
+              </div>
+            </StaggerItem>
           ))}
-        </div>
+        </Stagger>
       </Section>
 
       {/* WHY */}
       <Section eyebrow="Why NDH" title="Built like a tech company. Run like a studio.">
-        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-          {features.map((f) => (
-            <div key={f.title} className="rounded-2xl border border-border bg-card p-6 transition-all hover:-translate-y-1 hover:shadow-elegant">
-              <f.icon className="h-6 w-6 text-[oklch(0.65_0.19_252)]" />
-              <h3 className="mt-4 font-bold">{f.title}</h3>
-              <p className="mt-2 text-sm text-muted-foreground">{f.desc}</p>
+        <div className="grid items-center gap-10 lg:grid-cols-[1fr_1fr]">
+          <Reveal>
+            <div className="relative overflow-hidden rounded-3xl border border-border shadow-elegant">
+              <UnsplashImg q="african team meeting laptop diverse" alt="NDH team" w={1200} h={900} className="h-full w-full object-cover" />
             </div>
-          ))}
+          </Reveal>
+          <Stagger className="grid gap-5 sm:grid-cols-2">
+            {features.map((f) => (
+              <StaggerItem key={f.title}>
+                <div className="h-full rounded-2xl border border-border bg-card p-6 transition-all hover:-translate-y-1 hover:shadow-elegant">
+                  <div className="grid h-10 w-10 place-items-center rounded-lg bg-gradient-brand text-white shadow-glow">
+                    <f.icon className="h-5 w-5" />
+                  </div>
+                  <h3 className="mt-4 font-bold">{f.title}</h3>
+                  <p className="mt-2 text-sm text-muted-foreground">{f.desc}</p>
+                </div>
+              </StaggerItem>
+            ))}
+          </Stagger>
         </div>
       </Section>
 
       {/* ACADEMY PROMO */}
       <section className="relative mx-6 my-10 overflow-hidden rounded-3xl border border-border">
-        <img src={academyImg} alt="NDH Academy students" width={1536} height={1024} loading="lazy" className="absolute inset-0 h-full w-full object-cover" />
+        <UnsplashImg q="african students laptop graduation" alt="NDH Academy students" w={1600} h={900} className="absolute inset-0 h-full w-full object-cover" />
         <div className="absolute inset-0 bg-gradient-to-r from-[#0A0E2A]/95 via-[#0A0E2A]/80 to-transparent" />
         <div className="relative mx-auto grid max-w-7xl gap-8 px-6 py-16 text-white md:grid-cols-2 md:py-24">
           <div>
@@ -192,23 +219,23 @@ function Index() {
 
       {/* TESTIMONIALS */}
       <Section eyebrow="Loved by founders" title="Trusted across Nigeria and the diaspora." center>
-        <div className="grid gap-5 md:grid-cols-3">
+        <Stagger className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {testimonials.map((t) => (
-            <div key={t.name} className="rounded-2xl border border-border bg-card p-6">
-              <Quote className="h-6 w-6 text-[oklch(0.62_0.21_290)]" />
-              <p className="mt-3 text-sm text-foreground/90">"{t.quote}"</p>
-              <div className="mt-5 flex items-center gap-3">
-                <div className="grid h-10 w-10 place-items-center rounded-full bg-gradient-brand text-sm font-bold text-white">
-                  {t.name.split(" ").map((w) => w[0]).join("")}
-                </div>
-                <div>
-                  <div className="text-sm font-semibold">{t.name}</div>
-                  <div className="text-xs text-muted-foreground">{t.role}</div>
+            <StaggerItem key={t.name}>
+              <div className="h-full rounded-2xl border border-border bg-card p-6 transition-all hover:-translate-y-1 hover:shadow-elegant">
+                <Quote className="h-6 w-6 text-[oklch(0.62_0.21_290)]" />
+                <p className="mt-3 text-sm text-foreground/90">"{t.quote}"</p>
+                <div className="mt-5 flex items-center gap-3">
+                  <UnsplashImg q={t.q} alt={t.name} w={80} h={80} sig={t.name} className="h-10 w-10 rounded-full object-cover" />
+                  <div>
+                    <div className="text-sm font-semibold">{t.name}</div>
+                    <div className="text-xs text-muted-foreground">{t.role}</div>
+                  </div>
                 </div>
               </div>
-            </div>
+            </StaggerItem>
           ))}
-        </div>
+        </Stagger>
       </Section>
 
       {/* CTA / Newsletter */}
