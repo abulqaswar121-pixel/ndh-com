@@ -353,6 +353,188 @@ function Refunds() {
 
 type Ledger = { id: string; entry_date: string; type: string; direction: string; amount: number; currency: string; memo: string | null };
 
+async function downloadInvoice(id: string) {
+  try {
+    const { getInvoicePdf: fn } = await import("@/lib/finance/invoice-pdf.functions");
+    const res = await fn({ data: { invoice_id: id } });
+    const bin = atob(res.base64);
+    const bytes = new Uint8Array(bin.length);
+    for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+    const blob = new Blob([bytes], { type: "application/pdf" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url; a.download = res.filename; a.click();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  } catch (e: any) {
+    toast.error(e?.message || "Failed to download invoice");
+  }
+}
+
+type PayrollRun = {
+  id: string; period_start: string; period_end: string; currency: string;
+  total_amount: number; talent_count: number; status: string; created_at: string;
+};
+type PayrollItem = {
+  id: string; talent_id: string; total_amount: number; currency: string; status: string;
+  tasks_count: number; gross_amount: number;
+};
+
+function Payroll() {
+  const [runs, setRuns] = useState<PayrollRun[]>([]);
+  const [open, setOpen] = useState(false);
+  const [start, setStart] = useState(() => {
+    const d = new Date(); d.setDate(d.getDate() - 7); return d.toISOString().slice(0, 10);
+  });
+  const [end, setEnd] = useState(() => new Date().toISOString().slice(0, 10));
+  const [currency, setCurrency] = useState("NGN");
+  const [selected, setSelected] = useState<string | null>(null);
+  const [items, setItems] = useState<(PayrollItem & { talent_name?: string | null; talent_email?: string | null })[]>([]);
+
+  const gen = useServerFn(generatePayrollRun);
+  const approve = useServerFn(approvePayrollRun);
+  const process = useServerFn(processPayrollRun);
+  const markPaid = useServerFn(markPayrollItemPaid);
+
+  const loadRuns = async () => {
+    const { data } = await supabase.from("payroll_runs").select("*").order("created_at", { ascending: false });
+    setRuns((data as PayrollRun[]) || []);
+  };
+  const loadItems = async (runId: string) => {
+    const { data: rows } = await supabase
+      .from("payroll").select("*").eq("run_id", runId).order("total_amount", { ascending: false });
+    const arr = (rows as PayrollItem[]) || [];
+    if (arr.length === 0) { setItems([]); return; }
+    const ids = arr.map((r) => r.talent_id);
+    const { data: profs } = await supabase.from("profiles").select("id, full_name, email").in("id", ids);
+    const map = new Map((profs || []).map((p: any) => [p.id, p]));
+    setItems(arr.map((r) => {
+      const p: any = map.get(r.talent_id);
+      return { ...r, talent_name: p?.full_name ?? null, talent_email: p?.email ?? null };
+    }));
+  };
+
+  useEffect(() => { loadRuns(); }, []);
+  useEffect(() => { if (selected) loadItems(selected); }, [selected]);
+
+  return (
+    <div className="grid gap-4">
+      <Card className="p-6">
+        <div className="mb-4 flex items-center justify-between">
+          <div>
+            <h3 className="text-lg font-bold">Payroll runs</h3>
+            <p className="text-xs text-muted-foreground">
+              Generate weekly batches from completed tasks. Paystack Transfers is currently in test mode — settle each item manually.
+            </p>
+          </div>
+          <Button size="sm" onClick={() => setOpen(true)}><Plus className="mr-1 h-4 w-4" /> New run</Button>
+        </div>
+        {runs.length === 0 ? (
+          <div className="text-sm text-muted-foreground">No payroll runs yet.</div>
+        ) : (
+          <div className="grid gap-2">
+            {runs.map((r) => (
+              <div
+                key={r.id}
+                className={`flex flex-wrap items-center justify-between gap-2 rounded-lg border p-3 ${selected === r.id ? "border-primary" : "border-border"}`}
+              >
+                <button className="text-left" onClick={() => setSelected(r.id === selected ? null : r.id)}>
+                  <div className="font-semibold">
+                    {new Date(r.period_start).toLocaleDateString()} → {new Date(r.period_end).toLocaleDateString()}
+                  </div>
+                  <div className="text-xs text-muted-foreground">
+                    {r.talent_count} talents · {fmt(Number(r.total_amount), r.currency)}
+                  </div>
+                </button>
+                <div className="flex items-center gap-2">
+                  <Badge variant="outline">{r.status}</Badge>
+                  {r.status === "draft" && (
+                    <Button size="sm" variant="outline" onClick={async () => {
+                      try { await approve({ data: { run_id: r.id } }); toast.success("Approved"); loadRuns(); }
+                      catch (e: any) { toast.error(e.message); }
+                    }}>
+                      <CheckCircle2 className="mr-1 h-4 w-4" /> Approve
+                    </Button>
+                  )}
+                  {r.status === "approved" && (
+                    <Button size="sm" onClick={async () => {
+                      try {
+                        const res = await process({ data: { run_id: r.id } });
+                        toast.success(res.mode === "manual" ? "Manual mode — settle items" : "Processing");
+                        loadRuns();
+                      } catch (e: any) { toast.error(e.message); }
+                    }}>
+                      <PlayCircle className="mr-1 h-4 w-4" /> Process
+                    </Button>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </Card>
+
+      {selected && (
+        <Card className="p-6">
+          <h4 className="mb-3 text-base font-semibold">Items</h4>
+          {items.length === 0 ? (
+            <div className="text-sm text-muted-foreground">No items in this run.</div>
+          ) : (
+            <div className="grid gap-2">
+              {items.map((it) => (
+                <div key={it.id} className="flex flex-wrap items-center justify-between gap-2 rounded-lg border border-border p-3">
+                  <div>
+                    <div className="font-semibold">{it.talent_name || it.talent_email || it.talent_id.slice(0, 8)}</div>
+                    <div className="text-xs text-muted-foreground">
+                      {it.tasks_count} tasks · Gross {fmt(Number(it.gross_amount), it.currency)} · Net {fmt(Number(it.total_amount), it.currency)}
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Badge variant="outline">{it.status}</Badge>
+                    {it.status !== "paid" && (
+                      <Button size="sm" variant="outline" onClick={async () => {
+                        const ref = prompt("Transfer reference / proof (optional)") || undefined;
+                        try { await markPaid({ data: { payroll_id: it.id, transfer_reference: ref } }); toast.success("Marked paid"); if (selected) loadItems(selected); loadRuns(); }
+                        catch (e: any) { toast.error(e.message); }
+                      }}>Mark paid</Button>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </Card>
+      )}
+
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogContent>
+          <DialogHeader><DialogTitle>New payroll run</DialogTitle></DialogHeader>
+          <form className="grid gap-3" onSubmit={async (e) => {
+            e.preventDefault();
+            try {
+              const res = await gen({ data: { period_start: start, period_end: end, currency } });
+              toast.success(`Run created · ${res.talent_count} talents · ${fmt(Number(res.total), currency)}`);
+              setOpen(false); loadRuns();
+            } catch (er: any) { toast.error(er.message); }
+          }}>
+            <div className="grid grid-cols-2 gap-3">
+              <div><Label>Period start</Label><Input type="date" value={start} onChange={(e) => setStart(e.target.value)} required /></div>
+              <div><Label>Period end</Label><Input type="date" value={end} onChange={(e) => setEnd(e.target.value)} required /></div>
+            </div>
+            <div>
+              <Label>Currency</Label>
+              <Select value={currency} onValueChange={setCurrency}>
+                <SelectTrigger><SelectValue /></SelectTrigger>
+                <SelectContent>{["NGN","USD","GBP","EUR","CAD","AED"].map((c) => <SelectItem key={c} value={c}>{c}</SelectItem>)}</SelectContent>
+              </Select>
+            </div>
+            <DialogFooter><Button type="submit">Generate</Button></DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
+    </div>
+  );
+}
+
 function Ledger() {
   const [rows, setRows] = useState<Ledger[]>([]);
   useEffect(() => {
