@@ -40,7 +40,7 @@ function ClientDashboardPage() {
   const sendWelcome = useServerFn(sendWelcomeIfNeeded);
 
   useEffect(() => {
-    sendWelcome({ data: undefined } as any).catch(() => {});
+    (sendWelcome as any)().catch(() => {});
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
