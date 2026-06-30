@@ -6,7 +6,7 @@ import { MyCourses } from "@/components/dashboard/student/MyCourses";
 import { Certificates } from "@/components/dashboard/student/Certificates";
 import { StudentSettings } from "@/components/dashboard/student/Settings";
 
-export const Route = createFileRoute("/_authenticated/dashboard/student")({
+export const Route = createFileRoute("/_authenticated/dashboard/student/")({
   validateSearch: (s: Record<string, unknown>) => ({ tab: (s.tab as string) || undefined }),
   component: StudentDashboardPage,
 });
