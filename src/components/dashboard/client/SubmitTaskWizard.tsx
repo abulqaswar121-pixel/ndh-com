@@ -6,6 +6,8 @@ import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { Loader2, Upload, X, ChevronLeft, ChevronRight, CheckCircle2 } from "lucide-react";
 import { toast } from "sonner";
+import { useServerFn } from "@tanstack/react-start";
+import { notifyTaskCreated } from "@/lib/email/task-emails.functions";
 
 const SERVICES = [
   { id: "design", label: "Design", desc: "Brand, web/app UI, graphics, motion." },
@@ -28,6 +30,7 @@ type Tier = typeof TIERS[number]["id"];
 export function SubmitTaskWizard({ onDone }: { onDone: () => void }) {
   const { user } = useAuth();
   const { format } = useCurrency();
+  const notify = useServerFn(notifyTaskCreated);
   const [step, setStep] = useState(1);
   const [service, setService] = useState<Service | null>(null);
   const [tier, setTier] = useState<Tier>("professional");
@@ -76,6 +79,8 @@ export function SubmitTaskWizard({ onDone }: { onDone: () => void }) {
       if (uploaded.length) {
         await supabase.from("tasks").update({ files: uploaded }).eq("id", task.id);
       }
+      // Fire-and-forget: send client + PM notification emails
+      notify({ data: { taskId: task.id } }).catch((e) => console.error("notifyTaskCreated", e));
       toast.success("Task submitted — our PM will reach out shortly.");
       onDone();
     } catch (err) {
