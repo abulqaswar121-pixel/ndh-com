@@ -88,7 +88,7 @@ function Overview({ deptId, onOpen }: { deptId?: string; onOpen: (id: string) =>
       const month = new Date(Date.now() - 30 * 864e5).toISOString();
       const counts = async (statuses: string[]) => {
         const { count } = await supabase.from("tasks").select("id", { count: "exact", head: true })
-          .eq("department_id", deptId).in("status", statuses);
+          .eq("department_id", deptId).in("status", statuses as any);
         return count || 0;
       };
       const incoming = await counts(["pending"]);
@@ -97,8 +97,8 @@ function Overview({ deptId, onOpen }: { deptId?: string; onOpen: (id: string) =>
       const delivered = await counts(["delivered"]);
       const { count: cw } = await supabase.from("tasks").select("id", { count: "exact", head: true })
         .eq("department_id", deptId).eq("status", "completed").gte("completed_at", week);
-      const { data: pays } = await supabase.from("payments").select("amount,paid_at,task_id,tasks!inner(department_id)" as any)
-        .gte("paid_at", month).eq("status", "success").eq("tasks.department_id" as any, deptId);
+      const { data: pays } = await (supabase.from("payments") as any).select("amount,paid_at,task_id,tasks!inner(department_id)")
+        .gte("paid_at", month).eq("status", "paid").eq("tasks.department_id", deptId);
       const revenueMo = (pays || []).reduce((s: number, p: any) => s + Number(p.amount || 0), 0);
       const { count: tCount } = await supabase.from("talents").select("user_id", { count: "exact", head: true }).eq("department_id", deptId);
       const { data: done } = await supabase.from("tasks")
@@ -187,7 +187,7 @@ function TaskList({ deptId, statuses, title, onOpen }: { deptId?: string; status
     const load = async () => {
       const { data } = await supabase.from("tasks")
         .select("id,title,status,tier,deadline,created_at,client_id,assigned_talent_id,first_response_due_at,quoted_amount,quoted_currency")
-        .eq("department_id", deptId).in("status", statuses).order("created_at", { ascending: false });
+        .eq("department_id", deptId).in("status", statuses as any).order("created_at", { ascending: false });
       // join client name
       const clientIds = Array.from(new Set((data || []).map((t: any) => t.client_id).filter(Boolean)));
       const profMap: Record<string, string> = {};
@@ -296,7 +296,10 @@ function MessagesPage({ userId }: { userId?: string }) {
         .or(`sender_id.eq.${userId},receiver_id.eq.${userId}`)
         .order("created_at", { ascending: false }).limit(100);
       const byTask: Record<string, any> = {};
-      for (const m of (data || [])) if (!byTask[m.task_id]) byTask[m.task_id] = m;
+      for (const m of (data || [])) {
+        const k = m.task_id as string | null;
+        if (k && !byTask[k]) byTask[k] = m;
+      }
       const taskIds = Object.keys(byTask);
       const { data: tasks } = taskIds.length
         ? await supabase.from("tasks").select("id,title,client_id,assigned_talent_id").in("id", taskIds)
@@ -382,12 +385,12 @@ function Performance({ deptId }: { deptId?: string }) {
       const total = (delivered || []).length;
       const onTime = (delivered || []).filter((t: any) => !t.deadline || !t.completed_at || new Date(t.completed_at) <= new Date(t.deadline)).length;
       const revs = (delivered || []).filter((t: any) => (t.revision_count || 0) > 0).length;
-      const { data: pays } = await supabase.from("payments")
-        .select("amount,paid_at,tasks!inner(department_id)" as any)
-        .gte("paid_at", month).eq("status", "success").eq("tasks.department_id" as any, deptId);
+      const { data: pays } = await (supabase.from("payments") as any)
+        .select("amount,paid_at,tasks!inner(department_id)")
+        .gte("paid_at", month).eq("status", "paid").eq("tasks.department_id", deptId);
       const revenue = (pays || []).reduce((s: number, p: any) => s + Number(p.amount || 0), 0);
-      const { data: revs2 } = await supabase.from("reviews")
-        .select("rating,task_id,tasks!inner(department_id)" as any).eq("tasks.department_id" as any, deptId);
+      const { data: revs2 } = await (supabase.from("reviews") as any)
+        .select("rating,task_id,tasks!inner(department_id)").eq("tasks.department_id", deptId);
       const sat = revs2 && revs2.length ? revs2.reduce((s: number, r: any) => s + Number(r.rating || 0), 0) / revs2.length : 0;
       setM({
         delivered: total, revenue,
