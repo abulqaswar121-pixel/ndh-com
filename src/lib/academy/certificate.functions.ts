@@ -119,10 +119,8 @@ export const issueCertificate = createServerFn({ method: "POST" })
     return await withSignedUrl(supabaseAdmin, inserted);
   });
 
-async function withSignedUrl(
-  admin: Awaited<ReturnType<typeof import("@/integrations/supabase/client.server")["supabaseAdmin"] extends infer T ? () => T : never>> | any,
-  cert: { id: string; certificate_number: string; pdf_url: string | null; verification_token: string | null },
-) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+async function withSignedUrl(admin: any, cert: { id: string; certificate_number: string; pdf_url: string | null; verification_token: string | null }) {
   let downloadUrl: string | null = null;
   if (cert.pdf_url) {
     const { data } = await admin.storage.from("certificates").createSignedUrl(cert.pdf_url, 60 * 60 * 24 * 7);
