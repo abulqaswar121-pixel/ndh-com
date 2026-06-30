@@ -1,0 +1,14 @@
+{
+  "name": "Najeeb Digital Hub (NDH)",
+  "short_name": "NDH",
+  "description": "Premium digital services bureau and online academy.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#0A0E2A",
+  "theme_color": "#0A0E2A",
+  "orientation": "portrait-primary",
+  "icons": [
+    { "src": "/__l5e/assets-v1/0/ndh-logo.png", "sizes": "any", "type": "image/png", "purpose": "any maskable" }
+  ]
+}
