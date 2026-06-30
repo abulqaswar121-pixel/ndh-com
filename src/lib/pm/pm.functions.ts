@@ -180,7 +180,7 @@ export const approveAndDeliver = createServerFn({ method: "POST" })
       await supabase.from("talent_reviews").insert({
         talent_id: task.assigned_talent_id,
         task_id: data.task_id,
-        reviewer_id: userId,
+        pm_id: userId,
         quality_rating: data.quality,
         communication_rating: data.communication,
         timeliness_rating: data.timeliness,
