@@ -68,6 +68,71 @@ export type Database = {
           },
         ]
       }
+      admissions_applications: {
+        Row: {
+          applicant_id: string | null
+          country: string | null
+          course_id: string | null
+          created_at: string
+          decided_at: string | null
+          decided_by: string | null
+          decision_notes: string | null
+          documents: Json | null
+          email: string
+          full_name: string
+          id: string
+          intake: string | null
+          phone: string | null
+          prior_education: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          applicant_id?: string | null
+          country?: string | null
+          course_id?: string | null
+          created_at?: string
+          decided_at?: string | null
+          decided_by?: string | null
+          decision_notes?: string | null
+          documents?: Json | null
+          email: string
+          full_name: string
+          id?: string
+          intake?: string | null
+          phone?: string | null
+          prior_education?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          applicant_id?: string | null
+          country?: string | null
+          course_id?: string | null
+          created_at?: string
+          decided_at?: string | null
+          decided_by?: string | null
+          decision_notes?: string | null
+          documents?: Json | null
+          email?: string
+          full_name?: string
+          id?: string
+          intake?: string | null
+          phone?: string | null
+          prior_education?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "admissions_applications_course_id_fkey"
+            columns: ["course_id"]
+            isOneToOne: false
+            referencedRelation: "courses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       certificates: {
         Row: {
           certificate_number: string
@@ -561,6 +626,62 @@ export type Database = {
             columns: ["payment_id"]
             isOneToOne: false
             referencedRelation: "payments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      exam_schedules: {
+        Row: {
+          capacity: number | null
+          course_id: string | null
+          created_at: string
+          created_by: string | null
+          duration_minutes: number
+          id: string
+          mode: string
+          notes: string | null
+          proctor: string | null
+          starts_at: string
+          title: string
+          updated_at: string
+          venue: string | null
+        }
+        Insert: {
+          capacity?: number | null
+          course_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          duration_minutes?: number
+          id?: string
+          mode?: string
+          notes?: string | null
+          proctor?: string | null
+          starts_at: string
+          title: string
+          updated_at?: string
+          venue?: string | null
+        }
+        Update: {
+          capacity?: number | null
+          course_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          duration_minutes?: number
+          id?: string
+          mode?: string
+          notes?: string | null
+          proctor?: string | null
+          starts_at?: string
+          title?: string
+          updated_at?: string
+          venue?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "exam_schedules_course_id_fkey"
+            columns: ["course_id"]
+            isOneToOne: false
+            referencedRelation: "courses"
             referencedColumns: ["id"]
           },
         ]
@@ -1579,6 +1700,42 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      transcripts: {
+        Row: {
+          created_at: string
+          generated_by: string | null
+          gpa: number | null
+          id: string
+          notes: string | null
+          pdf_url: string | null
+          student_id: string
+          transcript_number: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          generated_by?: string | null
+          gpa?: number | null
+          id?: string
+          notes?: string | null
+          pdf_url?: string | null
+          student_id: string
+          transcript_number: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          generated_by?: string | null
+          gpa?: number | null
+          id?: string
+          notes?: string | null
+          pdf_url?: string | null
+          student_id?: string
+          transcript_number?: string
+          updated_at?: string
+        }
+        Relationships: []
       }
       tuition_prices: {
         Row: {
