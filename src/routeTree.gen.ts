@@ -56,6 +56,7 @@ import { Route as AuthenticatedDashboardRegistrarRouteImport } from './routes/_a
 import { Route as AuthenticatedDashboardPmRouteImport } from './routes/_authenticated/dashboard/pm'
 import { Route as AuthenticatedDashboardInstructorRouteImport } from './routes/_authenticated/dashboard/instructor'
 import { Route as AuthenticatedDashboardHodRouteImport } from './routes/_authenticated/dashboard/hod'
+import { Route as AuthenticatedDashboardFinanceRouteImport } from './routes/_authenticated/dashboard/finance'
 import { Route as AuthenticatedDashboardClientRouteImport } from './routes/_authenticated/dashboard/client'
 import { Route as AuthenticatedDashboardAdminRouteImport } from './routes/_authenticated/dashboard/admin'
 import { Route as AuthenticatedDashboardAcademyDirectorRouteImport } from './routes/_authenticated/dashboard/academy-director'
@@ -310,6 +311,12 @@ const AuthenticatedDashboardHodRoute =
     path: '/dashboard/hod',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedDashboardFinanceRoute =
+  AuthenticatedDashboardFinanceRouteImport.update({
+    id: '/dashboard/finance',
+    path: '/dashboard/finance',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedDashboardClientRoute =
   AuthenticatedDashboardClientRouteImport.update({
     id: '/dashboard/client',
@@ -412,6 +419,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/academy-director': typeof AuthenticatedDashboardAcademyDirectorRoute
   '/dashboard/admin': typeof AuthenticatedDashboardAdminRoute
   '/dashboard/client': typeof AuthenticatedDashboardClientRoute
+  '/dashboard/finance': typeof AuthenticatedDashboardFinanceRoute
   '/dashboard/hod': typeof AuthenticatedDashboardHodRoute
   '/dashboard/instructor': typeof AuthenticatedDashboardInstructorRoute
   '/dashboard/pm': typeof AuthenticatedDashboardPmRoute
@@ -470,6 +478,7 @@ export interface FileRoutesByTo {
   '/dashboard/academy-director': typeof AuthenticatedDashboardAcademyDirectorRoute
   '/dashboard/admin': typeof AuthenticatedDashboardAdminRoute
   '/dashboard/client': typeof AuthenticatedDashboardClientRoute
+  '/dashboard/finance': typeof AuthenticatedDashboardFinanceRoute
   '/dashboard/hod': typeof AuthenticatedDashboardHodRoute
   '/dashboard/instructor': typeof AuthenticatedDashboardInstructorRoute
   '/dashboard/pm': typeof AuthenticatedDashboardPmRoute
@@ -530,6 +539,7 @@ export interface FileRoutesById {
   '/_authenticated/dashboard/academy-director': typeof AuthenticatedDashboardAcademyDirectorRoute
   '/_authenticated/dashboard/admin': typeof AuthenticatedDashboardAdminRoute
   '/_authenticated/dashboard/client': typeof AuthenticatedDashboardClientRoute
+  '/_authenticated/dashboard/finance': typeof AuthenticatedDashboardFinanceRoute
   '/_authenticated/dashboard/hod': typeof AuthenticatedDashboardHodRoute
   '/_authenticated/dashboard/instructor': typeof AuthenticatedDashboardInstructorRoute
   '/_authenticated/dashboard/pm': typeof AuthenticatedDashboardPmRoute
@@ -590,6 +600,7 @@ export interface FileRouteTypes {
     | '/dashboard/academy-director'
     | '/dashboard/admin'
     | '/dashboard/client'
+    | '/dashboard/finance'
     | '/dashboard/hod'
     | '/dashboard/instructor'
     | '/dashboard/pm'
@@ -648,6 +659,7 @@ export interface FileRouteTypes {
     | '/dashboard/academy-director'
     | '/dashboard/admin'
     | '/dashboard/client'
+    | '/dashboard/finance'
     | '/dashboard/hod'
     | '/dashboard/instructor'
     | '/dashboard/pm'
@@ -707,6 +719,7 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard/academy-director'
     | '/_authenticated/dashboard/admin'
     | '/_authenticated/dashboard/client'
+    | '/_authenticated/dashboard/finance'
     | '/_authenticated/dashboard/hod'
     | '/_authenticated/dashboard/instructor'
     | '/_authenticated/dashboard/pm'
@@ -1098,6 +1111,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardHodRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/dashboard/finance': {
+      id: '/_authenticated/dashboard/finance'
+      path: '/dashboard/finance'
+      fullPath: '/dashboard/finance'
+      preLoaderRoute: typeof AuthenticatedDashboardFinanceRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/dashboard/client': {
       id: '/_authenticated/dashboard/client'
       path: '/dashboard/client'
@@ -1175,6 +1195,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedDashboardAcademyDirectorRoute: typeof AuthenticatedDashboardAcademyDirectorRoute
   AuthenticatedDashboardAdminRoute: typeof AuthenticatedDashboardAdminRoute
   AuthenticatedDashboardClientRoute: typeof AuthenticatedDashboardClientRoute
+  AuthenticatedDashboardFinanceRoute: typeof AuthenticatedDashboardFinanceRoute
   AuthenticatedDashboardHodRoute: typeof AuthenticatedDashboardHodRoute
   AuthenticatedDashboardInstructorRoute: typeof AuthenticatedDashboardInstructorRoute
   AuthenticatedDashboardPmRoute: typeof AuthenticatedDashboardPmRoute
@@ -1192,6 +1213,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
     AuthenticatedDashboardAcademyDirectorRoute,
   AuthenticatedDashboardAdminRoute: AuthenticatedDashboardAdminRoute,
   AuthenticatedDashboardClientRoute: AuthenticatedDashboardClientRoute,
+  AuthenticatedDashboardFinanceRoute: AuthenticatedDashboardFinanceRoute,
   AuthenticatedDashboardHodRoute: AuthenticatedDashboardHodRoute,
   AuthenticatedDashboardInstructorRoute: AuthenticatedDashboardInstructorRoute,
   AuthenticatedDashboardPmRoute: AuthenticatedDashboardPmRoute,
