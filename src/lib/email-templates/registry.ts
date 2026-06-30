@@ -11,6 +11,12 @@ import { template as talentInvitation } from './TalentInvitationTemplate'
 import { template as talentTaskAssigned } from './TalentTaskAssignedTemplate'
 import { template as talentRevision } from './TalentRevisionTemplate'
 import { template as talentPayment } from './TalentPaymentTemplate'
+import { template as pmInvitation } from './PmInvitationTemplate'
+import { template as pmNewTask } from './PmNewTaskTemplate'
+import { template as pmQuoteResponse } from './PmQuoteResponseTemplate'
+import { template as pmTalentSubmission } from './PmTalentSubmissionTemplate'
+import { template as pmOverdueAlert } from './PmOverdueAlertTemplate'
+import { template as pmWeeklyReport } from './PmWeeklyReportTemplate'
 
 export interface TemplateEntry {
   component: ComponentType<any>
@@ -124,4 +130,10 @@ export const TEMPLATES: Record<string, TemplateEntry> = {
   talent_task_assigned: talentTaskAssigned,
   talent_revision_required: talentRevision,
   talent_payment_processed: talentPayment,
+  pm_invitation: pmInvitation,
+  pm_new_task: pmNewTask,
+  pm_quote_response: pmQuoteResponse,
+  pm_talent_submission: pmTalentSubmission,
+  pm_overdue_alert: pmOverdueAlert,
+  pm_weekly_report: pmWeeklyReport,
 }
