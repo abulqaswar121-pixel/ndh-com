@@ -619,6 +619,7 @@ export type Database = {
           client_id: string
           created_at: string
           currency: string
+          enrollment_id: string | null
           gateway: string | null
           id: string
           status: Database["public"]["Enums"]["payment_status"]
@@ -630,6 +631,7 @@ export type Database = {
           client_id: string
           created_at?: string
           currency?: string
+          enrollment_id?: string | null
           gateway?: string | null
           id?: string
           status?: Database["public"]["Enums"]["payment_status"]
@@ -641,6 +643,7 @@ export type Database = {
           client_id?: string
           created_at?: string
           currency?: string
+          enrollment_id?: string | null
           gateway?: string | null
           id?: string
           status?: Database["public"]["Enums"]["payment_status"]
@@ -648,6 +651,13 @@ export type Database = {
           transaction_ref?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "payments_enrollment_id_fkey"
+            columns: ["enrollment_id"]
+            isOneToOne: false
+            referencedRelation: "enrollments"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "payments_task_id_fkey"
             columns: ["task_id"]
