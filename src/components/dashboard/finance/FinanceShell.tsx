@@ -137,6 +137,9 @@ function Invoices() {
               </div>
               <div className="flex flex-wrap items-center gap-2">
                 <Badge variant="outline">{r.status}</Badge>
+                <Button size="sm" variant="outline" onClick={() => downloadInvoice(r.id)}>
+                  <Download className="mr-1 h-4 w-4" /> PDF
+                </Button>
                 <Select value={r.status} onValueChange={async (v) => {
                   try { await setStatus({ data: { id: r.id, status: v as any, amount_paid: v === "paid" ? Number(r.total) : undefined } }); toast.success("Updated"); load(); }
                   catch (e: any) { toast.error(e.message); }
