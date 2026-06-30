@@ -79,7 +79,7 @@ export const updateInvoiceStatus = createServerFn({ method: "POST" })
       patch.paid_at = new Date().toISOString();
     }
     if (typeof data.amount_paid === "number") patch.amount_paid = data.amount_paid;
-    const { error } = await context.supabase.from("invoices").update(patch).eq("id", data.id);
+    const { error } = await context.supabase.from("invoices").update(patch as any).eq("id", data.id);
     if (error) throw new Error(error.message);
     if (data.status === "paid") {
       const { data: inv } = await context.supabase
@@ -181,7 +181,7 @@ export const decideRefund = createServerFn({ method: "POST" })
       processed_by: context.userId,
     };
     if (data.status === "processed") patch.processed_at = new Date().toISOString();
-    const { error } = await context.supabase.from("refunds").update(patch).eq("id", data.id);
+    const { error } = await context.supabase.from("refunds").update(patch as any).eq("id", data.id);
     if (error) throw new Error(error.message);
     if (data.status === "processed") {
       const { data: r } = await context.supabase
