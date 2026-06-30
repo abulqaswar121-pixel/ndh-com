@@ -25,16 +25,11 @@ export const signCertificate = createServerFn({ method: "POST" })
     } else {
       await assertDirector(supabase, userId);
     }
-    const patch: Record<string, unknown> = {};
-    if (data.as === "director") {
-      patch.director_signed_by = userId;
-      patch.director_signed_at = new Date().toISOString();
-      patch.status = "director_signed";
-    } else {
-      patch.founder_signed_by = userId;
-      patch.founder_signed_at = new Date().toISOString();
-      patch.status = "founder_signed";
-    }
+    const nowIso = new Date().toISOString();
+    const patch =
+      data.as === "director"
+        ? { director_signed_by: userId, director_signed_at: nowIso, status: "director_signed" }
+        : { founder_signed_by: userId, founder_signed_at: nowIso, status: "founder_signed" };
     const { error } = await supabase.from("certificates").update(patch).eq("id", data.certificate_id);
     if (error) throw new Error(error.message);
     return { ok: true };
