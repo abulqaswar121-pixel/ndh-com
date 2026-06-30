@@ -18,8 +18,9 @@ type Cert = {
 };
 
 export function Certificates() {
-  const { user, profile } = useAuth();
+  const { user } = useAuth();
   const [certs, setCerts] = useState<Cert[]>([]);
+  const [profile, setProfile] = useState<{ full_name: string | null; avatar_url: string | null } | null>(null);
   const [showIdFor, setShowIdFor] = useState<Cert | null>(null);
   const downloadFn = useServerFn(getCertificateDownloadUrl);
 
@@ -31,6 +32,12 @@ export function Certificates() {
       .eq("student_id", user.id)
       .order("issue_date", { ascending: false })
       .then(({ data }) => setCerts((data as unknown as Cert[]) || []));
+  }, [user]);
+
+  useEffect(() => {
+    if (!user) return;
+    supabase.from("profiles").select("full_name, avatar_url").eq("id", user.id).maybeSingle()
+      .then(({ data }) => setProfile(data));
   }, [user]);
 
   async function download(c: Cert) {
