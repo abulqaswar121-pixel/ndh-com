@@ -9,6 +9,7 @@ export type AppRole =
   | "instructor"
   | "pm"
   | "hod"
+  | "finance"
   | "admin"
   | "super_admin";
 
@@ -19,6 +20,7 @@ export const ROLE_HOME: Record<AppRole, string> = {
   instructor: "/dashboard/instructor",
   pm: "/dashboard/pm",
   hod: "/dashboard/hod",
+  finance: "/dashboard/finance",
   admin: "/dashboard/admin",
   super_admin: "/dashboard/super-admin",
 };
@@ -42,6 +44,7 @@ const Ctx = createContext<AuthState>({
 const ROLE_PRIORITY: AppRole[] = [
   "super_admin",
   "admin",
+  "finance",
   "hod",
   "pm",
   "instructor",

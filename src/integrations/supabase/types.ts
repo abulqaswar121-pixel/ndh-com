@@ -534,6 +534,7 @@ export type Database = {
       departments: {
         Row: {
           created_at: string
+          description: string | null
           hod_id: string | null
           id: string
           name: string
@@ -542,6 +543,7 @@ export type Database = {
         }
         Insert: {
           created_at?: string
+          description?: string | null
           hod_id?: string | null
           id?: string
           name: string
@@ -550,6 +552,7 @@ export type Database = {
         }
         Update: {
           created_at?: string
+          description?: string | null
           hod_id?: string | null
           id?: string
           name?: string
@@ -764,6 +767,99 @@ export type Database = {
           },
         ]
       }
+      expenses: {
+        Row: {
+          amount: number
+          approved_by: string | null
+          category: string
+          created_at: string
+          currency: string
+          description: string | null
+          id: string
+          notes: string | null
+          receipt_url: string | null
+          spent_on: string
+          status: string
+          submitted_by: string | null
+          updated_at: string
+          vendor: string | null
+        }
+        Insert: {
+          amount: number
+          approved_by?: string | null
+          category: string
+          created_at?: string
+          currency?: string
+          description?: string | null
+          id?: string
+          notes?: string | null
+          receipt_url?: string | null
+          spent_on?: string
+          status?: string
+          submitted_by?: string | null
+          updated_at?: string
+          vendor?: string | null
+        }
+        Update: {
+          amount?: number
+          approved_by?: string | null
+          category?: string
+          created_at?: string
+          currency?: string
+          description?: string | null
+          id?: string
+          notes?: string | null
+          receipt_url?: string | null
+          spent_on?: string
+          status?: string
+          submitted_by?: string | null
+          updated_at?: string
+          vendor?: string | null
+        }
+        Relationships: []
+      }
+      finance_ledger: {
+        Row: {
+          amount: number
+          created_at: string
+          created_by: string | null
+          currency: string
+          direction: string
+          entry_date: string
+          id: string
+          memo: string | null
+          reference_id: string | null
+          reference_table: string | null
+          type: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          created_by?: string | null
+          currency?: string
+          direction: string
+          entry_date?: string
+          id?: string
+          memo?: string | null
+          reference_id?: string | null
+          reference_table?: string | null
+          type: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          created_by?: string | null
+          currency?: string
+          direction?: string
+          entry_date?: string
+          id?: string
+          memo?: string | null
+          reference_id?: string | null
+          reference_table?: string | null
+          type?: string
+        }
+        Relationships: []
+      }
       forum_posts: {
         Row: {
           author_id: string
@@ -952,6 +1048,77 @@ export type Database = {
             columns: ["department_id"]
             isOneToOne: false
             referencedRelation: "departments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      invoices: {
+        Row: {
+          amount_paid: number
+          client_id: string | null
+          created_at: string
+          created_by: string | null
+          currency: string
+          due_date: string | null
+          id: string
+          invoice_number: string
+          issued_at: string | null
+          line_items: Json
+          notes: string | null
+          paid_at: string | null
+          status: string
+          subtotal: number
+          task_id: string | null
+          tax: number
+          total: number
+          updated_at: string
+        }
+        Insert: {
+          amount_paid?: number
+          client_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          currency?: string
+          due_date?: string | null
+          id?: string
+          invoice_number: string
+          issued_at?: string | null
+          line_items?: Json
+          notes?: string | null
+          paid_at?: string | null
+          status?: string
+          subtotal?: number
+          task_id?: string | null
+          tax?: number
+          total?: number
+          updated_at?: string
+        }
+        Update: {
+          amount_paid?: number
+          client_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          currency?: string
+          due_date?: string | null
+          id?: string
+          invoice_number?: string
+          issued_at?: string | null
+          line_items?: Json
+          notes?: string | null
+          paid_at?: string | null
+          status?: string
+          subtotal?: number
+          task_id?: string | null
+          tax?: number
+          total?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "invoices_task_id_fkey"
+            columns: ["task_id"]
+            isOneToOne: false
+            referencedRelation: "tasks"
             referencedColumns: ["id"]
           },
         ]
@@ -1431,6 +1598,59 @@ export type Database = {
             columns: ["task_id"]
             isOneToOne: false
             referencedRelation: "tasks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      refunds: {
+        Row: {
+          amount: number
+          client_id: string | null
+          created_at: string
+          currency: string
+          id: string
+          payment_id: string | null
+          processed_at: string | null
+          processed_by: string | null
+          reason: string | null
+          requested_by: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          amount: number
+          client_id?: string | null
+          created_at?: string
+          currency?: string
+          id?: string
+          payment_id?: string | null
+          processed_at?: string | null
+          processed_by?: string | null
+          reason?: string | null
+          requested_by?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          amount?: number
+          client_id?: string | null
+          created_at?: string
+          currency?: string
+          id?: string
+          payment_id?: string | null
+          processed_at?: string | null
+          processed_by?: string | null
+          reason?: string | null
+          requested_by?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "refunds_payment_id_fkey"
+            columns: ["payment_id"]
+            isOneToOne: false
+            referencedRelation: "payments"
             referencedColumns: ["id"]
           },
         ]
@@ -2070,6 +2290,7 @@ export type Database = {
         }
         Returns: boolean
       }
+      is_finance_staff: { Args: { _uid: string }; Returns: boolean }
       is_hod_of: { Args: { _dept: string }; Returns: boolean }
       move_to_dlq: {
         Args: {
@@ -2082,6 +2303,7 @@ export type Database = {
       }
       my_department: { Args: never; Returns: string }
       next_certificate_number: { Args: never; Returns: string }
+      next_invoice_number: { Args: never; Returns: string }
       pick_pm_for_department: { Args: { _dept_id: string }; Returns: string }
       pm_department: { Args: { _uid: string }; Returns: string }
       primary_role: {
@@ -2115,6 +2337,7 @@ export type Database = {
         | "hod"
         | "admin"
         | "super_admin"
+        | "finance"
       curriculum_status:
         | "draft"
         | "pending_approval"
@@ -2278,6 +2501,7 @@ export const Constants = {
         "hod",
         "admin",
         "super_admin",
+        "finance",
       ],
       curriculum_status: [
         "draft",
