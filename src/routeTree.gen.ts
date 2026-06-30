@@ -14,8 +14,10 @@ import { Route as TermsRouteImport } from './routes/terms'
 import { Route as TeamRouteImport } from './routes/team'
 import { Route as TalentApplicationRouteImport } from './routes/talent-application'
 import { Route as SubmitTaskRouteImport } from './routes/submit-task'
+import { Route as SignupRouteImport } from './routes/signup'
 import { Route as ServicesRouteImport } from './routes/services'
 import { Route as PrivacyRouteImport } from './routes/privacy'
+import { Route as LoginRouteImport } from './routes/login'
 import { Route as FaqRouteImport } from './routes/faq'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CareersRouteImport } from './routes/careers'
@@ -49,6 +51,11 @@ const SubmitTaskRoute = SubmitTaskRouteImport.update({
   path: '/submit-task',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SignupRoute = SignupRouteImport.update({
+  id: '/signup',
+  path: '/signup',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ServicesRoute = ServicesRouteImport.update({
   id: '/services',
   path: '/services',
@@ -57,6 +64,11 @@ const ServicesRoute = ServicesRouteImport.update({
 const PrivacyRoute = PrivacyRouteImport.update({
   id: '/privacy',
   path: '/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
 const FaqRoute = FaqRouteImport.update({
@@ -103,8 +115,10 @@ export interface FileRoutesByFullPath {
   '/careers': typeof CareersRoute
   '/contact': typeof ContactRoute
   '/faq': typeof FaqRoute
+  '/login': typeof LoginRoute
   '/privacy': typeof PrivacyRoute
   '/services': typeof ServicesRoute
+  '/signup': typeof SignupRoute
   '/submit-task': typeof SubmitTaskRoute
   '/talent-application': typeof TalentApplicationRoute
   '/team': typeof TeamRoute
@@ -119,8 +133,10 @@ export interface FileRoutesByTo {
   '/careers': typeof CareersRoute
   '/contact': typeof ContactRoute
   '/faq': typeof FaqRoute
+  '/login': typeof LoginRoute
   '/privacy': typeof PrivacyRoute
   '/services': typeof ServicesRoute
+  '/signup': typeof SignupRoute
   '/submit-task': typeof SubmitTaskRoute
   '/talent-application': typeof TalentApplicationRoute
   '/team': typeof TeamRoute
@@ -136,8 +152,10 @@ export interface FileRoutesById {
   '/careers': typeof CareersRoute
   '/contact': typeof ContactRoute
   '/faq': typeof FaqRoute
+  '/login': typeof LoginRoute
   '/privacy': typeof PrivacyRoute
   '/services': typeof ServicesRoute
+  '/signup': typeof SignupRoute
   '/submit-task': typeof SubmitTaskRoute
   '/talent-application': typeof TalentApplicationRoute
   '/team': typeof TeamRoute
@@ -154,8 +172,10 @@ export interface FileRouteTypes {
     | '/careers'
     | '/contact'
     | '/faq'
+    | '/login'
     | '/privacy'
     | '/services'
+    | '/signup'
     | '/submit-task'
     | '/talent-application'
     | '/team'
@@ -170,8 +190,10 @@ export interface FileRouteTypes {
     | '/careers'
     | '/contact'
     | '/faq'
+    | '/login'
     | '/privacy'
     | '/services'
+    | '/signup'
     | '/submit-task'
     | '/talent-application'
     | '/team'
@@ -186,8 +208,10 @@ export interface FileRouteTypes {
     | '/careers'
     | '/contact'
     | '/faq'
+    | '/login'
     | '/privacy'
     | '/services'
+    | '/signup'
     | '/submit-task'
     | '/talent-application'
     | '/team'
@@ -203,8 +227,10 @@ export interface RootRouteChildren {
   CareersRoute: typeof CareersRoute
   ContactRoute: typeof ContactRoute
   FaqRoute: typeof FaqRoute
+  LoginRoute: typeof LoginRoute
   PrivacyRoute: typeof PrivacyRoute
   ServicesRoute: typeof ServicesRoute
+  SignupRoute: typeof SignupRoute
   SubmitTaskRoute: typeof SubmitTaskRoute
   TalentApplicationRoute: typeof TalentApplicationRoute
   TeamRoute: typeof TeamRoute
@@ -249,6 +275,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SubmitTaskRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/signup': {
+      id: '/signup'
+      path: '/signup'
+      fullPath: '/signup'
+      preLoaderRoute: typeof SignupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/services': {
       id: '/services'
       path: '/services'
@@ -261,6 +294,13 @@ declare module '@tanstack/react-router' {
       path: '/privacy'
       fullPath: '/privacy'
       preLoaderRoute: typeof PrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/faq': {
@@ -323,8 +363,10 @@ const rootRouteChildren: RootRouteChildren = {
   CareersRoute: CareersRoute,
   ContactRoute: ContactRoute,
   FaqRoute: FaqRoute,
+  LoginRoute: LoginRoute,
   PrivacyRoute: PrivacyRoute,
   ServicesRoute: ServicesRoute,
+  SignupRoute: SignupRoute,
   SubmitTaskRoute: SubmitTaskRoute,
   TalentApplicationRoute: TalentApplicationRoute,
   TeamRoute: TeamRoute,
