@@ -26,9 +26,15 @@ function LoginPage() {
   const { user, role } = useAuth();
   const navigate = useNavigate();
 
+  const nextPath = (() => {
+    if (typeof window === "undefined") return null;
+    const raw = new URLSearchParams(window.location.search).get("next");
+    return raw && raw.startsWith("/") ? raw : null;
+  })();
+
   useEffect(() => {
-    if (user && role) navigate({ to: roleHome(role) });
-  }, [user, role, navigate]);
+    if (user && role) navigate({ to: nextPath || roleHome(role) });
+  }, [user, role, navigate, nextPath]);
 
   const handleEmailLogin = async (e: React.FormEvent) => {
     e.preventDefault();
