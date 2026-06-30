@@ -429,7 +429,7 @@ function SettingsPage({ userId }: { userId?: string }) {
   const [p, setP] = useState<any>({});
   useEffect(() => { if (userId) supabase.from("profiles").select("*").eq("id", userId).maybeSingle().then(({ data }) => setP(data || {})); }, [userId]);
   const save = async () => {
-    await supabase.from("profiles").update({ full_name: p.full_name, phone: p.phone, working_hours: p.working_hours, auto_reply: p.auto_reply }).eq("id", userId!);
+    await supabase.from("profiles").update({ full_name: p.full_name, phone: p.phone }).eq("id", userId!);
   };
   return (
     <div className="max-w-xl space-y-4">
