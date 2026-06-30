@@ -43,6 +43,7 @@ import { Route as AdminOperationsRouteImport } from './routes/admin.operations'
 import { Route as AdminHodRouteImport } from './routes/admin.hod'
 import { Route as AdminFinanceRouteImport } from './routes/admin.finance'
 import { Route as AdminAcademyRouteImport } from './routes/admin.academy'
+import { Route as AcademyProfessionalProgramsRouteImport } from './routes/academy.professional-programs'
 import { Route as AcademyDiplomaProgramsRouteImport } from './routes/academy.diploma-programs'
 import { Route as AcademyCertificateProgramsRouteImport } from './routes/academy.certificate-programs'
 import { Route as LovableEmailSuppressionRouteImport } from './routes/lovable/email/suppression'
@@ -228,6 +229,12 @@ const AdminAcademyRoute = AdminAcademyRouteImport.update({
   path: '/admin/academy',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AcademyProfessionalProgramsRoute =
+  AcademyProfessionalProgramsRouteImport.update({
+    id: '/professional-programs',
+    path: '/professional-programs',
+    getParentRoute: () => AcademyRoute,
+  } as any)
 const AcademyDiplomaProgramsRoute = AcademyDiplomaProgramsRouteImport.update({
   id: '/diploma-programs',
   path: '/diploma-programs',
@@ -343,6 +350,7 @@ export interface FileRoutesByFullPath {
   '/verify': typeof VerifyRoute
   '/academy/certificate-programs': typeof AcademyCertificateProgramsRoute
   '/academy/diploma-programs': typeof AcademyDiplomaProgramsRoute
+  '/academy/professional-programs': typeof AcademyProfessionalProgramsRoute
   '/admin/academy': typeof AdminAcademyRoute
   '/admin/finance': typeof AdminFinanceRoute
   '/admin/hod': typeof AdminHodRoute
@@ -393,6 +401,7 @@ export interface FileRoutesByTo {
   '/verify': typeof VerifyRoute
   '/academy/certificate-programs': typeof AcademyCertificateProgramsRoute
   '/academy/diploma-programs': typeof AcademyDiplomaProgramsRoute
+  '/academy/professional-programs': typeof AcademyProfessionalProgramsRoute
   '/admin/academy': typeof AdminAcademyRoute
   '/admin/finance': typeof AdminFinanceRoute
   '/admin/hod': typeof AdminHodRoute
@@ -445,6 +454,7 @@ export interface FileRoutesById {
   '/verify': typeof VerifyRoute
   '/academy/certificate-programs': typeof AcademyCertificateProgramsRoute
   '/academy/diploma-programs': typeof AcademyDiplomaProgramsRoute
+  '/academy/professional-programs': typeof AcademyProfessionalProgramsRoute
   '/admin/academy': typeof AdminAcademyRoute
   '/admin/finance': typeof AdminFinanceRoute
   '/admin/hod': typeof AdminHodRoute
@@ -497,6 +507,7 @@ export interface FileRouteTypes {
     | '/verify'
     | '/academy/certificate-programs'
     | '/academy/diploma-programs'
+    | '/academy/professional-programs'
     | '/admin/academy'
     | '/admin/finance'
     | '/admin/hod'
@@ -547,6 +558,7 @@ export interface FileRouteTypes {
     | '/verify'
     | '/academy/certificate-programs'
     | '/academy/diploma-programs'
+    | '/academy/professional-programs'
     | '/admin/academy'
     | '/admin/finance'
     | '/admin/hod'
@@ -598,6 +610,7 @@ export interface FileRouteTypes {
     | '/verify'
     | '/academy/certificate-programs'
     | '/academy/diploma-programs'
+    | '/academy/professional-programs'
     | '/admin/academy'
     | '/admin/finance'
     | '/admin/hod'
@@ -905,6 +918,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminAcademyRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/academy/professional-programs': {
+      id: '/academy/professional-programs'
+      path: '/professional-programs'
+      fullPath: '/academy/professional-programs'
+      preLoaderRoute: typeof AcademyProfessionalProgramsRouteImport
+      parentRoute: typeof AcademyRoute
+    }
     '/academy/diploma-programs': {
       id: '/academy/diploma-programs'
       path: '/diploma-programs'
@@ -1041,11 +1061,13 @@ const AuthenticatedRouteRouteWithChildren =
 interface AcademyRouteChildren {
   AcademyCertificateProgramsRoute: typeof AcademyCertificateProgramsRoute
   AcademyDiplomaProgramsRoute: typeof AcademyDiplomaProgramsRoute
+  AcademyProfessionalProgramsRoute: typeof AcademyProfessionalProgramsRoute
 }
 
 const AcademyRouteChildren: AcademyRouteChildren = {
   AcademyCertificateProgramsRoute: AcademyCertificateProgramsRoute,
   AcademyDiplomaProgramsRoute: AcademyDiplomaProgramsRoute,
+  AcademyProfessionalProgramsRoute: AcademyProfessionalProgramsRoute,
 }
 
 const AcademyRouteWithChildren =
