@@ -14,37 +14,109 @@ export type Database = {
   }
   public: {
     Tables: {
+      academic_calendar: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          department_id: string | null
+          ends_at: string
+          id: string
+          kind: string
+          notes: string | null
+          starts_at: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          department_id?: string | null
+          ends_at: string
+          id?: string
+          kind?: string
+          notes?: string | null
+          starts_at: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          department_id?: string | null
+          ends_at?: string
+          id?: string
+          kind?: string
+          notes?: string | null
+          starts_at?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "academic_calendar_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "academic_calendar_department_id_fkey"
+            columns: ["department_id"]
+            isOneToOne: false
+            referencedRelation: "departments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       certificates: {
         Row: {
           certificate_number: string
           course_id: string | null
+          director_signed_at: string | null
+          director_signed_by: string | null
+          founder_signed_at: string | null
+          founder_signed_by: string | null
           grade: string | null
           id: string
           issue_date: string
+          issued_at: string | null
           pdf_url: string | null
           qr_code: string | null
+          status: string
           student_id: string
           verification_token: string | null
         }
         Insert: {
           certificate_number: string
           course_id?: string | null
+          director_signed_at?: string | null
+          director_signed_by?: string | null
+          founder_signed_at?: string | null
+          founder_signed_by?: string | null
           grade?: string | null
           id?: string
           issue_date?: string
+          issued_at?: string | null
           pdf_url?: string | null
           qr_code?: string | null
+          status?: string
           student_id: string
           verification_token?: string | null
         }
         Update: {
           certificate_number?: string
           course_id?: string | null
+          director_signed_at?: string | null
+          director_signed_by?: string | null
+          founder_signed_at?: string | null
+          founder_signed_by?: string | null
           grade?: string | null
           id?: string
           issue_date?: string
+          issued_at?: string | null
           pdf_url?: string | null
           qr_code?: string | null
+          status?: string
           student_id?: string
           verification_token?: string | null
         }
@@ -54,6 +126,20 @@ export type Database = {
             columns: ["course_id"]
             isOneToOne: false
             referencedRelation: "courses"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "certificates_director_signed_by_fkey"
+            columns: ["director_signed_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "certificates_founder_signed_by_fkey"
+            columns: ["founder_signed_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
         ]
@@ -1490,6 +1576,47 @@ export type Database = {
             columns: ["department_id"]
             isOneToOne: false
             referencedRelation: "departments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      tuition_prices: {
+        Row: {
+          active: boolean
+          amount: number
+          country_code: string
+          course_id: string
+          created_at: string
+          currency: string
+          id: string
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          amount: number
+          country_code?: string
+          course_id: string
+          created_at?: string
+          currency: string
+          id?: string
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          amount?: number
+          country_code?: string
+          course_id?: string
+          created_at?: string
+          currency?: string
+          id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tuition_prices_course_id_fkey"
+            columns: ["course_id"]
+            isOneToOne: false
+            referencedRelation: "courses"
             referencedColumns: ["id"]
           },
         ]
