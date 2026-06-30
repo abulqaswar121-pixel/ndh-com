@@ -4,6 +4,9 @@ import { AnimatedBlobs } from "@/components/site/AnimatedBlobs";
 import { Reveal } from "@/components/site/Reveal";
 import { Button } from "@/components/ui/button";
 import { Lock, ArrowRight } from "lucide-react";
+import { useAuth } from "@/lib/auth";
+import { useEffect } from "react";
+import { useNavigate } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/submit-task")({
   head: () => ({
@@ -17,6 +20,11 @@ export const Route = createFileRoute("/submit-task")({
 });
 
 function SubmitTaskGate() {
+  const { user } = useAuth();
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (user) navigate({ to: "/dashboard/client", search: { tab: "submit" } as never });
+  }, [user, navigate]);
   return (
     <SiteLayout>
       <section className="relative isolate flex min-h-[70vh] items-center overflow-hidden bg-hero py-24 text-white">
