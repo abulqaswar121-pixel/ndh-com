@@ -11,7 +11,7 @@ export function WelcomeTemplate({ name, dashboardUrl }: { name?: string; dashboa
       <P><strong>Get started in 3 steps:</strong></P>
       <P>1. Submit your first task from the dashboard.<br/>2. Approve the quote from your assigned PM.<br/>3. Pay securely and we begin work immediately.</P>
       <CTA href={url} label="Open my dashboard" />
-      <P style={{ fontSize: 13 }}>Need help? Reply to this email or write to <a href="mailto:support@ndh.com.ng">support@ndh.com.ng</a>.</P>
+      <P>Need help? Reply to this email or write to <a href="mailto:support@ndh.com.ng">support@ndh.com.ng</a>.</P>
     </BrandedLayout>
   );
 }
