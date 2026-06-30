@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { PmShell } from "@/components/dashboard/pm/PmShell";
+import { AdminShell } from "@/components/dashboard/admin/AdminShell";
 
 export const Route = createFileRoute("/_authenticated/dashboard/admin")({
-  component: () => <PmShell title="Admin Portal" />,
+  component: () => <AdminShell title="Admin Portal" />,
 });
