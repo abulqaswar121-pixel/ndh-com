@@ -14,7 +14,6 @@ import { Route as TermsRouteImport } from './routes/terms'
 import { Route as TeamRouteImport } from './routes/team'
 import { Route as TalentApplicationRouteImport } from './routes/talent-application'
 import { Route as TalentRouteImport } from './routes/talent'
-import { Route as SubmitTaskRouteImport } from './routes/submit-task'
 import { Route as StudentRouteImport } from './routes/student'
 import { Route as SignupRouteImport } from './routes/signup'
 import { Route as ServicesRouteImport } from './routes/services'
@@ -61,11 +60,6 @@ const TalentApplicationRoute = TalentApplicationRouteImport.update({
 const TalentRoute = TalentRouteImport.update({
   id: '/talent',
   path: '/talent',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SubmitTaskRoute = SubmitTaskRouteImport.update({
-  id: '/submit-task',
-  path: '/submit-task',
   getParentRoute: () => rootRouteImport,
 } as any)
 const StudentRoute = StudentRouteImport.update({
@@ -194,7 +188,6 @@ export interface FileRoutesByFullPath {
   '/services': typeof ServicesRoute
   '/signup': typeof SignupRoute
   '/student': typeof StudentRoute
-  '/submit-task': typeof SubmitTaskRoute
   '/talent': typeof TalentRoute
   '/talent-application': typeof TalentApplicationRoute
   '/team': typeof TeamRoute
@@ -224,7 +217,6 @@ export interface FileRoutesByTo {
   '/services': typeof ServicesRoute
   '/signup': typeof SignupRoute
   '/student': typeof StudentRoute
-  '/submit-task': typeof SubmitTaskRoute
   '/talent': typeof TalentRoute
   '/talent-application': typeof TalentApplicationRoute
   '/team': typeof TeamRoute
@@ -255,7 +247,6 @@ export interface FileRoutesById {
   '/services': typeof ServicesRoute
   '/signup': typeof SignupRoute
   '/student': typeof StudentRoute
-  '/submit-task': typeof SubmitTaskRoute
   '/talent': typeof TalentRoute
   '/talent-application': typeof TalentApplicationRoute
   '/team': typeof TeamRoute
@@ -287,7 +278,6 @@ export interface FileRouteTypes {
     | '/services'
     | '/signup'
     | '/student'
-    | '/submit-task'
     | '/talent'
     | '/talent-application'
     | '/team'
@@ -317,7 +307,6 @@ export interface FileRouteTypes {
     | '/services'
     | '/signup'
     | '/student'
-    | '/submit-task'
     | '/talent'
     | '/talent-application'
     | '/team'
@@ -347,7 +336,6 @@ export interface FileRouteTypes {
     | '/services'
     | '/signup'
     | '/student'
-    | '/submit-task'
     | '/talent'
     | '/talent-application'
     | '/team'
@@ -378,7 +366,6 @@ export interface RootRouteChildren {
   ServicesRoute: typeof ServicesRoute
   SignupRoute: typeof SignupRoute
   StudentRoute: typeof StudentRoute
-  SubmitTaskRoute: typeof SubmitTaskRoute
   TalentRoute: typeof TalentRoute
   TalentApplicationRoute: typeof TalentApplicationRoute
   TeamRoute: typeof TeamRoute
@@ -429,13 +416,6 @@ declare module '@tanstack/react-router' {
       path: '/talent'
       fullPath: '/talent'
       preLoaderRoute: typeof TalentRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/submit-task': {
-      id: '/submit-task'
-      path: '/submit-task'
-      fullPath: '/submit-task'
-      preLoaderRoute: typeof SubmitTaskRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/student': {
@@ -610,7 +590,6 @@ const rootRouteChildren: RootRouteChildren = {
   ServicesRoute: ServicesRoute,
   SignupRoute: SignupRoute,
   StudentRoute: StudentRoute,
-  SubmitTaskRoute: SubmitTaskRoute,
   TalentRoute: TalentRoute,
   TalentApplicationRoute: TalentApplicationRoute,
   TeamRoute: TeamRoute,
