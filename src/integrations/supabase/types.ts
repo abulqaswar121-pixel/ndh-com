@@ -706,12 +706,66 @@ export type Database = {
         }
         Relationships: []
       }
+      pm_invitations: {
+        Row: {
+          accepted_at: string | null
+          created_at: string
+          department_id: string
+          email: string
+          expires_at: string
+          full_name: string
+          id: string
+          invited_by: string | null
+          phone: string | null
+          status: string
+          token: string
+          updated_at: string
+        }
+        Insert: {
+          accepted_at?: string | null
+          created_at?: string
+          department_id: string
+          email: string
+          expires_at?: string
+          full_name: string
+          id?: string
+          invited_by?: string | null
+          phone?: string | null
+          status?: string
+          token?: string
+          updated_at?: string
+        }
+        Update: {
+          accepted_at?: string | null
+          created_at?: string
+          department_id?: string
+          email?: string
+          expires_at?: string
+          full_name?: string
+          id?: string
+          invited_by?: string | null
+          phone?: string | null
+          status?: string
+          token?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pm_invitations_department_id_fkey"
+            columns: ["department_id"]
+            isOneToOne: false
+            referencedRelation: "departments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           avatar_url: string | null
           country: string | null
           created_at: string
           currency: string | null
+          department_id: string | null
           email: string
           full_name: string | null
           id: string
@@ -724,6 +778,7 @@ export type Database = {
           country?: string | null
           created_at?: string
           currency?: string | null
+          department_id?: string | null
           email: string
           full_name?: string | null
           id: string
@@ -736,6 +791,7 @@ export type Database = {
           country?: string | null
           created_at?: string
           currency?: string | null
+          department_id?: string | null
           email?: string
           full_name?: string | null
           id?: string
@@ -743,38 +799,58 @@ export type Database = {
           updated_at?: string
           welcome_sent?: boolean | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "profiles_department_id_fkey"
+            columns: ["department_id"]
+            isOneToOne: false
+            referencedRelation: "departments"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       quotes: {
         Row: {
           amount: number
           created_at: string
           currency: string | null
+          delivery_days: number | null
+          expires_at: string | null
           id: string
           notes: string | null
           pm_id: string | null
+          responded_at: string | null
           status: string
           task_id: string
+          updated_at: string
         }
         Insert: {
           amount: number
           created_at?: string
           currency?: string | null
+          delivery_days?: number | null
+          expires_at?: string | null
           id?: string
           notes?: string | null
           pm_id?: string | null
+          responded_at?: string | null
           status?: string
           task_id: string
+          updated_at?: string
         }
         Update: {
           amount?: number
           created_at?: string
           currency?: string | null
+          delivery_days?: number | null
+          expires_at?: string | null
           id?: string
           notes?: string | null
           pm_id?: string | null
+          responded_at?: string | null
           status?: string
           task_id?: string
+          updated_at?: string
         }
         Relationships: [
           {
@@ -1058,6 +1134,41 @@ export type Database = {
           },
         ]
       }
+      task_events: {
+        Row: {
+          actor_id: string | null
+          created_at: string
+          id: string
+          payload: Json
+          task_id: string
+          type: string
+        }
+        Insert: {
+          actor_id?: string | null
+          created_at?: string
+          id?: string
+          payload?: Json
+          task_id: string
+          type: string
+        }
+        Update: {
+          actor_id?: string | null
+          created_at?: string
+          id?: string
+          payload?: Json
+          task_id?: string
+          type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "task_events_task_id_fkey"
+            columns: ["task_id"]
+            isOneToOne: false
+            referencedRelation: "tasks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       tasks: {
         Row: {
           assigned_pm_id: string | null
@@ -1075,8 +1186,12 @@ export type Database = {
           department_id: string | null
           description: string | null
           files: Json | null
+          first_response_at: string | null
+          first_response_due_at: string | null
           id: string
           open_to_negotiation: boolean | null
+          quoted_amount: number | null
+          quoted_currency: string | null
           reviewed: boolean | null
           revision_count: number
           revision_notes: string | null
@@ -1106,8 +1221,12 @@ export type Database = {
           department_id?: string | null
           description?: string | null
           files?: Json | null
+          first_response_at?: string | null
+          first_response_due_at?: string | null
           id?: string
           open_to_negotiation?: boolean | null
+          quoted_amount?: number | null
+          quoted_currency?: string | null
           reviewed?: boolean | null
           revision_count?: number
           revision_notes?: string | null
@@ -1137,8 +1256,12 @@ export type Database = {
           department_id?: string | null
           description?: string | null
           files?: Json | null
+          first_response_at?: string | null
+          first_response_due_at?: string | null
           id?: string
           open_to_negotiation?: boolean | null
+          quoted_amount?: number | null
+          quoted_currency?: string | null
           reviewed?: boolean | null
           revision_count?: number
           revision_notes?: string | null
@@ -1238,8 +1361,12 @@ export type Database = {
           department_id: string | null
           description: string | null
           files: Json | null
+          first_response_at: string | null
+          first_response_due_at: string | null
           id: string
           open_to_negotiation: boolean | null
+          quoted_amount: number | null
+          quoted_currency: string | null
           reviewed: boolean | null
           revision_count: number
           revision_notes: string | null
@@ -1304,6 +1431,7 @@ export type Database = {
       }
       next_certificate_number: { Args: never; Returns: string }
       pick_pm_for_department: { Args: { _dept_id: string }; Returns: string }
+      pm_department: { Args: { _uid: string }; Returns: string }
       primary_role: {
         Args: { _user_id: string }
         Returns: Database["public"]["Enums"]["app_role"]
