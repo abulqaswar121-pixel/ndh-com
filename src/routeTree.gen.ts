@@ -43,6 +43,7 @@ import { Route as AdminOperationsRouteImport } from './routes/admin.operations'
 import { Route as AdminHodRouteImport } from './routes/admin.hod'
 import { Route as AdminFinanceRouteImport } from './routes/admin.finance'
 import { Route as AdminAcademyRouteImport } from './routes/admin.academy'
+import { Route as AcademyCertificateProgramsRouteImport } from './routes/academy.certificate-programs'
 import { Route as LovableEmailSuppressionRouteImport } from './routes/lovable/email/suppression'
 import { Route as AuthenticatedDashboardTalentRouteImport } from './routes/_authenticated/dashboard/talent'
 import { Route as AuthenticatedDashboardSuperAdminRouteImport } from './routes/_authenticated/dashboard/super-admin'
@@ -226,6 +227,12 @@ const AdminAcademyRoute = AdminAcademyRouteImport.update({
   path: '/admin/academy',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AcademyCertificateProgramsRoute =
+  AcademyCertificateProgramsRouteImport.update({
+    id: '/certificate-programs',
+    path: '/certificate-programs',
+    getParentRoute: () => AcademyRoute,
+  } as any)
 const LovableEmailSuppressionRoute = LovableEmailSuppressionRouteImport.update({
   id: '/lovable/email/suppression',
   path: '/lovable/email/suppression',
@@ -307,7 +314,7 @@ const ApiPublicWebhooksPaystackRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/academy': typeof AcademyRoute
+  '/academy': typeof AcademyRouteWithChildren
   '/blog': typeof BlogRoute
   '/careers': typeof CareersRoute
   '/client': typeof ClientRoute
@@ -328,6 +335,7 @@ export interface FileRoutesByFullPath {
   '/team': typeof TeamRoute
   '/terms': typeof TermsRoute
   '/verify': typeof VerifyRoute
+  '/academy/certificate-programs': typeof AcademyCertificateProgramsRoute
   '/admin/academy': typeof AdminAcademyRoute
   '/admin/finance': typeof AdminFinanceRoute
   '/admin/hod': typeof AdminHodRoute
@@ -355,7 +363,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/academy': typeof AcademyRoute
+  '/academy': typeof AcademyRouteWithChildren
   '/blog': typeof BlogRoute
   '/careers': typeof CareersRoute
   '/client': typeof ClientRoute
@@ -376,6 +384,7 @@ export interface FileRoutesByTo {
   '/team': typeof TeamRoute
   '/terms': typeof TermsRoute
   '/verify': typeof VerifyRoute
+  '/academy/certificate-programs': typeof AcademyCertificateProgramsRoute
   '/admin/academy': typeof AdminAcademyRoute
   '/admin/finance': typeof AdminFinanceRoute
   '/admin/hod': typeof AdminHodRoute
@@ -405,7 +414,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/about': typeof AboutRoute
-  '/academy': typeof AcademyRoute
+  '/academy': typeof AcademyRouteWithChildren
   '/blog': typeof BlogRoute
   '/careers': typeof CareersRoute
   '/client': typeof ClientRoute
@@ -426,6 +435,7 @@ export interface FileRoutesById {
   '/team': typeof TeamRoute
   '/terms': typeof TermsRoute
   '/verify': typeof VerifyRoute
+  '/academy/certificate-programs': typeof AcademyCertificateProgramsRoute
   '/admin/academy': typeof AdminAcademyRoute
   '/admin/finance': typeof AdminFinanceRoute
   '/admin/hod': typeof AdminHodRoute
@@ -476,6 +486,7 @@ export interface FileRouteTypes {
     | '/team'
     | '/terms'
     | '/verify'
+    | '/academy/certificate-programs'
     | '/admin/academy'
     | '/admin/finance'
     | '/admin/hod'
@@ -524,6 +535,7 @@ export interface FileRouteTypes {
     | '/team'
     | '/terms'
     | '/verify'
+    | '/academy/certificate-programs'
     | '/admin/academy'
     | '/admin/finance'
     | '/admin/hod'
@@ -573,6 +585,7 @@ export interface FileRouteTypes {
     | '/team'
     | '/terms'
     | '/verify'
+    | '/academy/certificate-programs'
     | '/admin/academy'
     | '/admin/finance'
     | '/admin/hod'
@@ -602,7 +615,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AboutRoute: typeof AboutRoute
-  AcademyRoute: typeof AcademyRoute
+  AcademyRoute: typeof AcademyRouteWithChildren
   BlogRoute: typeof BlogRoute
   CareersRoute: typeof CareersRoute
   ClientRoute: typeof ClientRoute
@@ -880,6 +893,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminAcademyRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/academy/certificate-programs': {
+      id: '/academy/certificate-programs'
+      path: '/certificate-programs'
+      fullPath: '/academy/certificate-programs'
+      preLoaderRoute: typeof AcademyCertificateProgramsRouteImport
+      parentRoute: typeof AcademyRoute
+    }
     '/lovable/email/suppression': {
       id: '/lovable/email/suppression'
       path: '/lovable/email/suppression'
@@ -999,11 +1019,22 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
 const AuthenticatedRouteRouteWithChildren =
   AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
 
+interface AcademyRouteChildren {
+  AcademyCertificateProgramsRoute: typeof AcademyCertificateProgramsRoute
+}
+
+const AcademyRouteChildren: AcademyRouteChildren = {
+  AcademyCertificateProgramsRoute: AcademyCertificateProgramsRoute,
+}
+
+const AcademyRouteWithChildren =
+  AcademyRoute._addFileChildren(AcademyRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AboutRoute: AboutRoute,
-  AcademyRoute: AcademyRoute,
+  AcademyRoute: AcademyRouteWithChildren,
   BlogRoute: BlogRoute,
   CareersRoute: CareersRoute,
   ClientRoute: ClientRoute,
