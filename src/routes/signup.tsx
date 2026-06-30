@@ -1,8 +1,13 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { AuthShell, GoogleButton, Divider } from "@/components/site/AuthShell";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
-import { Eye, EyeOff } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Eye, EyeOff, Loader2 } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth, roleHome } from "@/lib/auth";
+import { useNavigate } from "@tanstack/react-router";
+import { lovable } from "@/integrations/lovable";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/signup")({
   head: () => ({ meta: [
@@ -16,6 +21,39 @@ export const Route = createFileRoute("/signup")({
 function SignupPage() {
   const [show, setShow] = useState(false);
   const [role, setRole] = useState<"client" | "student">("client");
+  const [fullName, setFullName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const { user, role: currentRole } = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (user && currentRole) navigate({ to: roleHome(currentRole) });
+  }, [user, currentRole, navigate]);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (password.length < 8) { toast.error("Password must be at least 8 characters"); return; }
+    setLoading(true);
+    const { error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        emailRedirectTo: window.location.origin,
+        data: { full_name: fullName, role },
+      },
+    });
+    setLoading(false);
+    if (error) { toast.error(error.message); return; }
+    toast.success("Account created — redirecting…");
+  };
+
+  const handleGoogle = async () => {
+    const result = await lovable.auth.signInWithOAuth("google", { redirect_uri: window.location.origin + "/signup" });
+    if (result?.error) toast.error((result.error as Error).message ?? "Google sign-up failed");
+  };
+
   return (
     <AuthShell
       title="Create your account."
@@ -36,27 +74,29 @@ function SignupPage() {
           </button>
         ))}
       </div>
-      <GoogleButton label={`Sign up with Google`} />
+      <button onClick={handleGoogle} className="w-full"><GoogleButton label="Sign up with Google" /></button>
       <Divider />
-      <form onSubmit={(e) => e.preventDefault()} className="grid gap-4">
+      <form onSubmit={handleSubmit} className="grid gap-4">
         <div>
           <label className="text-sm font-medium">Full name</label>
-          <input required className="mt-1 w-full rounded-lg border border-border bg-background px-3 py-2.5 text-sm transition focus:border-[oklch(0.65_0.19_252)] focus:outline-none focus:ring-2 focus:ring-[oklch(0.65_0.19_252)]/30" />
+          <input required value={fullName} onChange={(e) => setFullName(e.target.value)} className="mt-1 w-full rounded-lg border border-border bg-background px-3 py-2.5 text-sm transition focus:border-[oklch(0.65_0.19_252)] focus:outline-none focus:ring-2 focus:ring-[oklch(0.65_0.19_252)]/30" />
         </div>
         <div>
           <label className="text-sm font-medium">Email</label>
-          <input type="email" required className="mt-1 w-full rounded-lg border border-border bg-background px-3 py-2.5 text-sm transition focus:border-[oklch(0.65_0.19_252)] focus:outline-none focus:ring-2 focus:ring-[oklch(0.65_0.19_252)]/30" />
+          <input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} className="mt-1 w-full rounded-lg border border-border bg-background px-3 py-2.5 text-sm transition focus:border-[oklch(0.65_0.19_252)] focus:outline-none focus:ring-2 focus:ring-[oklch(0.65_0.19_252)]/30" />
         </div>
         <div>
           <label className="text-sm font-medium">Password</label>
           <div className="relative mt-1">
-            <input type={show ? "text" : "password"} required minLength={8} className="w-full rounded-lg border border-border bg-background px-3 py-2.5 pr-10 text-sm transition focus:border-[oklch(0.65_0.19_252)] focus:outline-none focus:ring-2 focus:ring-[oklch(0.65_0.19_252)]/30" />
+            <input type={show ? "text" : "password"} required minLength={8} value={password} onChange={(e) => setPassword(e.target.value)} className="w-full rounded-lg border border-border bg-background px-3 py-2.5 pr-10 text-sm transition focus:border-[oklch(0.65_0.19_252)] focus:outline-none focus:ring-2 focus:ring-[oklch(0.65_0.19_252)]/30" />
             <button type="button" onClick={() => setShow((v) => !v)} className="absolute inset-y-0 right-2 grid place-items-center text-muted-foreground">
               {show ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
             </button>
           </div>
         </div>
-        <Button type="submit" variant="brand" size="lg">Create account</Button>
+        <Button type="submit" variant="brand" size="lg" disabled={loading}>
+          {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : "Create account"}
+        </Button>
         <p className="text-center text-sm text-muted-foreground">
           Already have an account? <Link to="/login" className="font-semibold text-foreground">Sign in</Link>
         </p>
