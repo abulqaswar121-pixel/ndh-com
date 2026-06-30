@@ -4,10 +4,13 @@ import { Menu, X, Moon, Sun } from "lucide-react";
 import { Logo } from "./Logo";
 import { Button } from "@/components/ui/button";
 
-const links = [
+const primary = [
   { to: "/", label: "Home" },
   { to: "/services", label: "Services" },
   { to: "/academy", label: "Academy" },
+] as const;
+
+const secondary = [
   { to: "/about", label: "About" },
   { to: "/team", label: "Team" },
   { to: "/blog", label: "Blog" },
@@ -53,7 +56,7 @@ export function Navbar() {
         </Link>
 
         <div className="hidden items-center gap-1 md:flex">
-          {links.map((l) => (
+          {primary.map((l) => (
             <Link
               key={l.to}
               to={l.to}
@@ -78,8 +81,8 @@ export function Navbar() {
           <Link to="/login" className="hidden md:block">
             <Button variant="ghost" size="sm">Sign in</Button>
           </Link>
-          <Link to="/submit-task" className="hidden md:block">
-            <Button variant="brand" size="sm">Submit a Task</Button>
+          <Link to="/signup" className="hidden md:block">
+            <Button variant="brand" size="sm">Sign up</Button>
           </Link>
           <button
             aria-label="Menu"
@@ -93,13 +96,13 @@ export function Navbar() {
 
       {open && (
         <div className="border-t border-border glass md:hidden">
-          <div className="mx-auto flex max-w-7xl flex-col px-4 py-3">
-            {links.map((l) => (
+          <div className="mx-auto flex max-w-7xl flex-col px-4 py-4">
+            {primary.map((l) => (
               <Link
                 key={l.to}
                 to={l.to}
                 onClick={() => setOpen(false)}
-                className="rounded-md px-3 py-3 text-sm font-medium text-foreground/80 hover:bg-secondary"
+                className="rounded-md px-3 py-3 text-base font-semibold text-foreground hover:bg-secondary"
               >
                 {l.label}
               </Link>
@@ -107,9 +110,22 @@ export function Navbar() {
             <Link to="/login" onClick={() => setOpen(false)} className="mt-2">
               <Button variant="outline" className="w-full">Sign in</Button>
             </Link>
-            <Link to="/submit-task" onClick={() => setOpen(false)} className="mt-2">
-              <Button variant="brand" className="w-full">Submit a Task</Button>
+            <Link to="/signup" onClick={() => setOpen(false)} className="mt-2">
+              <Button variant="brand" className="w-full">Sign up</Button>
             </Link>
+            <div className="my-4 h-px bg-border" />
+            <div className="grid grid-cols-2 gap-1">
+              {secondary.map((l) => (
+                <Link
+                  key={l.to}
+                  to={l.to}
+                  onClick={() => setOpen(false)}
+                  className="rounded-md px-3 py-2 text-sm text-muted-foreground hover:bg-secondary hover:text-foreground"
+                >
+                  {l.label}
+                </Link>
+              ))}
+            </div>
           </div>
         </div>
       )}
