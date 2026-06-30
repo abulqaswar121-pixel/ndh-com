@@ -1302,6 +1302,7 @@ export type Database = {
         }
         Returns: number
       }
+      next_certificate_number: { Args: never; Returns: string }
       pick_pm_for_department: { Args: { _dept_id: string }; Returns: string }
       primary_role: {
         Args: { _user_id: string }
