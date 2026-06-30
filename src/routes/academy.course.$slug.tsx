@@ -83,7 +83,7 @@ function CourseDetail() {
   const totalMinutes = Object.values(lessonsByModule).flat().reduce((a, b) => a + (b.duration_minutes || 0), 0);
   const learn = (course.what_youll_learn as unknown as string[]) || [];
 
-  const applyHref = user ? `/dashboard/student?apply=${course.slug}` : `/signup?role=student&apply=${course.slug}`;
+  const applyHref = user ? `/academy/apply/${course.slug}` : `/signup?role=student&next=${encodeURIComponent(`/academy/apply/${course.slug}`)}`;
 
   return (
     <SiteLayout>
