@@ -367,6 +367,50 @@ export type Database = {
           },
         ]
       }
+      notifications: {
+        Row: {
+          body: string | null
+          created_at: string
+          id: string
+          link: string | null
+          read: boolean
+          task_id: string | null
+          title: string
+          type: string
+          user_id: string
+        }
+        Insert: {
+          body?: string | null
+          created_at?: string
+          id?: string
+          link?: string | null
+          read?: boolean
+          task_id?: string | null
+          title: string
+          type: string
+          user_id: string
+        }
+        Update: {
+          body?: string | null
+          created_at?: string
+          id?: string
+          link?: string | null
+          read?: boolean
+          task_id?: string | null
+          title?: string
+          type?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "notifications_task_id_fkey"
+            columns: ["task_id"]
+            isOneToOne: false
+            referencedRelation: "tasks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       payments: {
         Row: {
           amount: number
@@ -461,6 +505,7 @@ export type Database = {
           id: string
           phone: string | null
           updated_at: string
+          welcome_sent: boolean | null
         }
         Insert: {
           avatar_url?: string | null
@@ -472,6 +517,7 @@ export type Database = {
           id: string
           phone?: string | null
           updated_at?: string
+          welcome_sent?: boolean | null
         }
         Update: {
           avatar_url?: string | null
@@ -483,6 +529,7 @@ export type Database = {
           id?: string
           phone?: string | null
           updated_at?: string
+          welcome_sent?: boolean | null
         }
         Relationships: []
       }
@@ -520,6 +567,56 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "quotes_task_id_fkey"
+            columns: ["task_id"]
+            isOneToOne: false
+            referencedRelation: "tasks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      reviews: {
+        Row: {
+          client_id: string
+          communication_rating: number
+          created_at: string
+          id: string
+          overall_rating: number
+          pm_id: string | null
+          quality_rating: number
+          speed_rating: number
+          task_id: string
+          would_hire_again: boolean | null
+          written_review: string | null
+        }
+        Insert: {
+          client_id: string
+          communication_rating: number
+          created_at?: string
+          id?: string
+          overall_rating: number
+          pm_id?: string | null
+          quality_rating: number
+          speed_rating: number
+          task_id: string
+          would_hire_again?: boolean | null
+          written_review?: string | null
+        }
+        Update: {
+          client_id?: string
+          communication_rating?: number
+          created_at?: string
+          id?: string
+          overall_rating?: number
+          pm_id?: string | null
+          quality_rating?: number
+          speed_rating?: number
+          task_id?: string
+          would_hire_again?: boolean | null
+          written_review?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reviews_task_id_fkey"
             columns: ["task_id"]
             isOneToOne: false
             referencedRelation: "tasks"
@@ -633,13 +730,18 @@ export type Database = {
           budget_max: number | null
           budget_min: number | null
           client_id: string
+          completed_at: string | null
           created_at: string
           deadline: string | null
+          deliverables: Json | null
+          delivered_at: string | null
+          delivered_by: string | null
           department_id: string | null
           description: string | null
           files: Json | null
           id: string
           open_to_negotiation: boolean | null
+          reviewed: boolean | null
           service_category: Database["public"]["Enums"]["service_category"]
           status: Database["public"]["Enums"]["task_status"]
           tier: Database["public"]["Enums"]["task_tier"]
@@ -653,13 +755,18 @@ export type Database = {
           budget_max?: number | null
           budget_min?: number | null
           client_id: string
+          completed_at?: string | null
           created_at?: string
           deadline?: string | null
+          deliverables?: Json | null
+          delivered_at?: string | null
+          delivered_by?: string | null
           department_id?: string | null
           description?: string | null
           files?: Json | null
           id?: string
           open_to_negotiation?: boolean | null
+          reviewed?: boolean | null
           service_category: Database["public"]["Enums"]["service_category"]
           status?: Database["public"]["Enums"]["task_status"]
           tier?: Database["public"]["Enums"]["task_tier"]
@@ -673,13 +780,18 @@ export type Database = {
           budget_max?: number | null
           budget_min?: number | null
           client_id?: string
+          completed_at?: string | null
           created_at?: string
           deadline?: string | null
+          deliverables?: Json | null
+          delivered_at?: string | null
+          delivered_by?: string | null
           department_id?: string | null
           description?: string | null
           files?: Json | null
           id?: string
           open_to_negotiation?: boolean | null
+          reviewed?: boolean | null
           service_category?: Database["public"]["Enums"]["service_category"]
           status?: Database["public"]["Enums"]["task_status"]
           tier?: Database["public"]["Enums"]["task_tier"]
@@ -746,6 +858,7 @@ export type Database = {
         }
         Returns: number
       }
+      pick_pm_for_department: { Args: { _dept_id: string }; Returns: string }
       primary_role: {
         Args: { _user_id: string }
         Returns: Database["public"]["Enums"]["app_role"]

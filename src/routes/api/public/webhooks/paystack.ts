@@ -52,18 +52,45 @@ export const Route = createFileRoute("/api/public/webhooks/paystack")({
             .from("payments")
             .update({ status: "paid" })
             .eq("transaction_ref", reference)
-            .select("task_id")
+            .select("task_id, client_id, amount, currency")
             .maybeSingle();
           if (error) {
             console.error("paystack webhook update failed", error);
             return new Response("DB error", { status: 500 });
           }
           // Move task forward
+          let taskTitle = "your task";
           if (updated?.task_id) {
-            await supabaseAdmin
+            const { data: t } = await supabaseAdmin
               .from("tasks")
               .update({ status: "in_progress" })
-              .eq("id", updated.task_id);
+              .eq("id", updated.task_id)
+              .select("title")
+              .maybeSingle();
+            if (t?.title) taskTitle = t.title;
+          }
+          // Send payment-received email
+          if (updated?.client_id) {
+            try {
+              const { data: client } = await supabaseAdmin
+                .from("profiles")
+                .select("email, full_name")
+                .eq("id", updated.client_id)
+                .maybeSingle();
+              if (client?.email) {
+                const { sendSystemEmail } = await import("@/lib/email/send-system.server");
+                const amount = `${updated.currency || "NGN"} ${Number(updated.amount || 0).toLocaleString()}`;
+                await sendSystemEmail(supabaseAdmin, "payment_received", client.email, {
+                  clientName: client.full_name || undefined,
+                  taskTitle,
+                  amount,
+                  reference,
+                  taskUrl: `https://ndh.com.ng/dashboard/client?tab=tasks${updated.task_id ? `&task=${updated.task_id}` : ""}`,
+                });
+              }
+            } catch (e) {
+              console.error("payment_received email failed", e);
+            }
           }
         } else if (eventName === "charge.failed") {
           await supabaseAdmin
