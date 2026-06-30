@@ -8,6 +8,7 @@ type Task = {
   id: string; title: string; service_category: string; tier: string;
   status: string; deadline: string | null; budget_min: number | null; budget_max: number | null;
   assigned_pm_id: string | null; created_at: string;
+  description: string | null;
 };
 
 const TABS = ["all", "pending", "in_progress", "in_review", "delivered", "completed"] as const;
