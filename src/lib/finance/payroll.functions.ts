@@ -171,7 +171,7 @@ export const markPayrollItemPaid = createServerFn({ method: "POST" })
         status: "paid",
         paid_at: new Date().toISOString(),
         transfer_status: "success",
-        transfer_reference: data.transfer_reference ?? null,
+        transfer_reference: data.transfer_reference ?? undefined,
       })
       .eq("id", data.payroll_id);
     if (uErr) throw new Error(uErr.message);
@@ -188,14 +188,16 @@ export const markPayrollItemPaid = createServerFn({ method: "POST" })
     });
 
     // If all items in run are paid, mark run completed.
+    const runId = row.run_id as string | null;
+    if (!runId) return { ok: true };
     const { data: pending } = await context.supabase
       .from("payroll")
       .select("id")
-      .eq("run_id", row.run_id)
+      .eq("run_id", runId)
       .neq("status", "paid")
       .limit(1);
     if (!pending || pending.length === 0) {
-      await context.supabase.from("payroll_runs").update({ status: "completed" }).eq("id", row.run_id);
+      await context.supabase.from("payroll_runs").update({ status: "completed" }).eq("id", runId);
     }
     return { ok: true };
   });
