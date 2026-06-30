@@ -21,8 +21,9 @@ function AuthenticatedLayout() {
     // Optional: enforce role section match by reading current path
     const path = window.location.pathname;
     const expected = role ? roleHome(role as AppRole) : null;
-    if (expected && path.startsWith("/dashboard/") && !path.startsWith(expected)) {
-      // user landed on a section that isn't theirs — bounce to their home
+    // Super Admin and Admin can access any dashboard section (they oversee everything).
+    const isStaff = role === "super_admin" || role === "admin";
+    if (!isStaff && expected && path.startsWith("/dashboard/") && !path.startsWith(expected)) {
       navigate({ to: expected });
     }
   }, [user, role, loading, navigate]);
