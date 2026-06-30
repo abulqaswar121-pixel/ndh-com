@@ -1409,40 +1409,135 @@ export type Database = {
       }
       payroll: {
         Row: {
+          approved_at: string | null
+          approved_by: string | null
           created_at: string
           currency: string | null
+          deductions: number
+          failure_reason: string | null
+          gross_amount: number
           id: string
+          notes: string | null
           paid_at: string | null
+          paystack_recipient_code: string | null
+          paystack_transfer_code: string | null
+          run_id: string | null
           status: string
           talent_id: string
           tasks_completed: Json | null
+          tasks_count: number
           total_amount: number
+          transfer_reference: string | null
+          transfer_status: string | null
+          updated_at: string
           week_end: string
           week_start: string
         }
         Insert: {
+          approved_at?: string | null
+          approved_by?: string | null
           created_at?: string
           currency?: string | null
+          deductions?: number
+          failure_reason?: string | null
+          gross_amount?: number
           id?: string
+          notes?: string | null
           paid_at?: string | null
+          paystack_recipient_code?: string | null
+          paystack_transfer_code?: string | null
+          run_id?: string | null
           status?: string
           talent_id: string
           tasks_completed?: Json | null
+          tasks_count?: number
           total_amount?: number
+          transfer_reference?: string | null
+          transfer_status?: string | null
+          updated_at?: string
           week_end: string
           week_start: string
         }
         Update: {
+          approved_at?: string | null
+          approved_by?: string | null
           created_at?: string
           currency?: string | null
+          deductions?: number
+          failure_reason?: string | null
+          gross_amount?: number
           id?: string
+          notes?: string | null
           paid_at?: string | null
+          paystack_recipient_code?: string | null
+          paystack_transfer_code?: string | null
+          run_id?: string | null
           status?: string
           talent_id?: string
           tasks_completed?: Json | null
+          tasks_count?: number
           total_amount?: number
+          transfer_reference?: string | null
+          transfer_status?: string | null
+          updated_at?: string
           week_end?: string
           week_start?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "payroll_run_id_fkey"
+            columns: ["run_id"]
+            isOneToOne: false
+            referencedRelation: "payroll_runs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      payroll_runs: {
+        Row: {
+          approved_at: string | null
+          approved_by: string | null
+          created_at: string
+          created_by: string | null
+          currency: string
+          id: string
+          notes: string | null
+          period_end: string
+          period_start: string
+          status: string
+          talent_count: number
+          total_amount: number
+          updated_at: string
+        }
+        Insert: {
+          approved_at?: string | null
+          approved_by?: string | null
+          created_at?: string
+          created_by?: string | null
+          currency?: string
+          id?: string
+          notes?: string | null
+          period_end: string
+          period_start: string
+          status?: string
+          talent_count?: number
+          total_amount?: number
+          updated_at?: string
+        }
+        Update: {
+          approved_at?: string | null
+          approved_by?: string | null
+          created_at?: string
+          created_by?: string | null
+          currency?: string
+          id?: string
+          notes?: string | null
+          period_end?: string
+          period_start?: string
+          status?: string
+          talent_count?: number
+          total_amount?: number
+          updated_at?: string
         }
         Relationships: []
       }
@@ -1811,6 +1906,48 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      talent_payout_accounts: {
+        Row: {
+          account_name: string
+          account_number: string
+          bank_code: string
+          bank_name: string | null
+          created_at: string
+          currency: string
+          id: string
+          is_default: boolean
+          paystack_recipient_code: string | null
+          talent_id: string
+          updated_at: string
+        }
+        Insert: {
+          account_name: string
+          account_number: string
+          bank_code: string
+          bank_name?: string | null
+          created_at?: string
+          currency?: string
+          id?: string
+          is_default?: boolean
+          paystack_recipient_code?: string | null
+          talent_id: string
+          updated_at?: string
+        }
+        Update: {
+          account_name?: string
+          account_number?: string
+          bank_code?: string
+          bank_name?: string | null
+          created_at?: string
+          currency?: string
+          id?: string
+          is_default?: boolean
+          paystack_recipient_code?: string | null
+          talent_id?: string
+          updated_at?: string
+        }
+        Relationships: []
       }
       talent_reviews: {
         Row: {
@@ -2181,6 +2318,16 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      compute_talent_payroll: {
+        Args: { _end: string; _start: string }
+        Returns: {
+          currency: string
+          gross_amount: number
+          talent_id: string
+          task_ids: string[]
+          tasks_count: number
+        }[]
+      }
       delete_email: {
         Args: { message_id: number; queue_name: string }
         Returns: boolean
