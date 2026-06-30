@@ -96,6 +96,9 @@ export type Database = {
           certification_text: string | null
           cover_image: string | null
           created_at: string
+          curriculum_approved_at: string | null
+          curriculum_approved_by: string | null
+          curriculum_status: Database["public"]["Enums"]["curriculum_status"]
           department_id: string | null
           description: string | null
           duration: string | null
@@ -121,6 +124,9 @@ export type Database = {
           certification_text?: string | null
           cover_image?: string | null
           created_at?: string
+          curriculum_approved_at?: string | null
+          curriculum_approved_by?: string | null
+          curriculum_status?: Database["public"]["Enums"]["curriculum_status"]
           department_id?: string | null
           description?: string | null
           duration?: string | null
@@ -146,6 +152,9 @@ export type Database = {
           certification_text?: string | null
           cover_image?: string | null
           created_at?: string
+          curriculum_approved_at?: string | null
+          curriculum_approved_by?: string | null
+          curriculum_status?: Database["public"]["Enums"]["curriculum_status"]
           department_id?: string | null
           description?: string | null
           duration?: string | null
@@ -169,10 +178,126 @@ export type Database = {
         }
         Relationships: [
           {
+            foreignKeyName: "courses_curriculum_approved_by_fkey"
+            columns: ["curriculum_approved_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "courses_department_id_fkey"
             columns: ["department_id"]
             isOneToOne: false
             referencedRelation: "departments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      curriculum_change_requests: {
+        Row: {
+          change_summary: string
+          course_id: string
+          created_at: string
+          diff: Json
+          id: string
+          requested_by: string
+          review_notes: string | null
+          reviewed_at: string | null
+          reviewed_by: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          change_summary: string
+          course_id: string
+          created_at?: string
+          diff?: Json
+          id?: string
+          requested_by: string
+          review_notes?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          change_summary?: string
+          course_id?: string
+          created_at?: string
+          diff?: Json
+          id?: string
+          requested_by?: string
+          review_notes?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "curriculum_change_requests_course_id_fkey"
+            columns: ["course_id"]
+            isOneToOne: false
+            referencedRelation: "courses"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "curriculum_change_requests_requested_by_fkey"
+            columns: ["requested_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "curriculum_change_requests_reviewed_by_fkey"
+            columns: ["reviewed_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      department_reports: {
+        Row: {
+          created_at: string
+          department_id: string
+          generated_by: string | null
+          id: string
+          metrics: Json
+          period_end: string
+          period_start: string
+        }
+        Insert: {
+          created_at?: string
+          department_id: string
+          generated_by?: string | null
+          id?: string
+          metrics?: Json
+          period_end: string
+          period_start: string
+        }
+        Update: {
+          created_at?: string
+          department_id?: string
+          generated_by?: string | null
+          id?: string
+          metrics?: Json
+          period_end?: string
+          period_start?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "department_reports_department_id_fkey"
+            columns: ["department_id"]
+            isOneToOne: false
+            referencedRelation: "departments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "department_reports_generated_by_fkey"
+            columns: ["generated_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
         ]
@@ -350,6 +475,90 @@ export type Database = {
             columns: ["payment_id"]
             isOneToOne: false
             referencedRelation: "payments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      graduate_recommendations: {
+        Row: {
+          admin_notes: string | null
+          course_id: string | null
+          created_at: string
+          decided_at: string | null
+          decided_by: string | null
+          department_id: string | null
+          id: string
+          justification: string
+          recommended_by: string
+          recommended_tier: string
+          status: string
+          student_id: string
+          updated_at: string
+        }
+        Insert: {
+          admin_notes?: string | null
+          course_id?: string | null
+          created_at?: string
+          decided_at?: string | null
+          decided_by?: string | null
+          department_id?: string | null
+          id?: string
+          justification: string
+          recommended_by: string
+          recommended_tier?: string
+          status?: string
+          student_id: string
+          updated_at?: string
+        }
+        Update: {
+          admin_notes?: string | null
+          course_id?: string | null
+          created_at?: string
+          decided_at?: string | null
+          decided_by?: string | null
+          department_id?: string | null
+          id?: string
+          justification?: string
+          recommended_by?: string
+          recommended_tier?: string
+          status?: string
+          student_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "graduate_recommendations_course_id_fkey"
+            columns: ["course_id"]
+            isOneToOne: false
+            referencedRelation: "courses"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "graduate_recommendations_decided_by_fkey"
+            columns: ["decided_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "graduate_recommendations_department_id_fkey"
+            columns: ["department_id"]
+            isOneToOne: false
+            referencedRelation: "departments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "graduate_recommendations_recommended_by_fkey"
+            columns: ["recommended_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "graduate_recommendations_student_id_fkey"
+            columns: ["student_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
         ]
@@ -1420,6 +1629,7 @@ export type Database = {
         }
         Returns: boolean
       }
+      is_hod_of: { Args: { _dept: string }; Returns: boolean }
       move_to_dlq: {
         Args: {
           dlq_name: string
@@ -1429,6 +1639,7 @@ export type Database = {
         }
         Returns: number
       }
+      my_department: { Args: never; Returns: string }
       next_certificate_number: { Args: never; Returns: string }
       pick_pm_for_department: { Args: { _dept_id: string }; Returns: string }
       pm_department: { Args: { _uid: string }; Returns: string }
@@ -1463,6 +1674,11 @@ export type Database = {
         | "hod"
         | "admin"
         | "super_admin"
+      curriculum_status:
+        | "draft"
+        | "pending_approval"
+        | "approved"
+        | "needs_revision"
       lesson_type: "video" | "pdf" | "text" | "quiz"
       payment_status: "pending" | "paid" | "failed" | "refunded"
       program_type: "certificate" | "diploma" | "professional"
@@ -1621,6 +1837,12 @@ export const Constants = {
         "hod",
         "admin",
         "super_admin",
+      ],
+      curriculum_status: [
+        "draft",
+        "pending_approval",
+        "approved",
+        "needs_revision",
       ],
       lesson_type: ["video", "pdf", "text", "quiz"],
       payment_status: ["pending", "paid", "failed", "refunded"],
