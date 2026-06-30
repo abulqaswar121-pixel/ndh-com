@@ -18,9 +18,11 @@ import { Route as SubmitTaskRouteImport } from './routes/submit-task'
 import { Route as StudentRouteImport } from './routes/student'
 import { Route as SignupRouteImport } from './routes/signup'
 import { Route as ServicesRouteImport } from './routes/services'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as InstructorRouteImport } from './routes/instructor'
+import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as FaqRouteImport } from './routes/faq'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as ClientRouteImport } from './routes/client'
@@ -28,6 +30,7 @@ import { Route as CareersRouteImport } from './routes/careers'
 import { Route as BlogRouteImport } from './routes/blog'
 import { Route as AcademyRouteImport } from './routes/academy'
 import { Route as AboutRouteImport } from './routes/about'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as AdminStudentAffairsRouteImport } from './routes/admin.student-affairs'
@@ -37,6 +40,14 @@ import { Route as AdminOperationsRouteImport } from './routes/admin.operations'
 import { Route as AdminHodRouteImport } from './routes/admin.hod'
 import { Route as AdminFinanceRouteImport } from './routes/admin.finance'
 import { Route as AdminAcademyRouteImport } from './routes/admin.academy'
+import { Route as AuthenticatedDashboardTalentRouteImport } from './routes/_authenticated/dashboard.talent'
+import { Route as AuthenticatedDashboardSuperAdminRouteImport } from './routes/_authenticated/dashboard.super-admin'
+import { Route as AuthenticatedDashboardStudentRouteImport } from './routes/_authenticated/dashboard.student'
+import { Route as AuthenticatedDashboardPmRouteImport } from './routes/_authenticated/dashboard.pm'
+import { Route as AuthenticatedDashboardInstructorRouteImport } from './routes/_authenticated/dashboard.instructor'
+import { Route as AuthenticatedDashboardHodRouteImport } from './routes/_authenticated/dashboard.hod'
+import { Route as AuthenticatedDashboardClientRouteImport } from './routes/_authenticated/dashboard.client'
+import { Route as AuthenticatedDashboardAdminRouteImport } from './routes/_authenticated/dashboard.admin'
 
 const VerifyRoute = VerifyRouteImport.update({
   id: '/verify',
@@ -83,6 +94,11 @@ const ServicesRoute = ServicesRouteImport.update({
   path: '/services',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PrivacyRoute = PrivacyRouteImport.update({
   id: '/privacy',
   path: '/privacy',
@@ -96,6 +112,11 @@ const LoginRoute = LoginRouteImport.update({
 const InstructorRoute = InstructorRouteImport.update({
   id: '/instructor',
   path: '/instructor',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
+  id: '/forgot-password',
+  path: '/forgot-password',
   getParentRoute: () => rootRouteImport,
 } as any)
 const FaqRoute = FaqRouteImport.update({
@@ -131,6 +152,10 @@ const AcademyRoute = AcademyRouteImport.update({
 const AboutRoute = AboutRouteImport.update({
   id: '/about',
   path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -178,6 +203,54 @@ const AdminAcademyRoute = AdminAcademyRouteImport.update({
   path: '/admin/academy',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedDashboardTalentRoute =
+  AuthenticatedDashboardTalentRouteImport.update({
+    id: '/dashboard/talent',
+    path: '/dashboard/talent',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedDashboardSuperAdminRoute =
+  AuthenticatedDashboardSuperAdminRouteImport.update({
+    id: '/dashboard/super-admin',
+    path: '/dashboard/super-admin',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedDashboardStudentRoute =
+  AuthenticatedDashboardStudentRouteImport.update({
+    id: '/dashboard/student',
+    path: '/dashboard/student',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedDashboardPmRoute =
+  AuthenticatedDashboardPmRouteImport.update({
+    id: '/dashboard/pm',
+    path: '/dashboard/pm',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedDashboardInstructorRoute =
+  AuthenticatedDashboardInstructorRouteImport.update({
+    id: '/dashboard/instructor',
+    path: '/dashboard/instructor',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedDashboardHodRoute =
+  AuthenticatedDashboardHodRouteImport.update({
+    id: '/dashboard/hod',
+    path: '/dashboard/hod',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedDashboardClientRoute =
+  AuthenticatedDashboardClientRouteImport.update({
+    id: '/dashboard/client',
+    path: '/dashboard/client',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedDashboardAdminRoute =
+  AuthenticatedDashboardAdminRouteImport.update({
+    id: '/dashboard/admin',
+    path: '/dashboard/admin',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -188,9 +261,11 @@ export interface FileRoutesByFullPath {
   '/client': typeof ClientRoute
   '/contact': typeof ContactRoute
   '/faq': typeof FaqRoute
+  '/forgot-password': typeof ForgotPasswordRoute
   '/instructor': typeof InstructorRoute
   '/login': typeof LoginRoute
   '/privacy': typeof PrivacyRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/services': typeof ServicesRoute
   '/signup': typeof SignupRoute
   '/student': typeof StudentRoute
@@ -208,6 +283,14 @@ export interface FileRoutesByFullPath {
   '/admin/registrar': typeof AdminRegistrarRoute
   '/admin/student-affairs': typeof AdminStudentAffairsRoute
   '/admin/': typeof AdminIndexRoute
+  '/dashboard/admin': typeof AuthenticatedDashboardAdminRoute
+  '/dashboard/client': typeof AuthenticatedDashboardClientRoute
+  '/dashboard/hod': typeof AuthenticatedDashboardHodRoute
+  '/dashboard/instructor': typeof AuthenticatedDashboardInstructorRoute
+  '/dashboard/pm': typeof AuthenticatedDashboardPmRoute
+  '/dashboard/student': typeof AuthenticatedDashboardStudentRoute
+  '/dashboard/super-admin': typeof AuthenticatedDashboardSuperAdminRoute
+  '/dashboard/talent': typeof AuthenticatedDashboardTalentRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -218,9 +301,11 @@ export interface FileRoutesByTo {
   '/client': typeof ClientRoute
   '/contact': typeof ContactRoute
   '/faq': typeof FaqRoute
+  '/forgot-password': typeof ForgotPasswordRoute
   '/instructor': typeof InstructorRoute
   '/login': typeof LoginRoute
   '/privacy': typeof PrivacyRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/services': typeof ServicesRoute
   '/signup': typeof SignupRoute
   '/student': typeof StudentRoute
@@ -238,10 +323,19 @@ export interface FileRoutesByTo {
   '/admin/registrar': typeof AdminRegistrarRoute
   '/admin/student-affairs': typeof AdminStudentAffairsRoute
   '/admin': typeof AdminIndexRoute
+  '/dashboard/admin': typeof AuthenticatedDashboardAdminRoute
+  '/dashboard/client': typeof AuthenticatedDashboardClientRoute
+  '/dashboard/hod': typeof AuthenticatedDashboardHodRoute
+  '/dashboard/instructor': typeof AuthenticatedDashboardInstructorRoute
+  '/dashboard/pm': typeof AuthenticatedDashboardPmRoute
+  '/dashboard/student': typeof AuthenticatedDashboardStudentRoute
+  '/dashboard/super-admin': typeof AuthenticatedDashboardSuperAdminRoute
+  '/dashboard/talent': typeof AuthenticatedDashboardTalentRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/about': typeof AboutRoute
   '/academy': typeof AcademyRoute
   '/blog': typeof BlogRoute
@@ -249,9 +343,11 @@ export interface FileRoutesById {
   '/client': typeof ClientRoute
   '/contact': typeof ContactRoute
   '/faq': typeof FaqRoute
+  '/forgot-password': typeof ForgotPasswordRoute
   '/instructor': typeof InstructorRoute
   '/login': typeof LoginRoute
   '/privacy': typeof PrivacyRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/services': typeof ServicesRoute
   '/signup': typeof SignupRoute
   '/student': typeof StudentRoute
@@ -269,6 +365,14 @@ export interface FileRoutesById {
   '/admin/registrar': typeof AdminRegistrarRoute
   '/admin/student-affairs': typeof AdminStudentAffairsRoute
   '/admin/': typeof AdminIndexRoute
+  '/_authenticated/dashboard/admin': typeof AuthenticatedDashboardAdminRoute
+  '/_authenticated/dashboard/client': typeof AuthenticatedDashboardClientRoute
+  '/_authenticated/dashboard/hod': typeof AuthenticatedDashboardHodRoute
+  '/_authenticated/dashboard/instructor': typeof AuthenticatedDashboardInstructorRoute
+  '/_authenticated/dashboard/pm': typeof AuthenticatedDashboardPmRoute
+  '/_authenticated/dashboard/student': typeof AuthenticatedDashboardStudentRoute
+  '/_authenticated/dashboard/super-admin': typeof AuthenticatedDashboardSuperAdminRoute
+  '/_authenticated/dashboard/talent': typeof AuthenticatedDashboardTalentRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -281,9 +385,11 @@ export interface FileRouteTypes {
     | '/client'
     | '/contact'
     | '/faq'
+    | '/forgot-password'
     | '/instructor'
     | '/login'
     | '/privacy'
+    | '/reset-password'
     | '/services'
     | '/signup'
     | '/student'
@@ -301,6 +407,14 @@ export interface FileRouteTypes {
     | '/admin/registrar'
     | '/admin/student-affairs'
     | '/admin/'
+    | '/dashboard/admin'
+    | '/dashboard/client'
+    | '/dashboard/hod'
+    | '/dashboard/instructor'
+    | '/dashboard/pm'
+    | '/dashboard/student'
+    | '/dashboard/super-admin'
+    | '/dashboard/talent'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -311,9 +425,11 @@ export interface FileRouteTypes {
     | '/client'
     | '/contact'
     | '/faq'
+    | '/forgot-password'
     | '/instructor'
     | '/login'
     | '/privacy'
+    | '/reset-password'
     | '/services'
     | '/signup'
     | '/student'
@@ -331,9 +447,18 @@ export interface FileRouteTypes {
     | '/admin/registrar'
     | '/admin/student-affairs'
     | '/admin'
+    | '/dashboard/admin'
+    | '/dashboard/client'
+    | '/dashboard/hod'
+    | '/dashboard/instructor'
+    | '/dashboard/pm'
+    | '/dashboard/student'
+    | '/dashboard/super-admin'
+    | '/dashboard/talent'
   id:
     | '__root__'
     | '/'
+    | '/_authenticated'
     | '/about'
     | '/academy'
     | '/blog'
@@ -341,9 +466,11 @@ export interface FileRouteTypes {
     | '/client'
     | '/contact'
     | '/faq'
+    | '/forgot-password'
     | '/instructor'
     | '/login'
     | '/privacy'
+    | '/reset-password'
     | '/services'
     | '/signup'
     | '/student'
@@ -361,10 +488,19 @@ export interface FileRouteTypes {
     | '/admin/registrar'
     | '/admin/student-affairs'
     | '/admin/'
+    | '/_authenticated/dashboard/admin'
+    | '/_authenticated/dashboard/client'
+    | '/_authenticated/dashboard/hod'
+    | '/_authenticated/dashboard/instructor'
+    | '/_authenticated/dashboard/pm'
+    | '/_authenticated/dashboard/student'
+    | '/_authenticated/dashboard/super-admin'
+    | '/_authenticated/dashboard/talent'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AboutRoute: typeof AboutRoute
   AcademyRoute: typeof AcademyRoute
   BlogRoute: typeof BlogRoute
@@ -372,9 +508,11 @@ export interface RootRouteChildren {
   ClientRoute: typeof ClientRoute
   ContactRoute: typeof ContactRoute
   FaqRoute: typeof FaqRoute
+  ForgotPasswordRoute: typeof ForgotPasswordRoute
   InstructorRoute: typeof InstructorRoute
   LoginRoute: typeof LoginRoute
   PrivacyRoute: typeof PrivacyRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
   ServicesRoute: typeof ServicesRoute
   SignupRoute: typeof SignupRoute
   StudentRoute: typeof StudentRoute
@@ -459,6 +597,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ServicesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/privacy': {
       id: '/privacy'
       path: '/privacy'
@@ -478,6 +623,13 @@ declare module '@tanstack/react-router' {
       path: '/instructor'
       fullPath: '/instructor'
       preLoaderRoute: typeof InstructorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/forgot-password': {
+      id: '/forgot-password'
+      path: '/forgot-password'
+      fullPath: '/forgot-password'
+      preLoaderRoute: typeof ForgotPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/faq': {
@@ -527,6 +679,13 @@ declare module '@tanstack/react-router' {
       path: '/about'
       fullPath: '/about'
       preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -592,11 +751,93 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminAcademyRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/dashboard/talent': {
+      id: '/_authenticated/dashboard/talent'
+      path: '/dashboard/talent'
+      fullPath: '/dashboard/talent'
+      preLoaderRoute: typeof AuthenticatedDashboardTalentRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/dashboard/super-admin': {
+      id: '/_authenticated/dashboard/super-admin'
+      path: '/dashboard/super-admin'
+      fullPath: '/dashboard/super-admin'
+      preLoaderRoute: typeof AuthenticatedDashboardSuperAdminRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/dashboard/student': {
+      id: '/_authenticated/dashboard/student'
+      path: '/dashboard/student'
+      fullPath: '/dashboard/student'
+      preLoaderRoute: typeof AuthenticatedDashboardStudentRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/dashboard/pm': {
+      id: '/_authenticated/dashboard/pm'
+      path: '/dashboard/pm'
+      fullPath: '/dashboard/pm'
+      preLoaderRoute: typeof AuthenticatedDashboardPmRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/dashboard/instructor': {
+      id: '/_authenticated/dashboard/instructor'
+      path: '/dashboard/instructor'
+      fullPath: '/dashboard/instructor'
+      preLoaderRoute: typeof AuthenticatedDashboardInstructorRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/dashboard/hod': {
+      id: '/_authenticated/dashboard/hod'
+      path: '/dashboard/hod'
+      fullPath: '/dashboard/hod'
+      preLoaderRoute: typeof AuthenticatedDashboardHodRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/dashboard/client': {
+      id: '/_authenticated/dashboard/client'
+      path: '/dashboard/client'
+      fullPath: '/dashboard/client'
+      preLoaderRoute: typeof AuthenticatedDashboardClientRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/dashboard/admin': {
+      id: '/_authenticated/dashboard/admin'
+      path: '/dashboard/admin'
+      fullPath: '/dashboard/admin'
+      preLoaderRoute: typeof AuthenticatedDashboardAdminRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
+interface AuthenticatedRouteRouteChildren {
+  AuthenticatedDashboardAdminRoute: typeof AuthenticatedDashboardAdminRoute
+  AuthenticatedDashboardClientRoute: typeof AuthenticatedDashboardClientRoute
+  AuthenticatedDashboardHodRoute: typeof AuthenticatedDashboardHodRoute
+  AuthenticatedDashboardInstructorRoute: typeof AuthenticatedDashboardInstructorRoute
+  AuthenticatedDashboardPmRoute: typeof AuthenticatedDashboardPmRoute
+  AuthenticatedDashboardStudentRoute: typeof AuthenticatedDashboardStudentRoute
+  AuthenticatedDashboardSuperAdminRoute: typeof AuthenticatedDashboardSuperAdminRoute
+  AuthenticatedDashboardTalentRoute: typeof AuthenticatedDashboardTalentRoute
+}
+
+const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedDashboardAdminRoute: AuthenticatedDashboardAdminRoute,
+  AuthenticatedDashboardClientRoute: AuthenticatedDashboardClientRoute,
+  AuthenticatedDashboardHodRoute: AuthenticatedDashboardHodRoute,
+  AuthenticatedDashboardInstructorRoute: AuthenticatedDashboardInstructorRoute,
+  AuthenticatedDashboardPmRoute: AuthenticatedDashboardPmRoute,
+  AuthenticatedDashboardStudentRoute: AuthenticatedDashboardStudentRoute,
+  AuthenticatedDashboardSuperAdminRoute: AuthenticatedDashboardSuperAdminRoute,
+  AuthenticatedDashboardTalentRoute: AuthenticatedDashboardTalentRoute,
+}
+
+const AuthenticatedRouteRouteWithChildren =
+  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AboutRoute: AboutRoute,
   AcademyRoute: AcademyRoute,
   BlogRoute: BlogRoute,
@@ -604,9 +845,11 @@ const rootRouteChildren: RootRouteChildren = {
   ClientRoute: ClientRoute,
   ContactRoute: ContactRoute,
   FaqRoute: FaqRoute,
+  ForgotPasswordRoute: ForgotPasswordRoute,
   InstructorRoute: InstructorRoute,
   LoginRoute: LoginRoute,
   PrivacyRoute: PrivacyRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
   ServicesRoute: ServicesRoute,
   SignupRoute: SignupRoute,
   StudentRoute: StudentRoute,

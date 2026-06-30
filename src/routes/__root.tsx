@@ -12,6 +12,8 @@ import { useEffect, type ReactNode } from "react";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { CurrencyProvider } from "../lib/currency";
+import { AuthProvider } from "../lib/auth";
+import { Toaster } from "sonner";
 
 function NotFoundComponent() {
   return (
@@ -125,10 +127,13 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <CurrencyProvider>
-        {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-        <Outlet />
-      </CurrencyProvider>
+      <AuthProvider>
+        <CurrencyProvider>
+          {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
+          <Outlet />
+          <Toaster position="top-right" richColors />
+        </CurrencyProvider>
+      </AuthProvider>
     </QueryClientProvider>
   );
 }
