@@ -34,6 +34,7 @@ import { Route as AboutRouteImport } from './routes/about'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
+import { Route as VerifyIdRouteImport } from './routes/verify.$id'
 import { Route as EmailUnsubscribeRouteImport } from './routes/email/unsubscribe'
 import { Route as AuthAcceptRouteImport } from './routes/auth.accept'
 import { Route as AdminStudentAffairsRouteImport } from './routes/admin.student-affairs'
@@ -43,7 +44,11 @@ import { Route as AdminOperationsRouteImport } from './routes/admin.operations'
 import { Route as AdminHodRouteImport } from './routes/admin.hod'
 import { Route as AdminFinanceRouteImport } from './routes/admin.finance'
 import { Route as AdminAcademyRouteImport } from './routes/admin.academy'
+import { Route as AcademyProfessionalProgramsRouteImport } from './routes/academy.professional-programs'
+import { Route as AcademyDiplomaProgramsRouteImport } from './routes/academy.diploma-programs'
+import { Route as AcademyCertificateProgramsRouteImport } from './routes/academy.certificate-programs'
 import { Route as LovableEmailSuppressionRouteImport } from './routes/lovable/email/suppression'
+import { Route as AcademyCourseSlugRouteImport } from './routes/academy.course.$slug'
 import { Route as AuthenticatedDashboardTalentRouteImport } from './routes/_authenticated/dashboard/talent'
 import { Route as AuthenticatedDashboardSuperAdminRouteImport } from './routes/_authenticated/dashboard/super-admin'
 import { Route as AuthenticatedDashboardStudentRouteImport } from './routes/_authenticated/dashboard/student'
@@ -181,6 +186,11 @@ const AdminIndexRoute = AdminIndexRouteImport.update({
   path: '/admin/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const VerifyIdRoute = VerifyIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => VerifyRoute,
+} as any)
 const EmailUnsubscribeRoute = EmailUnsubscribeRouteImport.update({
   id: '/email/unsubscribe',
   path: '/email/unsubscribe',
@@ -226,10 +236,32 @@ const AdminAcademyRoute = AdminAcademyRouteImport.update({
   path: '/admin/academy',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AcademyProfessionalProgramsRoute =
+  AcademyProfessionalProgramsRouteImport.update({
+    id: '/professional-programs',
+    path: '/professional-programs',
+    getParentRoute: () => AcademyRoute,
+  } as any)
+const AcademyDiplomaProgramsRoute = AcademyDiplomaProgramsRouteImport.update({
+  id: '/diploma-programs',
+  path: '/diploma-programs',
+  getParentRoute: () => AcademyRoute,
+} as any)
+const AcademyCertificateProgramsRoute =
+  AcademyCertificateProgramsRouteImport.update({
+    id: '/certificate-programs',
+    path: '/certificate-programs',
+    getParentRoute: () => AcademyRoute,
+  } as any)
 const LovableEmailSuppressionRoute = LovableEmailSuppressionRouteImport.update({
   id: '/lovable/email/suppression',
   path: '/lovable/email/suppression',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AcademyCourseSlugRoute = AcademyCourseSlugRouteImport.update({
+  id: '/course/$slug',
+  path: '/course/$slug',
+  getParentRoute: () => AcademyRoute,
 } as any)
 const AuthenticatedDashboardTalentRoute =
   AuthenticatedDashboardTalentRouteImport.update({
@@ -307,7 +339,7 @@ const ApiPublicWebhooksPaystackRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/academy': typeof AcademyRoute
+  '/academy': typeof AcademyRouteWithChildren
   '/blog': typeof BlogRoute
   '/careers': typeof CareersRoute
   '/client': typeof ClientRoute
@@ -327,7 +359,10 @@ export interface FileRoutesByFullPath {
   '/talent-login': typeof TalentLoginRoute
   '/team': typeof TeamRoute
   '/terms': typeof TermsRoute
-  '/verify': typeof VerifyRoute
+  '/verify': typeof VerifyRouteWithChildren
+  '/academy/certificate-programs': typeof AcademyCertificateProgramsRoute
+  '/academy/diploma-programs': typeof AcademyDiplomaProgramsRoute
+  '/academy/professional-programs': typeof AcademyProfessionalProgramsRoute
   '/admin/academy': typeof AdminAcademyRoute
   '/admin/finance': typeof AdminFinanceRoute
   '/admin/hod': typeof AdminHodRoute
@@ -337,6 +372,7 @@ export interface FileRoutesByFullPath {
   '/admin/student-affairs': typeof AdminStudentAffairsRoute
   '/auth/accept': typeof AuthAcceptRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
+  '/verify/$id': typeof VerifyIdRoute
   '/admin/': typeof AdminIndexRoute
   '/dashboard/admin': typeof AuthenticatedDashboardAdminRoute
   '/dashboard/client': typeof AuthenticatedDashboardClientRoute
@@ -346,6 +382,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/student': typeof AuthenticatedDashboardStudentRoute
   '/dashboard/super-admin': typeof AuthenticatedDashboardSuperAdminRoute
   '/dashboard/talent': typeof AuthenticatedDashboardTalentRoute
+  '/academy/course/$slug': typeof AcademyCourseSlugRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/api/public/webhooks/paystack': typeof ApiPublicWebhooksPaystackRoute
   '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
@@ -355,7 +392,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/academy': typeof AcademyRoute
+  '/academy': typeof AcademyRouteWithChildren
   '/blog': typeof BlogRoute
   '/careers': typeof CareersRoute
   '/client': typeof ClientRoute
@@ -375,7 +412,10 @@ export interface FileRoutesByTo {
   '/talent-login': typeof TalentLoginRoute
   '/team': typeof TeamRoute
   '/terms': typeof TermsRoute
-  '/verify': typeof VerifyRoute
+  '/verify': typeof VerifyRouteWithChildren
+  '/academy/certificate-programs': typeof AcademyCertificateProgramsRoute
+  '/academy/diploma-programs': typeof AcademyDiplomaProgramsRoute
+  '/academy/professional-programs': typeof AcademyProfessionalProgramsRoute
   '/admin/academy': typeof AdminAcademyRoute
   '/admin/finance': typeof AdminFinanceRoute
   '/admin/hod': typeof AdminHodRoute
@@ -385,6 +425,7 @@ export interface FileRoutesByTo {
   '/admin/student-affairs': typeof AdminStudentAffairsRoute
   '/auth/accept': typeof AuthAcceptRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
+  '/verify/$id': typeof VerifyIdRoute
   '/admin': typeof AdminIndexRoute
   '/dashboard/admin': typeof AuthenticatedDashboardAdminRoute
   '/dashboard/client': typeof AuthenticatedDashboardClientRoute
@@ -394,6 +435,7 @@ export interface FileRoutesByTo {
   '/dashboard/student': typeof AuthenticatedDashboardStudentRoute
   '/dashboard/super-admin': typeof AuthenticatedDashboardSuperAdminRoute
   '/dashboard/talent': typeof AuthenticatedDashboardTalentRoute
+  '/academy/course/$slug': typeof AcademyCourseSlugRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/api/public/webhooks/paystack': typeof ApiPublicWebhooksPaystackRoute
   '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
@@ -405,7 +447,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/about': typeof AboutRoute
-  '/academy': typeof AcademyRoute
+  '/academy': typeof AcademyRouteWithChildren
   '/blog': typeof BlogRoute
   '/careers': typeof CareersRoute
   '/client': typeof ClientRoute
@@ -425,7 +467,10 @@ export interface FileRoutesById {
   '/talent-login': typeof TalentLoginRoute
   '/team': typeof TeamRoute
   '/terms': typeof TermsRoute
-  '/verify': typeof VerifyRoute
+  '/verify': typeof VerifyRouteWithChildren
+  '/academy/certificate-programs': typeof AcademyCertificateProgramsRoute
+  '/academy/diploma-programs': typeof AcademyDiplomaProgramsRoute
+  '/academy/professional-programs': typeof AcademyProfessionalProgramsRoute
   '/admin/academy': typeof AdminAcademyRoute
   '/admin/finance': typeof AdminFinanceRoute
   '/admin/hod': typeof AdminHodRoute
@@ -435,6 +480,7 @@ export interface FileRoutesById {
   '/admin/student-affairs': typeof AdminStudentAffairsRoute
   '/auth/accept': typeof AuthAcceptRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
+  '/verify/$id': typeof VerifyIdRoute
   '/admin/': typeof AdminIndexRoute
   '/_authenticated/dashboard/admin': typeof AuthenticatedDashboardAdminRoute
   '/_authenticated/dashboard/client': typeof AuthenticatedDashboardClientRoute
@@ -444,6 +490,7 @@ export interface FileRoutesById {
   '/_authenticated/dashboard/student': typeof AuthenticatedDashboardStudentRoute
   '/_authenticated/dashboard/super-admin': typeof AuthenticatedDashboardSuperAdminRoute
   '/_authenticated/dashboard/talent': typeof AuthenticatedDashboardTalentRoute
+  '/academy/course/$slug': typeof AcademyCourseSlugRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/api/public/webhooks/paystack': typeof ApiPublicWebhooksPaystackRoute
   '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
@@ -476,6 +523,9 @@ export interface FileRouteTypes {
     | '/team'
     | '/terms'
     | '/verify'
+    | '/academy/certificate-programs'
+    | '/academy/diploma-programs'
+    | '/academy/professional-programs'
     | '/admin/academy'
     | '/admin/finance'
     | '/admin/hod'
@@ -485,6 +535,7 @@ export interface FileRouteTypes {
     | '/admin/student-affairs'
     | '/auth/accept'
     | '/email/unsubscribe'
+    | '/verify/$id'
     | '/admin/'
     | '/dashboard/admin'
     | '/dashboard/client'
@@ -494,6 +545,7 @@ export interface FileRouteTypes {
     | '/dashboard/student'
     | '/dashboard/super-admin'
     | '/dashboard/talent'
+    | '/academy/course/$slug'
     | '/lovable/email/suppression'
     | '/api/public/webhooks/paystack'
     | '/lovable/email/queue/process'
@@ -524,6 +576,9 @@ export interface FileRouteTypes {
     | '/team'
     | '/terms'
     | '/verify'
+    | '/academy/certificate-programs'
+    | '/academy/diploma-programs'
+    | '/academy/professional-programs'
     | '/admin/academy'
     | '/admin/finance'
     | '/admin/hod'
@@ -533,6 +588,7 @@ export interface FileRouteTypes {
     | '/admin/student-affairs'
     | '/auth/accept'
     | '/email/unsubscribe'
+    | '/verify/$id'
     | '/admin'
     | '/dashboard/admin'
     | '/dashboard/client'
@@ -542,6 +598,7 @@ export interface FileRouteTypes {
     | '/dashboard/student'
     | '/dashboard/super-admin'
     | '/dashboard/talent'
+    | '/academy/course/$slug'
     | '/lovable/email/suppression'
     | '/api/public/webhooks/paystack'
     | '/lovable/email/queue/process'
@@ -573,6 +630,9 @@ export interface FileRouteTypes {
     | '/team'
     | '/terms'
     | '/verify'
+    | '/academy/certificate-programs'
+    | '/academy/diploma-programs'
+    | '/academy/professional-programs'
     | '/admin/academy'
     | '/admin/finance'
     | '/admin/hod'
@@ -582,6 +642,7 @@ export interface FileRouteTypes {
     | '/admin/student-affairs'
     | '/auth/accept'
     | '/email/unsubscribe'
+    | '/verify/$id'
     | '/admin/'
     | '/_authenticated/dashboard/admin'
     | '/_authenticated/dashboard/client'
@@ -591,6 +652,7 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard/student'
     | '/_authenticated/dashboard/super-admin'
     | '/_authenticated/dashboard/talent'
+    | '/academy/course/$slug'
     | '/lovable/email/suppression'
     | '/api/public/webhooks/paystack'
     | '/lovable/email/queue/process'
@@ -602,7 +664,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AboutRoute: typeof AboutRoute
-  AcademyRoute: typeof AcademyRoute
+  AcademyRoute: typeof AcademyRouteWithChildren
   BlogRoute: typeof BlogRoute
   CareersRoute: typeof CareersRoute
   ClientRoute: typeof ClientRoute
@@ -622,7 +684,7 @@ export interface RootRouteChildren {
   TalentLoginRoute: typeof TalentLoginRoute
   TeamRoute: typeof TeamRoute
   TermsRoute: typeof TermsRoute
-  VerifyRoute: typeof VerifyRoute
+  VerifyRoute: typeof VerifyRouteWithChildren
   AdminAcademyRoute: typeof AdminAcademyRoute
   AdminFinanceRoute: typeof AdminFinanceRoute
   AdminHodRoute: typeof AdminHodRoute
@@ -817,6 +879,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/verify/$id': {
+      id: '/verify/$id'
+      path: '/$id'
+      fullPath: '/verify/$id'
+      preLoaderRoute: typeof VerifyIdRouteImport
+      parentRoute: typeof VerifyRoute
+    }
     '/email/unsubscribe': {
       id: '/email/unsubscribe'
       path: '/email/unsubscribe'
@@ -880,12 +949,40 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminAcademyRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/academy/professional-programs': {
+      id: '/academy/professional-programs'
+      path: '/professional-programs'
+      fullPath: '/academy/professional-programs'
+      preLoaderRoute: typeof AcademyProfessionalProgramsRouteImport
+      parentRoute: typeof AcademyRoute
+    }
+    '/academy/diploma-programs': {
+      id: '/academy/diploma-programs'
+      path: '/diploma-programs'
+      fullPath: '/academy/diploma-programs'
+      preLoaderRoute: typeof AcademyDiplomaProgramsRouteImport
+      parentRoute: typeof AcademyRoute
+    }
+    '/academy/certificate-programs': {
+      id: '/academy/certificate-programs'
+      path: '/certificate-programs'
+      fullPath: '/academy/certificate-programs'
+      preLoaderRoute: typeof AcademyCertificateProgramsRouteImport
+      parentRoute: typeof AcademyRoute
+    }
     '/lovable/email/suppression': {
       id: '/lovable/email/suppression'
       path: '/lovable/email/suppression'
       fullPath: '/lovable/email/suppression'
       preLoaderRoute: typeof LovableEmailSuppressionRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/academy/course/$slug': {
+      id: '/academy/course/$slug'
+      path: '/course/$slug'
+      fullPath: '/academy/course/$slug'
+      preLoaderRoute: typeof AcademyCourseSlugRouteImport
+      parentRoute: typeof AcademyRoute
     }
     '/_authenticated/dashboard/talent': {
       id: '/_authenticated/dashboard/talent'
@@ -999,11 +1096,39 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
 const AuthenticatedRouteRouteWithChildren =
   AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
 
+interface AcademyRouteChildren {
+  AcademyCertificateProgramsRoute: typeof AcademyCertificateProgramsRoute
+  AcademyDiplomaProgramsRoute: typeof AcademyDiplomaProgramsRoute
+  AcademyProfessionalProgramsRoute: typeof AcademyProfessionalProgramsRoute
+  AcademyCourseSlugRoute: typeof AcademyCourseSlugRoute
+}
+
+const AcademyRouteChildren: AcademyRouteChildren = {
+  AcademyCertificateProgramsRoute: AcademyCertificateProgramsRoute,
+  AcademyDiplomaProgramsRoute: AcademyDiplomaProgramsRoute,
+  AcademyProfessionalProgramsRoute: AcademyProfessionalProgramsRoute,
+  AcademyCourseSlugRoute: AcademyCourseSlugRoute,
+}
+
+const AcademyRouteWithChildren =
+  AcademyRoute._addFileChildren(AcademyRouteChildren)
+
+interface VerifyRouteChildren {
+  VerifyIdRoute: typeof VerifyIdRoute
+}
+
+const VerifyRouteChildren: VerifyRouteChildren = {
+  VerifyIdRoute: VerifyIdRoute,
+}
+
+const VerifyRouteWithChildren =
+  VerifyRoute._addFileChildren(VerifyRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AboutRoute: AboutRoute,
-  AcademyRoute: AcademyRoute,
+  AcademyRoute: AcademyRouteWithChildren,
   BlogRoute: BlogRoute,
   CareersRoute: CareersRoute,
   ClientRoute: ClientRoute,
@@ -1023,7 +1148,7 @@ const rootRouteChildren: RootRouteChildren = {
   TalentLoginRoute: TalentLoginRoute,
   TeamRoute: TeamRoute,
   TermsRoute: TermsRoute,
-  VerifyRoute: VerifyRoute,
+  VerifyRoute: VerifyRouteWithChildren,
   AdminAcademyRoute: AdminAcademyRoute,
   AdminFinanceRoute: AdminFinanceRoute,
   AdminHodRoute: AdminHodRoute,

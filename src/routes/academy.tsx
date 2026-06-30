@@ -55,9 +55,9 @@ const tuition = [
 ];
 
 function ProgramTier({
-  tier, duration, why, programs, accent,
+  tier, duration, why, programs, accent, categoryPath,
 }: {
-  tier: string; duration: string; why: string; programs: string[]; accent: string;
+  tier: string; duration: string; why: string; programs: string[]; accent: string; categoryPath: string;
 }) {
   return (
     <Reveal>
@@ -90,7 +90,7 @@ function ProgramTier({
             <div><div className="text-xs uppercase tracking-widest text-muted-foreground">Outcome</div><div className="mt-1 font-bold">Verified Certificate</div></div>
           </div>
           <div className="mt-5 flex flex-wrap gap-3">
-            <Link to="/signup"><Button variant="brand">Apply now</Button></Link>
+            <Link to={categoryPath}><Button variant="brand">Browse {tier.toLowerCase()}</Button></Link>
             <Link to="/contact"><Button variant="outline">Talk to admissions</Button></Link>
           </div>
         </div>
@@ -176,6 +176,7 @@ function AcademyPage() {
             why="Focused, intensive training to give you a marketable skill quickly. Perfect for beginners or skill upgrades."
             programs={certificates}
             accent="linear-gradient(135deg, oklch(0.65 0.19 252), oklch(0.78 0.13 180))"
+            categoryPath="/academy/certificate-programs"
           />
           <ProgramTier
             tier="Diploma Programs"
@@ -183,6 +184,7 @@ function AcademyPage() {
             why="Comprehensive training combining theory and hands-on projects. Two semesters with assessments, mid-term exams and a final project. Graduates qualify for the NDH talent pool."
             programs={diplomas}
             accent="linear-gradient(135deg, oklch(0.62 0.21 290), oklch(0.65 0.19 252))"
+            categoryPath="/academy/diploma-programs"
           />
           <ProgramTier
             tier="Professional Programs"
@@ -190,6 +192,7 @@ function AcademyPage() {
             why="Advanced, in-depth training equivalent to a year-long industry apprenticeship. Includes specialization, mentorship, internship with the NDH Bureau and a capstone project."
             programs={professionals}
             accent="linear-gradient(135deg, oklch(0.2 0.1 268), oklch(0.62 0.21 290))"
+            categoryPath="/academy/professional-programs"
           />
         </div>
       </Section>
