@@ -4,6 +4,9 @@ import {
   LayoutDashboard, Plus, ListTodo, MessageSquare, Wallet, Settings as SettingsIcon, Bell,
 } from "lucide-react";
 import { useRouterState } from "@tanstack/react-router";
+import { useEffect } from "react";
+import { useServerFn } from "@tanstack/react-start";
+import { sendWelcomeIfNeeded } from "@/lib/email/task-emails.functions";
 import { ClientOverview } from "@/components/dashboard/client/Overview";
 import { SubmitTaskWizard } from "@/components/dashboard/client/SubmitTaskWizard";
 import { MyTasks } from "@/components/dashboard/client/MyTasks";
@@ -34,6 +37,12 @@ function ClientDashboardPage() {
   const search = useRouterState({ select: (r) => r.location.search as { tab?: string; task?: string } });
   const navigate = useNavigate();
   const tab = search.tab ?? "overview";
+  const sendWelcome = useServerFn(sendWelcomeIfNeeded);
+
+  useEffect(() => {
+    sendWelcome({ data: undefined } as any).catch(() => {});
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const go = (t?: string) => navigate({ to: "/dashboard/client", search: t ? { tab: t } : {} });
 
