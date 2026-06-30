@@ -73,7 +73,7 @@ export const updateInvoiceStatus = createServerFn({ method: "POST" })
   )
   .handler(async ({ data, context }) => {
     await assertFinance(context.supabase, context.userId);
-    const patch: Record<string, unknown> = { status: data.status };
+    const patch: Record<string, any> = { status: data.status };
     if (data.status === "sent") patch.issued_at = new Date().toISOString();
     if (data.status === "paid") {
       patch.paid_at = new Date().toISOString();
@@ -176,7 +176,7 @@ export const decideRefund = createServerFn({ method: "POST" })
   )
   .handler(async ({ data, context }) => {
     await assertFinance(context.supabase, context.userId);
-    const patch: Record<string, unknown> = {
+    const patch: Record<string, any> = {
       status: data.status,
       processed_by: context.userId,
     };
