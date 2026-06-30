@@ -3,8 +3,10 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import { useCurrency } from "@/lib/currency";
 import { Button } from "@/components/ui/button";
-import { X, Check, RefreshCw } from "lucide-react";
+import { X, Check, RefreshCw, CreditCard, Loader2 } from "lucide-react";
 import { toast } from "sonner";
+import { useServerFn } from "@tanstack/react-start";
+import { initPaystackPayment } from "@/lib/paystack.functions";
 
 type Task = {
   id: string; title: string; service_category: string; tier: string;
@@ -21,13 +23,37 @@ export function TaskDetailsDialog({ task, onClose }: { task: Task; onClose: () =
   const { format } = useCurrency();
   const [quotes, setQuotes] = useState<Quote[]>([]);
   const [files, setFiles] = useState<{ name: string; path: string }[]>([]);
+  const [paidQuoteIds, setPaidQuoteIds] = useState<Set<string>>(new Set());
+  const [payingId, setPayingId] = useState<string | null>(null);
+  const initPay = useServerFn(initPaystackPayment);
 
   useEffect(() => {
     supabase.from("quotes").select("*").eq("task_id", task.id).order("created_at").then(({ data }) => setQuotes((data as Quote[]) || []));
     supabase.from("tasks").select("files").eq("id", task.id).maybeSingle().then(({ data }) => {
       setFiles((data?.files as { name: string; path: string }[]) || []);
     });
+    supabase.from("payments").select("task_id,status").eq("task_id", task.id).eq("status", "paid").then(({ data }) => {
+      if (data && data.length > 0) setPaidQuoteIds(new Set(["__any__"]));
+    });
   }, [task.id]);
+
+  const hasPaid = paidQuoteIds.has("__any__");
+
+  const payWithPaystack = async (quoteId: string) => {
+    setPayingId(quoteId);
+    try {
+      const res = await initPay({ data: { taskId: task.id, quoteId } });
+      if (res?.authorization_url) {
+        window.location.href = res.authorization_url;
+      } else {
+        toast.error("Could not start payment");
+      }
+    } catch (e) {
+      toast.error((e as Error).message || "Payment init failed");
+    } finally {
+      setPayingId(null);
+    }
+  };
 
   const respondQuote = async (id: string, status: "approved" | "rejected") => {
     const { error } = await supabase.from("quotes").update({ status }).eq("id", id);
@@ -117,8 +143,15 @@ export function TaskDetailsDialog({ task, onClose }: { task: Task; onClose: () =
                       <Button size="sm" variant="brand" onClick={() => respondQuote(q.id, "approved")}>Approve</Button>
                       <Button size="sm" variant="outline" onClick={() => respondQuote(q.id, "rejected")}>Reject</Button>
                     </div>
+                  ) : q.status === "approved" && !hasPaid ? (
+                    <Button size="sm" variant="brand" disabled={payingId === q.id} onClick={() => payWithPaystack(q.id)}>
+                      {payingId === q.id ? <Loader2 className="h-4 w-4 animate-spin" /> : <CreditCard className="h-4 w-4" />}
+                      Pay with Paystack
+                    </Button>
                   ) : (
-                    <span className="rounded-full bg-secondary px-2 py-0.5 text-xs font-semibold capitalize">{q.status}</span>
+                    <span className="rounded-full bg-secondary px-2 py-0.5 text-xs font-semibold capitalize">
+                      {q.status === "approved" && hasPaid ? "paid" : q.status}
+                    </span>
                   )}
                 </li>
               ))}
