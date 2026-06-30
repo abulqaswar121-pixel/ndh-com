@@ -1,6 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { RoleStub } from "@/components/dashboard/RoleStub";
+import { InstructorShell } from "@/components/dashboard/instructor/InstructorShell";
 
 export const Route = createFileRoute("/_authenticated/dashboard/instructor")({
-  component: () => <RoleStub title="Instructor Portal" subtitle="Cohorts, lessons and grading." />,
+  component: InstructorShell,
+  validateSearch: (s: Record<string, unknown>) => ({
+    tab: (s.tab as string) ?? undefined,
+    course: (s.course as string) ?? undefined,
+  }),
 });
