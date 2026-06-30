@@ -56,6 +56,7 @@ import { Route as AuthenticatedDashboardInstructorRouteImport } from './routes/_
 import { Route as AuthenticatedDashboardHodRouteImport } from './routes/_authenticated/dashboard/hod'
 import { Route as AuthenticatedDashboardClientRouteImport } from './routes/_authenticated/dashboard/client'
 import { Route as AuthenticatedDashboardAdminRouteImport } from './routes/_authenticated/dashboard/admin'
+import { Route as AuthenticatedDashboardAcademyDirectorRouteImport } from './routes/_authenticated/dashboard/academy-director'
 import { Route as AuthenticatedDashboardStudentIndexRouteImport } from './routes/_authenticated/dashboard/student.index'
 import { Route as LovableEmailTransactionalSendRouteImport } from './routes/lovable/email/transactional/send'
 import { Route as LovableEmailTransactionalPreviewRouteImport } from './routes/lovable/email/transactional/preview'
@@ -307,6 +308,12 @@ const AuthenticatedDashboardAdminRoute =
     path: '/dashboard/admin',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedDashboardAcademyDirectorRoute =
+  AuthenticatedDashboardAcademyDirectorRouteImport.update({
+    id: '/dashboard/academy-director',
+    path: '/dashboard/academy-director',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedDashboardStudentIndexRoute =
   AuthenticatedDashboardStudentIndexRouteImport.update({
     id: '/dashboard/student/',
@@ -388,6 +395,7 @@ export interface FileRoutesByFullPath {
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/verify/$id': typeof VerifyIdRoute
   '/admin/': typeof AdminIndexRoute
+  '/dashboard/academy-director': typeof AuthenticatedDashboardAcademyDirectorRoute
   '/dashboard/admin': typeof AuthenticatedDashboardAdminRoute
   '/dashboard/client': typeof AuthenticatedDashboardClientRoute
   '/dashboard/hod': typeof AuthenticatedDashboardHodRoute
@@ -443,6 +451,7 @@ export interface FileRoutesByTo {
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/verify/$id': typeof VerifyIdRoute
   '/admin': typeof AdminIndexRoute
+  '/dashboard/academy-director': typeof AuthenticatedDashboardAcademyDirectorRoute
   '/dashboard/admin': typeof AuthenticatedDashboardAdminRoute
   '/dashboard/client': typeof AuthenticatedDashboardClientRoute
   '/dashboard/hod': typeof AuthenticatedDashboardHodRoute
@@ -500,6 +509,7 @@ export interface FileRoutesById {
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/verify/$id': typeof VerifyIdRoute
   '/admin/': typeof AdminIndexRoute
+  '/_authenticated/dashboard/academy-director': typeof AuthenticatedDashboardAcademyDirectorRoute
   '/_authenticated/dashboard/admin': typeof AuthenticatedDashboardAdminRoute
   '/_authenticated/dashboard/client': typeof AuthenticatedDashboardClientRoute
   '/_authenticated/dashboard/hod': typeof AuthenticatedDashboardHodRoute
@@ -557,6 +567,7 @@ export interface FileRouteTypes {
     | '/email/unsubscribe'
     | '/verify/$id'
     | '/admin/'
+    | '/dashboard/academy-director'
     | '/dashboard/admin'
     | '/dashboard/client'
     | '/dashboard/hod'
@@ -612,6 +623,7 @@ export interface FileRouteTypes {
     | '/email/unsubscribe'
     | '/verify/$id'
     | '/admin'
+    | '/dashboard/academy-director'
     | '/dashboard/admin'
     | '/dashboard/client'
     | '/dashboard/hod'
@@ -668,6 +680,7 @@ export interface FileRouteTypes {
     | '/email/unsubscribe'
     | '/verify/$id'
     | '/admin/'
+    | '/_authenticated/dashboard/academy-director'
     | '/_authenticated/dashboard/admin'
     | '/_authenticated/dashboard/client'
     | '/_authenticated/dashboard/hod'
@@ -1059,6 +1072,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardAdminRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/dashboard/academy-director': {
+      id: '/_authenticated/dashboard/academy-director'
+      path: '/dashboard/academy-director'
+      fullPath: '/dashboard/academy-director'
+      preLoaderRoute: typeof AuthenticatedDashboardAcademyDirectorRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/dashboard/student/': {
       id: '/_authenticated/dashboard/student/'
       path: '/dashboard/student'
@@ -1112,6 +1132,7 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedRouteRouteChildren {
+  AuthenticatedDashboardAcademyDirectorRoute: typeof AuthenticatedDashboardAcademyDirectorRoute
   AuthenticatedDashboardAdminRoute: typeof AuthenticatedDashboardAdminRoute
   AuthenticatedDashboardClientRoute: typeof AuthenticatedDashboardClientRoute
   AuthenticatedDashboardHodRoute: typeof AuthenticatedDashboardHodRoute
@@ -1125,6 +1146,8 @@ interface AuthenticatedRouteRouteChildren {
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedDashboardAcademyDirectorRoute:
+    AuthenticatedDashboardAcademyDirectorRoute,
   AuthenticatedDashboardAdminRoute: AuthenticatedDashboardAdminRoute,
   AuthenticatedDashboardClientRoute: AuthenticatedDashboardClientRoute,
   AuthenticatedDashboardHodRoute: AuthenticatedDashboardHodRoute,
