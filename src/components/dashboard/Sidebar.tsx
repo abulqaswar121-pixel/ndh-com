@@ -39,15 +39,16 @@ export function DashboardShell({
   return (
     <div className="flex min-h-screen bg-secondary/30">
       {/* Sidebar */}
-      <aside className={`fixed inset-y-0 left-0 z-40 w-64 transform border-r border-border bg-card transition-transform lg:translate-x-0 ${open ? "translate-x-0" : "-translate-x-full"}`}>
-        <div className="flex h-16 items-center gap-3 border-b border-border px-5">
+      <aside className={`fixed inset-y-0 left-0 z-40 flex w-64 transform flex-col border-r border-border bg-card transition-transform lg:translate-x-0 ${open ? "translate-x-0" : "-translate-x-full"}`}>
+        <div className="flex h-16 shrink-0 items-center gap-3 border-b border-border px-5">
           <Logo className="h-9 w-9" />
           <div>
             <div className="text-sm font-extrabold tracking-tight">NDH</div>
             <div className="text-[10px] uppercase tracking-widest text-muted-foreground">{title}</div>
           </div>
         </div>
-        <nav className="grid gap-1 p-3">
+        <nav className="flex-1 overflow-y-auto p-3 pb-4">
+          <div className="grid gap-1">
           {items.map((it) => (
             <Link
               key={it.label}
@@ -64,8 +65,9 @@ export function DashboardShell({
               {it.label}
             </Link>
           ))}
+          </div>
         </nav>
-        <div className="absolute inset-x-0 bottom-0 border-t border-border p-3">
+        <div className="shrink-0 border-t border-border bg-card p-3">
           <button
             onClick={signOut}
             className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-muted-foreground transition hover:bg-secondary hover:text-foreground"

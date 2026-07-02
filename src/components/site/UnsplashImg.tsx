@@ -1,9 +1,29 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useServerFn } from "@tanstack/react-start";
+import { getPexelsPhoto } from "@/lib/pexels.functions";
+
+// Module-level in-flight/result cache so we don't refetch the same
+// keyword+size on every remount within a session.
+const memo = new Map<string, Promise<string | null>>();
+
+function loadPexels(q: string, w: number, h: number, sig?: string) {
+  const orientation: "landscape" | "portrait" | "square" =
+    w > h ? "landscape" : h > w ? "portrait" : "square";
+  const key = `${q}|${w}x${h}|${orientation}|${sig ?? ""}`;
+  const cached = memo.get(key);
+  if (cached) return cached;
+  const p = (getPexelsPhoto as unknown as (a: { data: { q: string; w: number; h: number; orientation: "landscape" | "portrait" | "square"; sig?: string } }) => Promise<{ url: string | null }>)
+    ({ data: { q, w, h, orientation, sig } })
+    .then((r) => r.url)
+    .catch(() => null);
+  memo.set(key, p);
+  return p;
+}
 
 /**
- * Auto-fetches an Unsplash image by keyword. If the image fails to load
- * (rate limit, network error), gracefully falls back to a branded gradient
- * block so the page never shows a broken-image icon.
+ * Auto-fetches a photo from Pexels by keyword. Falls back to a seeded
+ * picsum photo and finally to a branded gradient block. Public API kept
+ * identical to the previous UnsplashImg for drop-in compatibility.
  */
 export function UnsplashImg({
   q,
@@ -20,12 +40,22 @@ export function UnsplashImg({
   className?: string;
   sig?: string | number;
 }) {
-  const [failed, setFailed] = useState(false);
-  const keyword = encodeURIComponent(q);
-  const seed = encodeURIComponent(String(sig ?? q));
-  // Use source.unsplash.com (random by keyword). Fallback chain: picsum seeded -> gradient.
-  const primary = `https://source.unsplash.com/${w}x${h}/?${keyword}`;
+  const sigStr = sig !== undefined ? String(sig) : undefined;
+  const seed = encodeURIComponent(sigStr ?? q);
   const fallback = `https://picsum.photos/seed/${seed}/${w}/${h}`;
+  const [src, setSrc] = useState<string | null>(null);
+  const [failed, setFailed] = useState(false);
+  // Attach server fn once so tree-shaking keeps the reference.
+  useServerFn(getPexelsPhoto);
+
+  useEffect(() => {
+    let cancelled = false;
+    loadPexels(q, w, h, sigStr).then((url) => {
+      if (!cancelled) setSrc(url ?? fallback);
+    });
+    return () => { cancelled = true; };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [q, w, h, sigStr]);
 
   if (failed) {
     return (
@@ -37,9 +67,19 @@ export function UnsplashImg({
       />
     );
   }
+  if (!src) {
+    return (
+      <div
+        aria-label={alt}
+        role="img"
+        className={`animate-pulse bg-secondary ${className}`}
+        style={{ aspectRatio: `${w}/${h}` }}
+      />
+    );
+  }
   return (
     <img
-      src={primary}
+      src={src}
       alt={alt}
       width={w}
       height={h}
@@ -47,11 +87,8 @@ export function UnsplashImg({
       decoding="async"
       onError={(e) => {
         const el = e.currentTarget;
-        if (el.src === primary) {
-          el.src = fallback;
-        } else {
-          setFailed(true);
-        }
+        if (el.src !== fallback) el.src = fallback;
+        else setFailed(true);
       }}
       className={className}
     />
