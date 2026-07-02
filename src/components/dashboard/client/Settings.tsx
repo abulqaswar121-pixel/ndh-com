@@ -5,6 +5,7 @@ import { useCurrency, CURRENCIES, type CurrencyCode } from "@/lib/currency";
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
+import { LinkAccountsCard } from "@/components/auth/LinkAccountsCard";
 
 export function ClientSettings() {
   const { user } = useAuth();
@@ -104,6 +105,8 @@ export function ClientSettings() {
           <Button variant="outline" onClick={changePassword}>Update</Button>
         </div>
       </Card>
+
+      <LinkAccountsCard />
     </div>
   );
 }
