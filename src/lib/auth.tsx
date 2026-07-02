@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import type { Session, User } from "@supabase/supabase-js";
+import { applyPendingRole } from "@/lib/auth/pending-role.functions";
 
 export type AppRole =
   | "client"
@@ -73,7 +74,31 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setSession(s);
       if (s?.user) {
         setTimeout(() => {
-          fetchPrimaryRole(s.user.id).then(setRole);
+          fetchPrimaryRole(s.user.id).then(async (r) => {
+            if (!r) {
+              // Apply signup-intent role (from Google OAuth on /signup)
+              try {
+                const pending = typeof window !== "undefined"
+                  ? window.sessionStorage.getItem("ndh_pending_role")
+                  : null;
+                if (pending === "client" || pending === "student") {
+                  await applyPendingRole({ data: { role: pending } });
+                  window.sessionStorage.removeItem("ndh_pending_role");
+                  const again = await fetchPrimaryRole(s.user.id);
+                  setRole(again ?? "client");
+                  return;
+                }
+                // Default any brand-new social user without a role to client
+                await applyPendingRole({ data: { role: "client" } });
+                const again = await fetchPrimaryRole(s.user.id);
+                setRole(again ?? "client");
+              } catch {
+                setRole(null);
+              }
+            } else {
+              setRole(r);
+            }
+          });
         }, 0);
       } else {
         setRole(null);
