@@ -6,8 +6,8 @@ export const Route = createFileRoute("/terms")({
   head: () => ({ meta: [
     { title: "Terms of Service — NDH" },
     { name: "description", content: "The terms governing your use of NDH services and academy." },
-    { property: "og:title", content: "NDH Terms of Service" },
-    { property: "og:description", content: "The agreement between you and NDH." },
+    { property: "og:title", content: "Terms of Service · Najeeb Digital Hub" },
+    { property: "og:description", content: "The agreement between you and Najeeb Digital Hub covering briefs, escrow payments, deliveries, academy enrolment, refunds and dispute resolution." },
   ]}),
   component: () => (
     <SiteLayout>

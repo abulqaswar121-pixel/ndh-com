@@ -55,7 +55,7 @@ function ServicesPage() {
             <StaggerItem key={c.title}>
               <div className="group h-full overflow-hidden rounded-2xl border border-border bg-card transition-all hover:-translate-y-1 hover:shadow-glow">
                 <div className="aspect-[16/10] overflow-hidden">
-                  <UnsplashImg q={c.q} alt={c.title} w={800} h={500} sig={c.title} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
+                 <UnsplashImg q={c.q} alt={`${c.title} services at Najeeb Digital Hub`} w={800} h={500} sig={c.title} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
                 </div>
                 <div className="p-6">
                   <div className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-brand text-white shadow-glow">
@@ -80,7 +80,7 @@ function ServicesPage() {
           {portfolio.map((p) => (
             <StaggerItem key={p.title}>
               <div className="group relative aspect-[4/3] overflow-hidden rounded-2xl border border-border">
-                <UnsplashImg q={p.q} alt={p.title} w={800} h={600} sig={p.title} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" />
+               <UnsplashImg q={p.q} alt={`${p.title} project — NDH portfolio`} w={800} h={600} sig={p.title} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
                 <div className="absolute bottom-0 p-5 text-white">
                   <div className="text-xs font-semibold uppercase tracking-widest text-white/70">{p.tag}</div>

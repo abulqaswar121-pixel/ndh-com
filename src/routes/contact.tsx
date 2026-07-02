@@ -6,12 +6,42 @@ import { Facebook, Instagram, Mail, Phone, MapPin } from "lucide-react";
 import { useState } from "react";
 
 export const Route = createFileRoute("/contact")({
-  head: () => ({ meta: [
-    { title: "Contact — Najeeb Digital Hub" },
-    { name: "description", content: "Reach NDH by WhatsApp, email or contact form. We respond within 24 hours." },
-    { property: "og:title", content: "Contact NDH" },
-    { property: "og:description", content: "Talk to a Project Manager today." },
-  ]}),
+  head: () => ({
+    meta: [
+      { title: "Contact — Najeeb Digital Hub" },
+      { name: "description", content: "Reach NDH by WhatsApp, email or contact form. We respond within 24 hours." },
+      { property: "og:title", content: "Contact NDH — Talk to a Project Manager" },
+      { property: "og:description", content: "Reach the Najeeb Digital Hub team in Sokoto, Nigeria via phone, email or contact form. A Project Manager replies within 24 hours." },
+    ],
+    scripts: [{
+      type: "application/ld+json",
+      children: JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "LocalBusiness",
+        name: "Najeeb Digital Hub",
+        image: "https://ndh.com.ng/__l5e/assets-v1/e2b8c427-3850-4864-8770-e1dd30edd19b/ndh-logo.png",
+        "@id": "https://ndh.com.ng/#localbusiness",
+        url: "https://ndh.com.ng/contact",
+        telephone: "+234-902-993-2794",
+        email: "support@ndh.com.ng",
+        address: {
+          "@type": "PostalAddress",
+          addressLocality: "Sokoto",
+          addressCountry: "NG",
+        },
+        openingHoursSpecification: [{
+          "@type": "OpeningHoursSpecification",
+          dayOfWeek: ["Monday","Tuesday","Wednesday","Thursday","Friday"],
+          opens: "09:00",
+          closes: "18:00",
+        }],
+        sameAs: [
+          "https://www.facebook.com/share/1Be6HN8zjS/",
+          "https://www.instagram.com/njb_digital_hub",
+        ],
+      }),
+    }],
+  }),
   component: ContactPage,
 });
 
