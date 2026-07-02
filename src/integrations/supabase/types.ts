@@ -2810,6 +2810,16 @@ export type Database = {
         Args: { _deliverables: Json; _notes: string; _task_id: string }
         Returns: undefined
       }
+      verify_certificate: {
+        Args: { _code: string }
+        Returns: {
+          grade: string
+          holder: string
+          issued: string
+          number: string
+          program: string
+        }[]
+      }
     }
     Enums: {
       app_role:

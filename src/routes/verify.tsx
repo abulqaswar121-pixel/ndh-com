@@ -27,25 +27,15 @@ function VerifyPage() {
     e.preventDefault();
     setLoading(true);
     const q = code.trim();
-    // Allow lookup by certificate_number or verification_token
-    const { data: cert } = await supabase
-      .from("certificates")
-      .select("certificate_number, grade, issue_date, student_id, course_id, verification_token")
-      .or(`certificate_number.eq.${q},verification_token.eq.${q}`)
-      .maybeSingle();
-    if (!cert) { setResult("missing"); setLoading(false); return; }
-    const [{ data: prof }, { data: course }] = await Promise.all([
-      supabase.from("profiles").select("full_name").eq("id", cert.student_id).maybeSingle(),
-      cert.course_id
-        ? supabase.from("courses").select("program_name").eq("id", cert.course_id).maybeSingle()
-        : Promise.resolve({ data: null }),
-    ]);
+    const { data } = await supabase.rpc("verify_certificate", { _code: q });
+    const row = Array.isArray(data) ? data[0] : null;
+    if (!row) { setResult("missing"); setLoading(false); return; }
     setResult({
-      holder: prof?.full_name || "NDH Graduate",
-      program: course?.program_name || "NDH Program",
-      grade: cert.grade,
-      issued: new Date(cert.issue_date).toLocaleDateString(),
-      number: cert.certificate_number,
+      holder: row.holder,
+      program: row.program,
+      grade: row.grade,
+      issued: new Date(row.issued).toLocaleDateString(),
+      number: row.number,
     });
     setLoading(false);
   }
