@@ -4,6 +4,7 @@ import { useAuth } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
+import { LinkAccountsCard } from "@/components/auth/LinkAccountsCard";
 
 export function TalentSettings() {
   const { user } = useAuth();
@@ -108,6 +109,8 @@ export function TalentSettings() {
       <Button variant="brand" onClick={save} disabled={saving}>
         {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : "Save changes"}
       </Button>
+
+      <LinkAccountsCard />
     </div>
   );
 }
