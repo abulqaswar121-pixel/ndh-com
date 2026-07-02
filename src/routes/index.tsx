@@ -259,7 +259,11 @@ function Index() {
             <StaggerItem key={m.name}>
               <div className="group overflow-hidden rounded-2xl border border-border bg-card transition-all hover:-translate-y-1 hover:shadow-glow">
                 <div className="aspect-[4/5] overflow-hidden">
-                  <UnsplashImg q={m.q} alt={m.name} w={600} h={750} sig={m.name} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" />
+                  {"image" in m && (m as { image?: string }).image ? (
+                    <img src={(m as { image: string }).image} alt={m.name} loading="lazy" className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" />
+                  ) : (
+                    <UnsplashImg q={m.q} alt={m.name} w={600} h={750} sig={m.name} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" />
+                  )}
                 </div>
                 <div className="p-5">
                   <div className="font-bold">{m.name}</div>
