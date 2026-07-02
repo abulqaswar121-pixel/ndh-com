@@ -29,25 +29,25 @@ const founder: Member = {
 };
 
 const leadership: Member[] = [
-  { name: "Amina Sani", role: "Operations Manager", bio: "Runs day-to-day delivery, PM rituals and QA standards.", q: "african woman tech operations manager laptop office" },
-  { name: "David Eze", role: "Academy Director", bio: "Owns curriculum, faculty and the Learn → Earn pipeline.", q: "african male computer science lecturer classroom laptop" },
-  { name: "Fatima Abubakar", role: "Finance Admin", bio: "Billing, payroll, escrow — clean money flow for clients and talents.", q: "african woman fintech analyst monitors dashboard" },
+  { name: "Hassan Al'amin Hassan", role: "Operations Manager", bio: "Runs day-to-day delivery, PM rituals and QA standards.", q: "nigerian muslim man tech operations manager laptop office" },
+  { name: "Hamza Suleiman", role: "Academy Director", bio: "Owns curriculum, faculty and the Learn → Earn pipeline.", q: "nigerian muslim man tech lecturer laptop classroom" },
+  { name: "Saleem Mujahid Basheer", role: "Finance Admin", bio: "Billing, payroll, escrow — clean money flow for clients and talents.", q: "nigerian muslim man digital marketer analytics dashboard laptop" },
 ];
 
 const hods: Member[] = [
   { name: "Ibrahim Lawal", role: "HOD · Design", bio: "Brand systems, UI and the visual standard for every NDH project.", q: "african ui ux designer figma laptop workspace" },
-  { name: "Chinwe Okafor", role: "HOD · Development", bio: "Web, mobile and platform engineering across the bureau.", q: "black woman software engineer coding monitor" },
+  { name: "Chinwe Okafor", role: "HOD · Development", bio: "Web, mobile and platform engineering across the bureau.", q: "nigerian christian man software engineer developer coding monitor" },
   { name: "Yusuf Bello", role: "HOD · Content", bio: "SEO, brand copy and editorial across client work and the blog.", q: "african man tech writer laptop workspace" },
   { name: "Grace Adeyemi", role: "HOD · Marketing", bio: "Performance ads, growth strategy and analytics.", q: "african woman digital marketer analytics dashboard laptop" },
-  { name: "Aisha Mohammed", role: "HOD · Media", bio: "Video, motion, photography and podcast production.", q: "african woman video editor computer editing suite" },
+  { name: "Aisha Mohammed", role: "HOD · Media", bio: "Video, motion, photography and podcast production.", q: "nigerian hijabi muslim woman video editor computer editing suite" },
 ];
 
 const pms: Member[] = [
   { name: "Tobi Williams", role: "PM · Design", bio: "Single point of contact for every design engagement.", q: "african project manager kanban board tech office" },
-  { name: "Hauwa Garba", role: "PM · Development", bio: "Sprints, scope and shipping for engineering work.", q: "african woman scrum master standup tech team" },
+  { name: "Hauwa Garba", role: "PM · Development", bio: "Sprints, scope and shipping for engineering work.", q: "nigerian hijabi muslim woman scrum master developer laptop tech team" },
   { name: "Emeka Nwosu", role: "PM · Content", bio: "Briefs, calendars and editorial pipelines.", q: "african man content strategist laptop office" },
   { name: "Zainab Yakubu", role: "PM · Marketing", bio: "Campaign management end-to-end.", q: "african woman marketing manager dashboard tech office" },
-  { name: "Samuel Okoro", role: "PM · Media", bio: "Production schedules from script to delivery.", q: "african media producer editing computer studio" },
+  { name: "Samuel Okoro", role: "PM · Media", bio: "Production schedules from script to delivery.", q: "nigerian christian man media producer video editing computer studio" },
 ];
 
 function Card({ m, size = "md" }: { m: Member; size?: "lg" | "md" }) {
