@@ -51,21 +51,27 @@ export function AuthShell({
       </div>
 
       {/* Right form panel */}
-      <div className="relative flex items-center justify-center px-6 py-12 sm:px-12">
-        <Link
-          to="/"
-          className="absolute left-4 top-4 inline-flex items-center gap-1.5 rounded-full border border-border bg-background/80 px-3 py-1.5 text-xs font-semibold text-muted-foreground backdrop-blur transition hover:text-foreground sm:left-8 sm:top-8"
-        >
-          <ArrowLeft className="h-3.5 w-3.5" /> Back to Homepage
-        </Link>
-        <div className="w-full max-w-md">
-          <Link to="/" className="mb-8 inline-flex items-center gap-3 lg:hidden">
-            <Logo className="h-10 w-10" />
-            <div className="text-sm font-extrabold tracking-tight">NAJEEB DIGITAL HUB</div>
+      <div className="relative flex flex-col px-6 py-6 sm:px-12">
+        {/* Slim top bar with mobile logo + Back link, never overlaps content */}
+        <div className="mb-8 flex items-center justify-between">
+          <Link to="/" className="inline-flex items-center gap-2 lg:invisible">
+            <Logo className="h-9 w-9" />
+            <span className="text-sm font-extrabold tracking-tight">NDH</span>
           </Link>
-          <h1 className="text-3xl font-extrabold tracking-tight">{title}</h1>
-          {subtitle && <p className="mt-2 text-sm text-muted-foreground">{subtitle}</p>}
-          <div className="mt-8">{children}</div>
+          <Link
+            to="/"
+            className="group inline-flex items-center gap-1.5 rounded-full border border-border bg-background/80 px-3 py-1.5 text-xs font-semibold text-muted-foreground backdrop-blur transition hover:border-foreground/30 hover:text-foreground"
+          >
+            <ArrowLeft className="h-3.5 w-3.5 transition-transform group-hover:-translate-x-0.5" />
+            Back to Homepage
+          </Link>
+        </div>
+        <div className="flex flex-1 items-center justify-center">
+          <div className="w-full max-w-md">
+            <h1 className="text-3xl font-extrabold tracking-tight">{title}</h1>
+            {subtitle && <p className="mt-2 text-sm text-muted-foreground">{subtitle}</p>}
+            <div className="mt-8">{children}</div>
+          </div>
         </div>
       </div>
     </div>
