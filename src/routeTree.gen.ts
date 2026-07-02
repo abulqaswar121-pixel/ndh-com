@@ -18,6 +18,7 @@ import { Route as TalentRouteImport } from './routes/talent'
 import { Route as SubmitTaskRouteImport } from './routes/submit-task'
 import { Route as StudentRouteImport } from './routes/student'
 import { Route as StaffAccessRouteImport } from './routes/staff-access'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as SignupRouteImport } from './routes/signup'
 import { Route as ServicesRouteImport } from './routes/services'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
@@ -115,6 +116,11 @@ const StudentRoute = StudentRouteImport.update({
 const StaffAccessRoute = StaffAccessRouteImport.update({
   id: '/staff-access',
   path: '/staff-access',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SignupRoute = SignupRouteImport.update({
@@ -418,6 +424,7 @@ export interface FileRoutesByFullPath {
   '/reset-password': typeof ResetPasswordRoute
   '/services': typeof ServicesRoute
   '/signup': typeof SignupRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/staff-access': typeof StaffAccessRoute
   '/student': typeof StudentRoute
   '/submit-task': typeof SubmitTaskRoute
@@ -481,6 +488,7 @@ export interface FileRoutesByTo {
   '/reset-password': typeof ResetPasswordRoute
   '/services': typeof ServicesRoute
   '/signup': typeof SignupRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/staff-access': typeof StaffAccessRoute
   '/student': typeof StudentRoute
   '/submit-task': typeof SubmitTaskRoute
@@ -546,6 +554,7 @@ export interface FileRoutesById {
   '/reset-password': typeof ResetPasswordRoute
   '/services': typeof ServicesRoute
   '/signup': typeof SignupRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/staff-access': typeof StaffAccessRoute
   '/student': typeof StudentRoute
   '/submit-task': typeof SubmitTaskRoute
@@ -611,6 +620,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/services'
     | '/signup'
+    | '/sitemap.xml'
     | '/staff-access'
     | '/student'
     | '/submit-task'
@@ -674,6 +684,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/services'
     | '/signup'
+    | '/sitemap.xml'
     | '/staff-access'
     | '/student'
     | '/submit-task'
@@ -738,6 +749,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/services'
     | '/signup'
+    | '/sitemap.xml'
     | '/staff-access'
     | '/student'
     | '/submit-task'
@@ -803,6 +815,7 @@ export interface RootRouteChildren {
   ResetPasswordRoute: typeof ResetPasswordRoute
   ServicesRoute: typeof ServicesRoute
   SignupRoute: typeof SignupRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   StaffAccessRoute: typeof StaffAccessRoute
   StudentRoute: typeof StudentRoute
   SubmitTaskRoute: typeof SubmitTaskRoute
@@ -894,6 +907,13 @@ declare module '@tanstack/react-router' {
       path: '/staff-access'
       fullPath: '/staff-access'
       preLoaderRoute: typeof StaffAccessRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/signup': {
@@ -1366,6 +1386,7 @@ const rootRouteChildren: RootRouteChildren = {
   ResetPasswordRoute: ResetPasswordRoute,
   ServicesRoute: ServicesRoute,
   SignupRoute: SignupRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
   StaffAccessRoute: StaffAccessRoute,
   StudentRoute: StudentRoute,
   SubmitTaskRoute: SubmitTaskRoute,
