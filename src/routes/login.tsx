@@ -8,6 +8,7 @@ import { useAuth, roleHome } from "@/lib/auth";
 import { useNavigate } from "@tanstack/react-router";
 import { lovable } from "@/integrations/lovable";
 import { toast } from "sonner";
+import { checkEmailProviders } from "@/lib/auth/account-linking.functions";
 
 export const Route = createFileRoute("/login")({
   head: () => ({ meta: [
@@ -41,7 +42,20 @@ function LoginPage() {
     setLoading(true);
     const { error } = await supabase.auth.signInWithPassword({ email, password });
     setLoading(false);
-    if (error) { toast.error(error.message); return; }
+    if (error) {
+      // Detect Google-only accounts to give a clear message instead of generic "Invalid login credentials".
+      if (/invalid.*(login|credentials)/i.test(error.message)) {
+        try {
+          const info = await checkEmailProviders({ data: { email } });
+          if (info.exists && info.providers.includes("google") && !info.providers.includes("email")) {
+            toast.error("This email was registered with Google. Please continue with Google, or use 'Forgot?' to set a password.");
+            return;
+          }
+        } catch {/* fall through to generic */}
+      }
+      toast.error(error.message);
+      return;
+    }
     toast.success("Signed in");
   };
 

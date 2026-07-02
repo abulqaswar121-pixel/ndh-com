@@ -6,6 +6,7 @@ import { useCurrency } from "@/lib/currency";
 import { Button } from "@/components/ui/button";
 import { Plus, ListTodo, MessageSquare, Wallet, CheckCircle2, Clock } from "lucide-react";
 import { InstallAppBanner } from "@/components/site/InstallApp";
+import { SetPasswordNudge } from "@/components/auth/SetPasswordNudge";
 import {
   verifyPaystackReference,
   verifyMyPendingPayments,
@@ -77,6 +78,7 @@ export function ClientOverview({ onSubmit, onSeeTasks }: { onSubmit: () => void;
   return (
     <div className="space-y-8">
       <InstallAppBanner />
+      <SetPasswordNudge settingsHref="/dashboard/client/settings" />
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
           <h1 className="text-3xl font-extrabold">Welcome back, {name.split(" ")[0]}.</h1>
