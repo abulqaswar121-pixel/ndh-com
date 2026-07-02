@@ -80,13 +80,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Najeeb Digital Hub (NDH) — Where Digital Excellence Meets Opportunity" },
+      { title: "Najeeb Digital Hub — Digital Bureau & Academy" },
       { name: "description", content: "NDH is a premium digital services bureau and online academy delivering design, development, content, marketing and media for clients worldwide." },
       { name: "author", content: "Najeeb Digital Hub" },
       { name: "theme-color", content: "#0A0E2A" },
       { property: "og:title", content: "Najeeb Digital Hub (NDH)" },
       { property: "og:description", content: "Where Digital Excellence Meets Opportunity." },
       { property: "og:type", content: "website" },
+      { property: "og:site_name", content: "Najeeb Digital Hub" },
       { name: "twitter:card", content: "summary" },
     ],
     links: [
@@ -101,6 +102,40 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "manifest", href: "/manifest.webmanifest" },
       { rel: "apple-touch-icon", href: "/__l5e/assets-v1/e2b8c427-3850-4864-8770-e1dd30edd19b/ndh-logo.png" },
       { rel: "icon", type: "image/png", href: "/__l5e/assets-v1/e2b8c427-3850-4864-8770-e1dd30edd19b/ndh-logo.png" },
+    ],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Organization",
+          name: "Najeeb Digital Hub",
+          alternateName: "NDH",
+          url: "https://ndh.com.ng",
+          logo: "https://ndh.com.ng/__l5e/assets-v1/e2b8c427-3850-4864-8770-e1dd30edd19b/ndh-logo.png",
+          sameAs: [
+            "https://www.facebook.com/share/1Be6HN8zjS/",
+            "https://www.instagram.com/njb_digital_hub",
+          ],
+          contactPoint: [{
+            "@type": "ContactPoint",
+            email: "support@ndh.com.ng",
+            telephone: "+234-902-993-2794",
+            contactType: "customer support",
+            areaServed: ["NG", "GB", "US", "CA", "AE"],
+            availableLanguage: ["en"],
+          }],
+        }),
+      },
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          name: "Najeeb Digital Hub",
+          url: "https://ndh.com.ng",
+        }),
+      },
     ],
   }),
   shellComponent: RootShell,
