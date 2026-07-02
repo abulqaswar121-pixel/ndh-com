@@ -42,6 +42,7 @@ const cols = [
       { to: "/faq", label: "Help Center" },
       { to: "/faq", label: "FAQ" },
       { to: "/careers", label: "Talent Application" },
+      { to: "/staff-access", label: "Staff Access" },
       { to: "/terms", label: "Terms of Service" },
       { to: "/privacy", label: "Privacy Policy" },
     ],
