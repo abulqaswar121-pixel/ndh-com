@@ -21,22 +21,15 @@ function VerifyDirect() {
   const [state, setState] = useState<"loading" | "missing" | Verified>("loading");
   useEffect(() => {
     (async () => {
-      const { data: cert } = await supabase
-        .from("certificates")
-        .select("certificate_number, grade, issue_date, student_id, course_id, verification_token")
-        .or(`certificate_number.eq.${id},verification_token.eq.${id}`)
-        .maybeSingle();
-      if (!cert) { setState("missing"); return; }
-      const [{ data: prof }, { data: course }] = await Promise.all([
-        supabase.from("profiles").select("full_name").eq("id", cert.student_id).maybeSingle(),
-        cert.course_id ? supabase.from("courses").select("program_name").eq("id", cert.course_id).maybeSingle() : Promise.resolve({ data: null }),
-      ]);
+      const { data } = await supabase.rpc("verify_certificate", { _code: id });
+      const row = Array.isArray(data) ? data[0] : null;
+      if (!row) { setState("missing"); return; }
       setState({
-        holder: prof?.full_name || "NDH Graduate",
-        program: course?.program_name || "NDH Program",
-        grade: cert.grade,
-        issued: new Date(cert.issue_date).toLocaleDateString(),
-        number: cert.certificate_number,
+        holder: row.holder,
+        program: row.program,
+        grade: row.grade,
+        issued: new Date(row.issued).toLocaleDateString(),
+        number: row.number,
       });
     })();
   }, [id]);
