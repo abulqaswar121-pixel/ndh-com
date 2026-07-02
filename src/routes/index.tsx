@@ -14,6 +14,12 @@ import { AnimatedBlobs } from "@/components/site/AnimatedBlobs";
 import { TypingHeadline } from "@/components/site/TypingHeadline";
 import { Reveal, Stagger, StaggerItem } from "@/components/site/Reveal";
 import { UnsplashImg } from "@/components/site/UnsplashImg";
+import testimonialAisha from "@/assets/testimonial-aisha-bello-founder.jpg";
+import testimonialChinedu from "@/assets/testimonial-chinedu-okafor-founder.jpg";
+import testimonialJames from "@/assets/testimonial-james-rowe-operator.jpg";
+import testimonialMaryam from "@/assets/testimonial-maryam-ibrahim-brand-manager.jpg";
+import testimonialSarah from "@/assets/testimonial-sarah-mitchell-marketer.jpg";
+import testimonialTunde from "@/assets/testimonial-tunde-adeyemi-ceo.jpg";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -50,12 +56,12 @@ const features = [
 ];
 
 const testimonials = [
-  { name: "Aisha Bello", role: "Founder, Lagos", quote: "NDH felt like an in-house team. Fast, sharp, and zero drama.", q: "portrait african woman hijab smiling face" },
-  { name: "James Rowe", role: "Operations, London", quote: "The PM model is gold — one contact, world-class delivery.", q: "portrait white man business suit face smiling" },
-  { name: "Tunde Adeyemi", role: "CEO, Abuja", quote: "From brand to web to ads, every piece felt premium.", q: "portrait african black man suit face smiling" },
-  { name: "Maryam Ibrahim", role: "Brand Manager, Dubai", quote: "World-class output with zero project management overhead.", q: "portrait arab woman hijab face smiling" },
-  { name: "Chinedu Okafor", role: "Founder, Enugu", quote: "Their PMs treated my product like their own. Shipped fast.", q: "portrait african black man face smiling shirt" },
-  { name: "Sarah Mitchell", role: "Marketing, Toronto", quote: "Best agency-feel I've had at startup pricing. Hire them.", q: "portrait white woman blonde face smiling professional" },
+  { name: "Aisha Bello", role: "Founder, Lagos", quote: "NDH felt like an in-house team. Fast, sharp, and zero drama.", image: testimonialAisha },
+  { name: "James Rowe", role: "Operations, London", quote: "The PM model is gold — one contact, world-class delivery.", image: testimonialJames },
+  { name: "Tunde Adeyemi", role: "CEO, Abuja", quote: "From brand to web to ads, every piece felt premium.", image: testimonialTunde },
+  { name: "Maryam Ibrahim", role: "Brand Manager, Dubai", quote: "World-class output with zero project management overhead.", image: testimonialMaryam },
+  { name: "Chinedu Okafor", role: "Founder, Enugu", quote: "Their PMs treated my product like their own. Shipped fast.", image: testimonialChinedu },
+  { name: "Sarah Mitchell", role: "Marketing, Toronto", quote: "Best agency-feel I've had at startup pricing. Hire them.", image: testimonialSarah },
 ];
 
 import founderAsset from "@/assets/founder-ceo.png.asset.json";
@@ -381,7 +387,7 @@ function TestimonialsCarousel() {
           <Quote className="h-6 w-6 text-[oklch(0.62_0.21_290)]" />
           <p className="mt-3 text-sm text-foreground/90">"{t.quote}"</p>
           <div className="mt-5 flex items-center gap-3">
-            <UnsplashImg q={t.q} alt={t.name} w={80} h={80} sig={t.name} className="h-10 w-10 rounded-full object-cover" />
+            <img src={t.image} alt={t.name} width={768} height={768} loading="lazy" className="h-12 w-12 rounded-full object-cover" />
             <div>
               <div className="text-sm font-semibold">{t.name}</div>
               <div className="text-xs text-muted-foreground">{t.role}</div>
