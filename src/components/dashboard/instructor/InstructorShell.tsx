@@ -19,7 +19,7 @@ import {
   getInstructorCourses, getCourseRoster,
 } from "@/lib/instructor/instructor.functions";
 
-type Course = { id: string; program_name: string; slug: string | null; program_type: string; cover_image: string | null; is_published: boolean; students_count: number | null; curriculum_status: string; instructor_id: string | null };
+type Course = { id: string; program_name: string; slug: string | null; program_type: string; cover_image: string | null; is_published: boolean; students_count: number | null; curriculum_status: string; instructor_id: string | null; tuition_ngn: number | null };
 type Module = { id: string; course_id: string; title: string; description: string | null; position: number };
 type Lesson = { id: string; module_id: string; title: string; type: "video"|"pdf"|"text"; content_url: string | null; content_text: string | null; duration_minutes: number | null; position: number; is_preview: boolean };
 type Assignment = { id: string; course_id: string; title: string; instructions: string | null; max_score: number; due_at: string | null };
