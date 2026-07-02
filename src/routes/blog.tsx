@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { Section } from "@/components/site/Section";
 import { AnimatedBlobs } from "@/components/site/AnimatedBlobs";
@@ -6,6 +6,8 @@ import { Reveal, Stagger, StaggerItem } from "@/components/site/Reveal";
 import { UnsplashImg } from "@/components/site/UnsplashImg";
 import { Search } from "lucide-react";
 import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { listBlogPosts } from "@/lib/content/blog.functions";
 
 export const Route = createFileRoute("/blog")({
   head: () => ({ meta: [
@@ -17,20 +19,15 @@ export const Route = createFileRoute("/blog")({
   component: BlogPage,
 });
 
-const posts = [
-  { tag: "NDH News", title: "Why founders hire bureaus, not freelancers", excerpt: "The hidden cost of managing 5 freelancers vs. one PM.", q: "modern office strategy meeting" },
-  { tag: "Digital Skills", title: "Brand systems that scale on a budget", excerpt: "A quick guide to tokens, type and color discipline.", q: "graphic design workspace branding" },
-  { tag: "Academy Updates", title: "Inside the NDH Diploma program", excerpt: "How we structure six months of intensive learning.", q: "african online classroom students" },
-  { tag: "Freelancing Tips", title: "What's working in Meta ads in 2026", excerpt: "Creative, audience and budget patterns from real campaigns.", q: "digital marketing analytics screen" },
-  { tag: "Digital Skills", title: "Picking the right stack for your MVP", excerpt: "A pragmatic framework for first-time founders.", q: "developer coding multiple monitors" },
-  { tag: "Freelancing Tips", title: "How to make Tier 5 (Elite) at NDH", excerpt: "Metrics, mindset and craft from our top talents.", q: "african freelancer working laptop home" },
-];
-
 const cats = ["All", "Freelancing Tips", "Digital Skills", "Academy Updates", "NDH News"];
 
 function BlogPage() {
   const [cat, setCat] = useState("All");
   const [q, setQ] = useState("");
+  const { data: posts = [], isLoading } = useQuery({
+    queryKey: ["blog-posts"],
+    queryFn: () => listBlogPosts(),
+  });
   const filtered = posts.filter(
     (p) => (cat === "All" || p.tag === cat) && (q === "" || p.title.toLowerCase().includes(q.toLowerCase())),
   );
@@ -59,21 +56,23 @@ function BlogPage() {
         </div>
         <Stagger className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {filtered.map((p) => (
-            <StaggerItem key={p.title}>
-              <article className="group h-full overflow-hidden rounded-2xl border border-border bg-card transition-all hover:-translate-y-1 hover:shadow-elegant">
+            <StaggerItem key={p.slug}>
+              <Link to="/blog/$slug" params={{ slug: p.slug }} className="group block h-full overflow-hidden rounded-2xl border border-border bg-card transition-all hover:-translate-y-1 hover:shadow-elegant">
                 <div className="aspect-[16/10] overflow-hidden">
-                  <UnsplashImg q={p.q} alt={p.title} w={800} h={500} sig={p.title} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
+                  <UnsplashImg q={p.cover_query} alt={p.title} w={800} h={500} sig={p.slug} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
                 </div>
                 <div className="p-6">
                   <div className="text-xs font-semibold uppercase tracking-widest text-[oklch(0.65_0.19_252)]">{p.tag}</div>
                   <h3 className="mt-2 text-lg font-bold leading-snug">{p.title}</h3>
                   <p className="mt-2 text-sm text-muted-foreground">{p.excerpt}</p>
+                  <div className="mt-3 text-xs text-muted-foreground">{p.read_minutes} min read</div>
                 </div>
-              </article>
+              </Link>
             </StaggerItem>
           ))}
         </Stagger>
-        {filtered.length === 0 && <p className="mt-10 text-center text-sm text-muted-foreground">No articles match your search.</p>}
+        {!isLoading && filtered.length === 0 && <p className="mt-10 text-center text-sm text-muted-foreground">No articles match your search.</p>}
+        {isLoading && <p className="mt-10 text-center text-sm text-muted-foreground">Loading articles…</p>}
       </Section>
     </SiteLayout>
   );
