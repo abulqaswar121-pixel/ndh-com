@@ -4,16 +4,6 @@ import { Section } from "@/components/site/Section";
 import { ChevronDown } from "lucide-react";
 import { useState } from "react";
 
-export const Route = createFileRoute("/faq")({
-  head: () => ({ meta: [
-    { title: "FAQ — Najeeb Digital Hub" },
-    { name: "description", content: "Answers to common questions about NDH services, academy and talents." },
-    { property: "og:title", content: "NDH FAQ" },
-    { property: "og:description", content: "Common questions, clearly answered." },
-  ]}),
-  component: FaqPage,
-});
-
 const faqs = [
   { q: "How is NDH different from a freelance marketplace?", a: "We are a managed bureau. You never have to find or chase a freelancer — your PM does that." },
   { q: "Do I talk to talents directly?", a: "No. To protect quality, talents only communicate with their PM. You only talk to your PM." },
@@ -22,6 +12,30 @@ const faqs = [
   { q: "How are talents paid?", a: "Talents are paid weekly to their bank accounts after QA-approved delivery." },
   { q: "Are NDH Academy certificates verifiable?", a: "Yes — every certificate has a unique ID and QR code, verifiable at /verify." },
 ];
+
+export const Route = createFileRoute("/faq")({
+  head: () => ({
+    meta: [
+      { title: "FAQ — Najeeb Digital Hub" },
+      { name: "description", content: "Answers to common questions about NDH services, academy and talents." },
+      { property: "og:title", content: "Frequently Asked Questions · Najeeb Digital Hub" },
+      { property: "og:description", content: "How NDH's managed bureau works, project pricing across regions, PM-only communication, talent payouts, and how to verify NDH Academy certificates." },
+    ],
+    scripts: [{
+      type: "application/ld+json",
+      children: JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        mainEntity: faqs.map((f) => ({
+          "@type": "Question",
+          name: f.q,
+          acceptedAnswer: { "@type": "Answer", text: f.a },
+        })),
+      }),
+    }],
+  }),
+  component: FaqPage,
+});
 
 function FaqPage() {
   const [open, setOpen] = useState<number | null>(0);
