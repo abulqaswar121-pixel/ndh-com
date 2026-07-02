@@ -8,6 +8,7 @@ import { useAuth, roleHome } from "@/lib/auth";
 import { useNavigate } from "@tanstack/react-router";
 import { lovable } from "@/integrations/lovable";
 import { toast } from "sonner";
+import { checkEmailProviders } from "@/lib/auth/account-linking.functions";
 
 export const Route = createFileRoute("/signup")({
   head: () => ({ meta: [
@@ -45,6 +46,15 @@ function SignupPage() {
     e.preventDefault();
     if (password.length < 8) { toast.error("Password must be at least 8 characters"); return; }
     setLoading(true);
+    // Pre-flight: if this email already exists via Google only, tell the user clearly.
+    try {
+      const info = await checkEmailProviders({ data: { email } });
+      if (info.exists && info.providers.includes("google") && !info.providers.includes("email")) {
+        setLoading(false);
+        toast.error("This email is already registered with Google. Please sign in with Google — you can add a password afterwards in Settings.");
+        return;
+      }
+    } catch {/* non-fatal; continue */}
     const { error } = await supabase.auth.signUp({
       email,
       password,
