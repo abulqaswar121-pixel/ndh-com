@@ -343,12 +343,10 @@ function Index() {
         </div>
       </Section>
 
-      {/* FINAL CTA */}
-      <section className="relative mx-6 my-10 overflow-hidden rounded-3xl border border-border bg-hero p-10 text-white sm:p-16">
-        {/* PWA install section */}
-        {null}
-      </section>
+      {/* PWA install */}
       <InstallAppSection />
+
+      {/* FINAL CTA */}
       <section className="relative mx-6 my-10 overflow-hidden rounded-3xl border border-border bg-hero p-10 text-white sm:p-16">
         <AnimatedBlobs />
         <div className="relative mx-auto max-w-3xl text-center">
