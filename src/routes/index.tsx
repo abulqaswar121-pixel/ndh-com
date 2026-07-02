@@ -14,6 +14,7 @@ import { AnimatedBlobs } from "@/components/site/AnimatedBlobs";
 import { TypingHeadline } from "@/components/site/TypingHeadline";
 import { Reveal, Stagger, StaggerItem } from "@/components/site/Reveal";
 import { UnsplashImg } from "@/components/site/UnsplashImg";
+import { InstallAppSection } from "@/components/site/InstallApp";
 import testimonialAisha from "@/assets/testimonial-aisha-bello-founder.jpg";
 import testimonialChinedu from "@/assets/testimonial-chinedu-okafor-founder.jpg";
 import testimonialJames from "@/assets/testimonial-james-rowe-operator.jpg";
@@ -341,6 +342,9 @@ function Index() {
           ))}
         </div>
       </Section>
+
+      {/* PWA install */}
+      <InstallAppSection />
 
       {/* FINAL CTA */}
       <section className="relative mx-6 my-10 overflow-hidden rounded-3xl border border-border bg-hero p-10 text-white sm:p-16">

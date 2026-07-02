@@ -59,6 +59,8 @@ function SignupPage() {
   };
 
   const handleGoogle = async () => {
+    // Remember the intended role so we can assign it after the OAuth round-trip.
+    try { window.sessionStorage.setItem("ndh_pending_role", role); } catch {}
     const result = await lovable.auth.signInWithOAuth("google", { redirect_uri: window.location.origin + "/signup" });
     if (result?.error) toast.error((result.error as Error).message ?? "Google sign-up failed");
   };

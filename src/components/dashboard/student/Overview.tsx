@@ -1,10 +1,17 @@
 import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
+import { useServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { BookOpen, GraduationCap, Award, PlayCircle } from "lucide-react";
+import { InstallAppBanner } from "@/components/site/InstallApp";
+import {
+  verifyPaystackReference,
+  verifyMyPendingPayments,
+} from "@/lib/payments/verify.functions";
+import { toast } from "sonner";
 
 type EnrolledCourse = {
   id: string;
@@ -18,6 +25,37 @@ export function StudentOverview({ onBrowse }: { onBrowse: () => void }) {
   const [name, setName] = useState("");
   const [courses, setCourses] = useState<EnrolledCourse[]>([]);
   const [certCount, setCertCount] = useState(0);
+  const verifyRef = useServerFn(verifyPaystackReference);
+  const verifyPending = useServerFn(verifyMyPendingPayments);
+  const [reloadKey, setReloadKey] = useState(0);
+
+  // Reconcile any Paystack payment that landed us here via callback
+  useEffect(() => {
+    if (!user) return;
+    (async () => {
+      const params = new URLSearchParams(window.location.search);
+      const ref = params.get("reference") || params.get("trxref");
+      try {
+        if (ref) {
+          const res: any = await verifyRef({ data: { reference: ref } });
+          if (res?.ok) {
+            toast.success("Payment confirmed — course unlocked");
+            const url = new URL(window.location.href);
+            url.searchParams.delete("reference");
+            url.searchParams.delete("trxref");
+            window.history.replaceState({}, "", url.toString());
+            setReloadKey((k) => k + 1);
+          }
+        } else {
+          const res: any = await verifyPending({});
+          if (res?.updated > 0) {
+            toast.success("Enrollment confirmed");
+            setReloadKey((k) => k + 1);
+          }
+        }
+      } catch {/* ignore */}
+    })();
+  }, [user, verifyRef, verifyPending]);
 
   useEffect(() => {
     if (!user) return;
@@ -36,7 +74,7 @@ export function StudentOverview({ onBrowse }: { onBrowse: () => void }) {
       setCourses((enrolls as unknown as EnrolledCourse[]) || []);
       setCertCount(certs || 0);
     })();
-  }, [user]);
+  }, [user, reloadKey]);
 
   const active = courses.length;
   const completed = courses.filter((c) => c.progress >= 100).length;
@@ -51,6 +89,7 @@ export function StudentOverview({ onBrowse }: { onBrowse: () => void }) {
 
   return (
     <div className="space-y-8">
+      <InstallAppBanner />
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
           <h1 className="text-3xl font-extrabold">Welcome back, {name.split(" ")[0]}.</h1>
