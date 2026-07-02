@@ -5,6 +5,7 @@ import { Reveal, Stagger, StaggerItem } from "@/components/site/Reveal";
 import { AnimatedBlobs } from "@/components/site/AnimatedBlobs";
 import { UnsplashImg } from "@/components/site/UnsplashImg";
 import { Button } from "@/components/ui/button";
+import founderAsset from "@/assets/founder-ceo.png.asset.json";
 
 export const Route = createFileRoute("/team")({
   head: () => ({ meta: [
@@ -17,42 +18,47 @@ export const Route = createFileRoute("/team")({
   component: TeamPage,
 });
 
-type Member = { name: string; role: string; bio: string; q: string };
+type Member = { name: string; role: string; bio: string; q: string; image?: string };
 
 const founder: Member = {
-  name: "Najeeb Umar",
+  name: "Ataurrahman Najeeb Ahmad",
   role: "Founder & CEO",
   bio: "Builds NDH like a serious tech company — measurable craft, fair pay, real outcomes.",
-  q: "nigerian man kaftan portrait professional",
+  q: "african software engineer portrait office",
+  image: founderAsset.url,
 };
 
 const leadership: Member[] = [
-  { name: "Amina Sani", role: "Operations Manager", bio: "Runs day-to-day delivery, PM rituals and QA standards.", q: "hijabi woman manager office portrait" },
-  { name: "David Eze", role: "Academy Director", bio: "Owns curriculum, faculty and the Learn → Earn pipeline.", q: "african man professor portrait" },
-  { name: "Fatima Abubakar", role: "Finance Admin", bio: "Billing, payroll, escrow — clean money flow for clients and talents.", q: "muslim woman finance office portrait" },
+  { name: "Amina Sani", role: "Operations Manager", bio: "Runs day-to-day delivery, PM rituals and QA standards.", q: "african woman tech operations manager laptop office" },
+  { name: "David Eze", role: "Academy Director", bio: "Owns curriculum, faculty and the Learn → Earn pipeline.", q: "african male computer science lecturer classroom laptop" },
+  { name: "Fatima Abubakar", role: "Finance Admin", bio: "Billing, payroll, escrow — clean money flow for clients and talents.", q: "african woman fintech analyst monitors dashboard" },
 ];
 
 const hods: Member[] = [
-  { name: "Ibrahim Lawal", role: "HOD · Design", bio: "Brand systems, UI and the visual standard for every NDH project.", q: "nigerian graphic designer portrait" },
-  { name: "Chinwe Okafor", role: "HOD · Development", bio: "Web, mobile and platform engineering across the bureau.", q: "black woman software engineer portrait" },
-  { name: "Yusuf Bello", role: "HOD · Content", bio: "SEO, brand copy and editorial across client work and the blog.", q: "african man writer portrait" },
-  { name: "Grace Adeyemi", role: "HOD · Marketing", bio: "Performance ads, growth strategy and analytics.", q: "african woman marketing professional" },
-  { name: "Aisha Mohammed", role: "HOD · Media", bio: "Video, motion, photography and podcast production.", q: "hijabi videographer content creator" },
+  { name: "Ibrahim Lawal", role: "HOD · Design", bio: "Brand systems, UI and the visual standard for every NDH project.", q: "african ui ux designer figma laptop workspace" },
+  { name: "Chinwe Okafor", role: "HOD · Development", bio: "Web, mobile and platform engineering across the bureau.", q: "black woman software engineer coding monitor" },
+  { name: "Yusuf Bello", role: "HOD · Content", bio: "SEO, brand copy and editorial across client work and the blog.", q: "african man tech writer laptop workspace" },
+  { name: "Grace Adeyemi", role: "HOD · Marketing", bio: "Performance ads, growth strategy and analytics.", q: "african woman digital marketer analytics dashboard laptop" },
+  { name: "Aisha Mohammed", role: "HOD · Media", bio: "Video, motion, photography and podcast production.", q: "african woman video editor computer editing suite" },
 ];
 
 const pms: Member[] = [
-  { name: "Tobi Williams", role: "PM · Design", bio: "Single point of contact for every design engagement.", q: "african project manager portrait" },
-  { name: "Hauwa Garba", role: "PM · Development", bio: "Sprints, scope and shipping for engineering work.", q: "muslim woman tech project manager" },
-  { name: "Emeka Nwosu", role: "PM · Content", bio: "Briefs, calendars and editorial pipelines.", q: "nigerian editor portrait" },
-  { name: "Zainab Yakubu", role: "PM · Marketing", bio: "Campaign management end-to-end.", q: "hijabi marketing manager portrait" },
-  { name: "Samuel Okoro", role: "PM · Media", bio: "Production schedules from script to delivery.", q: "african film producer portrait" },
+  { name: "Tobi Williams", role: "PM · Design", bio: "Single point of contact for every design engagement.", q: "african project manager kanban board tech office" },
+  { name: "Hauwa Garba", role: "PM · Development", bio: "Sprints, scope and shipping for engineering work.", q: "african woman scrum master standup tech team" },
+  { name: "Emeka Nwosu", role: "PM · Content", bio: "Briefs, calendars and editorial pipelines.", q: "african man content strategist laptop office" },
+  { name: "Zainab Yakubu", role: "PM · Marketing", bio: "Campaign management end-to-end.", q: "african woman marketing manager dashboard tech office" },
+  { name: "Samuel Okoro", role: "PM · Media", bio: "Production schedules from script to delivery.", q: "african media producer editing computer studio" },
 ];
 
 function Card({ m, size = "md" }: { m: Member; size?: "lg" | "md" }) {
   return (
     <div className="group relative h-full overflow-hidden rounded-2xl border border-border bg-card transition-all hover:-translate-y-1 hover:shadow-glow">
       <div className={size === "lg" ? "aspect-[4/3]" : "aspect-[4/5]"}>
-        <UnsplashImg q={m.q} alt={m.name} w={600} h={750} sig={m.name} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
+        {m.image ? (
+          <img src={m.image} alt={m.name} loading="lazy" className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
+        ) : (
+          <UnsplashImg q={m.q} alt={m.name} w={600} h={750} sig={m.name} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
+        )}
       </div>
       <div className="p-5">
         <div className="text-xs font-semibold uppercase tracking-widest text-[oklch(0.65_0.19_252)]">{m.role}</div>
@@ -81,7 +87,7 @@ function TeamPage() {
         <div className="grid items-center gap-8 lg:grid-cols-[1fr_1.3fr]">
           <Reveal>
             <div className="overflow-hidden rounded-3xl border border-border shadow-elegant">
-              <UnsplashImg q={founder.q} alt={founder.name} w={800} h={900} sig="founder" className="h-full w-full object-cover" />
+              <img src={founder.image!} alt={founder.name} className="h-full w-full object-cover" />
             </div>
           </Reveal>
           <Reveal delay={0.1}>
