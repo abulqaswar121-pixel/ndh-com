@@ -7,6 +7,8 @@ import { UnsplashImg } from "@/components/site/UnsplashImg";
 import { Button } from "@/components/ui/button";
 import { Briefcase, MapPin, Clock, ArrowRight } from "lucide-react";
 import { useState } from "react";
+import { submitCareerApplication } from "@/lib/content/blog.functions";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/careers")({
   head: () => ({ meta: [
@@ -31,6 +33,26 @@ const roles = [
 
 function CareersPage() {
   const [sent, setSent] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const fd = new FormData(e.currentTarget);
+    setSubmitting(true);
+    try {
+      await submitCareerApplication({ data: {
+        full_name: String(fd.get("name") || ""),
+        email: String(fd.get("email") || ""),
+        role_applied: String(fd.get("role") || ""),
+        portfolio_url: String(fd.get("portfolio") || "") || undefined,
+        cover_letter: String(fd.get("cover") || "") || undefined,
+      }});
+      setSent(true);
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Failed to submit");
+    } finally {
+      setSubmitting(false);
+    }
+  }
   return (
     <SiteLayout>
       <section className="relative isolate overflow-hidden bg-hero py-24 text-white">
@@ -95,10 +117,7 @@ function CareersPage() {
       </Section>
 
       <Section eyebrow="Apply" title="Send us your details.">
-        <form
-          onSubmit={(e) => { e.preventDefault(); setSent(true); }}
-          className="mx-auto max-w-2xl rounded-2xl border border-border bg-card p-6 sm:p-8"
-        >
+        <form onSubmit={onSubmit} className="mx-auto max-w-2xl rounded-2xl border border-border bg-card p-6 sm:p-8">
           {sent ? (
             <div className="text-center">
               <div className="mx-auto grid h-14 w-14 place-items-center rounded-full bg-gradient-brand text-white">✓</div>
@@ -115,9 +134,9 @@ function CareersPage() {
               <Field label="Portfolio / LinkedIn" name="portfolio" />
               <div>
                 <label className="text-sm font-medium">Tell us about yourself</label>
-                <textarea rows={5} required className="mt-1 w-full rounded-lg border border-border bg-background px-3 py-2.5 text-sm" />
+                <textarea name="cover" rows={5} required className="mt-1 w-full rounded-lg border border-border bg-background px-3 py-2.5 text-sm" />
               </div>
-              <Button type="submit" variant="brand" size="lg">Submit application <Clock className="h-4 w-4" /></Button>
+              <Button type="submit" variant="brand" size="lg" disabled={submitting}>{submitting ? "Submitting…" : "Submit application"} <Clock className="h-4 w-4" /></Button>
             </div>
           )}
         </form>

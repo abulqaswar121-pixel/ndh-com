@@ -36,6 +36,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as VerifyIdRouteImport } from './routes/verify.$id'
 import { Route as EmailUnsubscribeRouteImport } from './routes/email/unsubscribe'
+import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as AuthAcceptRouteImport } from './routes/auth.accept'
 import { Route as AdminStudentAffairsRouteImport } from './routes/admin.student-affairs'
 import { Route as AdminRegistrarRouteImport } from './routes/admin.registrar'
@@ -201,6 +202,11 @@ const EmailUnsubscribeRoute = EmailUnsubscribeRouteImport.update({
   id: '/email/unsubscribe',
   path: '/email/unsubscribe',
   getParentRoute: () => rootRouteImport,
+} as any)
+const BlogSlugRoute = BlogSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => BlogRoute,
 } as any)
 const AuthAcceptRoute = AuthAcceptRouteImport.update({
   id: '/auth/accept',
@@ -382,7 +388,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/academy': typeof AcademyRouteWithChildren
-  '/blog': typeof BlogRoute
+  '/blog': typeof BlogRouteWithChildren
   '/careers': typeof CareersRoute
   '/client': typeof ClientRoute
   '/contact': typeof ContactRoute
@@ -413,6 +419,7 @@ export interface FileRoutesByFullPath {
   '/admin/registrar': typeof AdminRegistrarRoute
   '/admin/student-affairs': typeof AdminStudentAffairsRoute
   '/auth/accept': typeof AuthAcceptRoute
+  '/blog/$slug': typeof BlogSlugRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/verify/$id': typeof VerifyIdRoute
   '/admin/': typeof AdminIndexRoute
@@ -441,7 +448,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/academy': typeof AcademyRouteWithChildren
-  '/blog': typeof BlogRoute
+  '/blog': typeof BlogRouteWithChildren
   '/careers': typeof CareersRoute
   '/client': typeof ClientRoute
   '/contact': typeof ContactRoute
@@ -472,6 +479,7 @@ export interface FileRoutesByTo {
   '/admin/registrar': typeof AdminRegistrarRoute
   '/admin/student-affairs': typeof AdminStudentAffairsRoute
   '/auth/accept': typeof AuthAcceptRoute
+  '/blog/$slug': typeof BlogSlugRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/verify/$id': typeof VerifyIdRoute
   '/admin': typeof AdminIndexRoute
@@ -502,7 +510,7 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/about': typeof AboutRoute
   '/academy': typeof AcademyRouteWithChildren
-  '/blog': typeof BlogRoute
+  '/blog': typeof BlogRouteWithChildren
   '/careers': typeof CareersRoute
   '/client': typeof ClientRoute
   '/contact': typeof ContactRoute
@@ -533,6 +541,7 @@ export interface FileRoutesById {
   '/admin/registrar': typeof AdminRegistrarRoute
   '/admin/student-affairs': typeof AdminStudentAffairsRoute
   '/auth/accept': typeof AuthAcceptRoute
+  '/blog/$slug': typeof BlogSlugRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/verify/$id': typeof VerifyIdRoute
   '/admin/': typeof AdminIndexRoute
@@ -594,6 +603,7 @@ export interface FileRouteTypes {
     | '/admin/registrar'
     | '/admin/student-affairs'
     | '/auth/accept'
+    | '/blog/$slug'
     | '/email/unsubscribe'
     | '/verify/$id'
     | '/admin/'
@@ -653,6 +663,7 @@ export interface FileRouteTypes {
     | '/admin/registrar'
     | '/admin/student-affairs'
     | '/auth/accept'
+    | '/blog/$slug'
     | '/email/unsubscribe'
     | '/verify/$id'
     | '/admin'
@@ -713,6 +724,7 @@ export interface FileRouteTypes {
     | '/admin/registrar'
     | '/admin/student-affairs'
     | '/auth/accept'
+    | '/blog/$slug'
     | '/email/unsubscribe'
     | '/verify/$id'
     | '/admin/'
@@ -743,7 +755,7 @@ export interface RootRouteChildren {
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AboutRoute: typeof AboutRoute
   AcademyRoute: typeof AcademyRouteWithChildren
-  BlogRoute: typeof BlogRoute
+  BlogRoute: typeof BlogRouteWithChildren
   CareersRoute: typeof CareersRoute
   ClientRoute: typeof ClientRoute
   ContactRoute: typeof ContactRoute
@@ -970,6 +982,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/email/unsubscribe'
       preLoaderRoute: typeof EmailUnsubscribeRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/blog/$slug': {
+      id: '/blog/$slug'
+      path: '/$slug'
+      fullPath: '/blog/$slug'
+      preLoaderRoute: typeof BlogSlugRouteImport
+      parentRoute: typeof BlogRoute
     }
     '/auth/accept': {
       id: '/auth/accept'
@@ -1249,6 +1268,16 @@ const AcademyRouteChildren: AcademyRouteChildren = {
 const AcademyRouteWithChildren =
   AcademyRoute._addFileChildren(AcademyRouteChildren)
 
+interface BlogRouteChildren {
+  BlogSlugRoute: typeof BlogSlugRoute
+}
+
+const BlogRouteChildren: BlogRouteChildren = {
+  BlogSlugRoute: BlogSlugRoute,
+}
+
+const BlogRouteWithChildren = BlogRoute._addFileChildren(BlogRouteChildren)
+
 interface VerifyRouteChildren {
   VerifyIdRoute: typeof VerifyIdRoute
 }
@@ -1265,7 +1294,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AboutRoute: AboutRoute,
   AcademyRoute: AcademyRouteWithChildren,
-  BlogRoute: BlogRoute,
+  BlogRoute: BlogRouteWithChildren,
   CareersRoute: CareersRoute,
   ClientRoute: ClientRoute,
   ContactRoute: ContactRoute,
