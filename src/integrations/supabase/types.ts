@@ -276,6 +276,51 @@ export type Database = {
           },
         ]
       }
+      blog_posts: {
+        Row: {
+          author: string
+          body_md: string
+          cover_query: string
+          created_at: string
+          excerpt: string
+          id: string
+          published: boolean
+          published_at: string
+          read_minutes: number
+          slug: string
+          tag: string
+          title: string
+        }
+        Insert: {
+          author?: string
+          body_md?: string
+          cover_query?: string
+          created_at?: string
+          excerpt: string
+          id?: string
+          published?: boolean
+          published_at?: string
+          read_minutes?: number
+          slug: string
+          tag?: string
+          title: string
+        }
+        Update: {
+          author?: string
+          body_md?: string
+          cover_query?: string
+          created_at?: string
+          excerpt?: string
+          id?: string
+          published?: boolean
+          published_at?: string
+          read_minutes?: number
+          slug?: string
+          tag?: string
+          title?: string
+        }
+        Relationships: []
+      }
       broadcasts: {
         Row: {
           audience: string[]
@@ -312,6 +357,39 @@ export type Database = {
           sent_at?: string | null
           status?: string
           title?: string
+        }
+        Relationships: []
+      }
+      career_applications: {
+        Row: {
+          cover_letter: string | null
+          created_at: string
+          email: string
+          full_name: string
+          id: string
+          portfolio_url: string | null
+          role_applied: string
+          status: string
+        }
+        Insert: {
+          cover_letter?: string | null
+          created_at?: string
+          email: string
+          full_name: string
+          id?: string
+          portfolio_url?: string | null
+          role_applied: string
+          status?: string
+        }
+        Update: {
+          cover_letter?: string | null
+          created_at?: string
+          email?: string
+          full_name?: string
+          id?: string
+          portfolio_url?: string | null
+          role_applied?: string
+          status?: string
         }
         Relationships: []
       }
