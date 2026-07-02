@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useState } from "react";
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { Section } from "@/components/site/Section";
 import { Button } from "@/components/ui/button";
@@ -6,6 +7,7 @@ import { Reveal, Stagger, StaggerItem } from "@/components/site/Reveal";
 import { AnimatedBlobs } from "@/components/site/AnimatedBlobs";
 import { UnsplashImg } from "@/components/site/UnsplashImg";
 import { GraduationCap, BookOpen, Award, ArrowRight, Briefcase, Calendar, CheckCircle2, Globe2 } from "lucide-react";
+import { ProgramDetailsDialog } from "@/components/academy/ProgramDetailsDialog";
 
 export const Route = createFileRoute("/academy")({
   head: () => ({ meta: [
@@ -18,46 +20,40 @@ export const Route = createFileRoute("/academy")({
   component: AcademyPage,
 });
 
-const certificates = [
-  "Certificate in Graphic Design",
-  "Certificate in Social Media Management",
-  "Certificate in Content Writing",
-  "Certificate in Basic Web Design",
-  "Certificate in Virtual Assistance",
-  "Certificate in AI Tools Mastery",
-  "Certificate in Video Editing",
-  "Certificate in Digital Photography",
+type Program = { name: string; slug: string };
+const certificates: Program[] = [
+  { name: "Certificate in Graphic Design", slug: "certificate-graphic-design" },
+  { name: "Certificate in Social Media Management", slug: "certificate-social-media-management" },
+  { name: "Certificate in Content Writing", slug: "certificate-content-writing" },
+  { name: "Certificate in Basic Web Design", slug: "certificate-basic-web-design" },
+  { name: "Certificate in Virtual Assistance", slug: "certificate-virtual-assistance" },
+  { name: "Certificate in AI Tools Mastery", slug: "certificate-ai-tools-mastery" },
+  { name: "Certificate in Video Editing", slug: "certificate-video-editing" },
+  { name: "Certificate in Digital Photography", slug: "certificate-digital-photography" },
 ];
-const diplomas = [
-  "Diploma in Digital Marketing",
-  "Diploma in Full-Stack Web Development",
-  "Diploma in UI/UX Design",
-  "Diploma in Video Production & Editing",
-  "Diploma in Graphic Design & Branding",
-  "Diploma in Content Creation & Copywriting",
-  "Diploma in E-Commerce & Dropshipping",
-  "Diploma in Data Analysis",
+const diplomas: Program[] = [
+  { name: "Diploma in Digital Marketing", slug: "diploma-digital-marketing" },
+  { name: "Diploma in Full-Stack Web Development", slug: "diploma-fullstack-web-development" },
+  { name: "Diploma in UI/UX Design", slug: "diploma-ui-ux-design" },
+  { name: "Diploma in Video Production & Editing", slug: "diploma-video-production-editing" },
+  { name: "Diploma in Graphic Design & Branding", slug: "diploma-graphic-design-branding" },
+  { name: "Diploma in Content Creation & Copywriting", slug: "diploma-content-creation-copywriting" },
+  { name: "Diploma in E-Commerce & Dropshipping", slug: "diploma-ecommerce-dropshipping" },
+  { name: "Diploma in Data Analysis", slug: "diploma-data-analysis" },
 ];
-const professionals = [
-  "Professional Diploma in Software Engineering",
-  "Professional Diploma in Digital Business Management",
-  "Professional Diploma in Cybersecurity",
-  "Professional Diploma in Full Brand Strategy",
-  "Professional Diploma in Advanced Web & Mobile Development",
-];
-
-const tuition = [
-  { region: "Nigeria", cert: "₦95,000", dip: "₦250,000", pro: "₦650,000" },
-  { region: "UK", cert: "£260", dip: "£680", pro: "£1,500" },
-  { region: "US / Canada", cert: "$320", dip: "$850", pro: "$1,900" },
-  { region: "Europe", cert: "€290", dip: "€780", pro: "€1,750" },
-  { region: "UAE / GCC", cert: "AED 1,150", dip: "AED 3,100", pro: "AED 7,000" },
+const professionals: Program[] = [
+  { name: "Professional Diploma in Software Engineering", slug: "professional-software-engineering" },
+  { name: "Professional Diploma in Digital Business Management", slug: "professional-digital-business-management" },
+  { name: "Professional Diploma in Cybersecurity", slug: "professional-cybersecurity" },
+  { name: "Professional Diploma in Full Brand Strategy", slug: "professional-full-brand-strategy" },
+  { name: "Professional Diploma in Advanced Web & Mobile Development", slug: "professional-advanced-web-mobile" },
 ];
 
 function ProgramTier({
-  tier, duration, why, programs, accent, categoryPath,
+  tier, duration, why, programs, accent, categoryPath, onPick,
 }: {
-  tier: string; duration: string; why: string; programs: string[]; accent: string; categoryPath: string;
+  tier: string; duration: string; why: string; programs: Program[]; accent: string; categoryPath: string;
+  onPick: (slug: string) => void;
 }) {
   return (
     <Reveal>
@@ -77,10 +73,16 @@ function ProgramTier({
         <div className="p-6 sm:p-8">
           <ul className="grid gap-3 sm:grid-cols-2">
             {programs.map((p) => (
-              <li key={p} className="group flex items-center gap-3 rounded-xl border border-border bg-background/50 p-4 transition hover:-translate-y-0.5 hover:border-[oklch(0.65_0.19_252)]/40 hover:shadow-elegant">
-                <CheckCircle2 className="h-4 w-4 shrink-0 text-[oklch(0.78_0.13_180)]" />
-                <span className="flex-1 text-sm font-semibold">{p}</span>
-                <ArrowRight className="h-4 w-4 text-muted-foreground transition-transform group-hover:translate-x-1" />
+              <li key={p.slug}>
+                <button
+                  type="button"
+                  onClick={() => onPick(p.slug)}
+                  className="group flex w-full items-center gap-3 rounded-xl border border-border bg-background/50 p-4 text-left transition hover:-translate-y-0.5 hover:border-[oklch(0.65_0.19_252)]/40 hover:shadow-elegant"
+                >
+                  <CheckCircle2 className="h-4 w-4 shrink-0 text-[oklch(0.78_0.13_180)]" />
+                  <span className="flex-1 text-sm font-semibold">{p.name}</span>
+                  <ArrowRight className="h-4 w-4 text-muted-foreground transition-transform group-hover:translate-x-1" />
+                </button>
               </li>
             ))}
           </ul>
@@ -100,6 +102,7 @@ function ProgramTier({
 }
 
 function AcademyPage() {
+  const [pickedSlug, setPickedSlug] = useState<string | null>(null);
   return (
     <SiteLayout>
       <section className="relative isolate overflow-hidden text-white">
@@ -177,6 +180,7 @@ function AcademyPage() {
             programs={certificates}
             accent="linear-gradient(135deg, oklch(0.65 0.19 252), oklch(0.78 0.13 180))"
             categoryPath="/academy/certificate-programs"
+            onPick={setPickedSlug}
           />
           <ProgramTier
             tier="Diploma Programs"
@@ -185,6 +189,7 @@ function AcademyPage() {
             programs={diplomas}
             accent="linear-gradient(135deg, oklch(0.62 0.21 290), oklch(0.65 0.19 252))"
             categoryPath="/academy/diploma-programs"
+            onPick={setPickedSlug}
           />
           <ProgramTier
             tier="Professional Programs"
@@ -193,6 +198,7 @@ function AcademyPage() {
             programs={professionals}
             accent="linear-gradient(135deg, oklch(0.2 0.1 268), oklch(0.62 0.21 290))"
             categoryPath="/academy/professional-programs"
+            onPick={setPickedSlug}
           />
         </div>
       </Section>
@@ -225,31 +231,13 @@ function AcademyPage() {
         </div>
       </Section>
 
-      {/* Tuition geo-pricing */}
-      <Section eyebrow="Tuition & Fees" title="Geo-priced. Fair everywhere.">
-        <div className="overflow-hidden rounded-2xl border border-border">
-          <table className="w-full text-sm">
-            <thead className="bg-secondary/60 text-xs uppercase tracking-widest text-muted-foreground">
-              <tr>
-                <th className="px-4 py-3 text-left">Region</th>
-                <th className="px-4 py-3 text-left">Certificate (3m)</th>
-                <th className="px-4 py-3 text-left">Diploma (6m)</th>
-                <th className="px-4 py-3 text-left">Professional (12m)</th>
-              </tr>
-            </thead>
-            <tbody>
-              {tuition.map((t) => (
-                <tr key={t.region} className="border-t border-border odd:bg-background even:bg-secondary/20">
-                  <td className="px-4 py-3 font-semibold">{t.region}</td>
-                  <td className="px-4 py-3">{t.cert}</td>
-                  <td className="px-4 py-3">{t.dip}</td>
-                  <td className="px-4 py-3">{t.pro}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-        <p className="mt-3 text-xs text-muted-foreground">Installment plans available. Scholarships for the top 5% of applicants.</p>
+      {/* Pricing note */}
+      <Section eyebrow="Tuition" title="Every program has its own tuition — geo-priced and fair.">
+        <p className="max-w-3xl text-muted-foreground">
+          Click any program above to see its full overview, curriculum, entry criteria and exact tuition —
+          automatically converted into your local currency (NGN, USD, GBP, EUR, CAD or AED). Installment plans
+          and scholarships (top 5% of applicants) are available on every tier.
+        </p>
       </Section>
 
       {/* CTA */}
@@ -265,6 +253,8 @@ function AcademyPage() {
           </div>
         </div>
       </section>
+
+      <ProgramDetailsDialog slug={pickedSlug} open={!!pickedSlug} onOpenChange={(o) => !o && setPickedSlug(null)} />
     </SiteLayout>
   );
 }

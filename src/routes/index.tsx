@@ -58,13 +58,15 @@ const testimonials = [
   { name: "Sarah Mitchell", role: "Marketing, Toronto", quote: "Best agency-feel I've had at startup pricing. Hire them.", q: "canadian woman professional smiling" },
 ];
 
+import founderAsset from "@/assets/founder-ceo.png.asset.json";
+
 const team = [
-  { name: "Najeeb Aliyu", role: "Founder & CEO", q: "nigerian muslim man entrepreneur portrait" },
-  { name: "Fatima Bello", role: "Head of Academy", q: "nigerian hijabi woman professional portrait" },
-  { name: "Emmanuel Adeyemi", role: "Head of Design", q: "nigerian christian man designer portrait" },
-  { name: "Halima Suleiman", role: "Head of Tech", q: "northern nigerian woman engineer portrait" },
-  { name: "Chinwe Okeke", role: "Head of Marketing", q: "southern nigerian woman marketing portrait" },
-  { name: "Yusuf Abdullahi", role: "Head of Operations", q: "nigerian muslim professional man portrait" },
+  { name: "Ataurrahman Najeeb Ahmad", role: "Founder & CEO", q: "african software engineer coding office", image: founderAsset.url },
+  { name: "Fatima Bello", role: "Head of Academy", q: "african woman computer science lecturer laptop" },
+  { name: "Emmanuel Adeyemi", role: "Head of Design", q: "african ui ux designer working on laptop" },
+  { name: "Halima Suleiman", role: "Head of Tech", q: "african woman software developer coding monitor" },
+  { name: "Chinwe Okeke", role: "Head of Marketing", q: "african digital marketer analytics dashboard" },
+  { name: "Yusuf Abdullahi", role: "Head of Operations", q: "african tech operations manager server room" },
 ];
 
 const programs = [
@@ -91,7 +93,8 @@ const faqs = [
   { q: "Is my work confidential?", a: "Always. We sign NDAs on request and our talents only see the project, not your personal contact." },
 ];
 
-const HERO_VIDEO = "https://assets.mixkit.co/videos/4828/4828-720.mp4";
+// Tech / coding hero video (Pexels, hotlink-safe)
+const HERO_VIDEO = "https://videos.pexels.com/video-files/3130284/3130284-uhd_2560_1440_30fps.mp4";
 
 function Index() {
   return (
@@ -243,7 +246,7 @@ function Index() {
           </Reveal>
           <Reveal delay={0.1}>
             <div className="relative overflow-hidden rounded-3xl border border-border shadow-elegant">
-              <UnsplashImg q="sokoto nigeria architecture culture" alt="NDH headquarters in Sokoto" w={1000} h={1200} className="h-full w-full object-cover" />
+              <UnsplashImg q="modern tech company office team collaboration computers" alt="NDH tech bureau" w={1000} h={1200} className="h-full w-full object-cover" />
             </div>
           </Reveal>
         </div>
@@ -256,7 +259,11 @@ function Index() {
             <StaggerItem key={m.name}>
               <div className="group overflow-hidden rounded-2xl border border-border bg-card transition-all hover:-translate-y-1 hover:shadow-glow">
                 <div className="aspect-[4/5] overflow-hidden">
-                  <UnsplashImg q={m.q} alt={m.name} w={600} h={750} sig={m.name} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" />
+                  {"image" in m && (m as { image?: string }).image ? (
+                    <img src={(m as { image: string }).image} alt={m.name} loading="lazy" className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" />
+                  ) : (
+                    <UnsplashImg q={m.q} alt={m.name} w={600} h={750} sig={m.name} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" />
+                  )}
                 </div>
                 <div className="p-5">
                   <div className="font-bold">{m.name}</div>

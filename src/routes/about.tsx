@@ -6,6 +6,7 @@ import { Reveal, Stagger, StaggerItem } from "@/components/site/Reveal";
 import { UnsplashImg } from "@/components/site/UnsplashImg";
 import { Button } from "@/components/ui/button";
 import { HeartHandshake, Compass, Target, Sparkles, MapPin } from "lucide-react";
+import founderAsset from "@/assets/founder-ceo.png.asset.json";
 
 export const Route = createFileRoute("/about")({
   head: () => ({ meta: [
@@ -49,7 +50,7 @@ function AboutPage() {
           </Reveal>
           <Reveal delay={0.1}>
             <div className="overflow-hidden rounded-3xl border border-border shadow-elegant">
-              <UnsplashImg q="african tech entrepreneurs office" alt="NDH story" w={900} h={700} className="h-full w-full object-cover" />
+              <UnsplashImg q="african tech company office developers computers collaboration" alt="NDH story" w={900} h={700} className="h-full w-full object-cover" />
             </div>
           </Reveal>
         </div>
@@ -90,11 +91,11 @@ function AboutPage() {
       <Section eyebrow="Founder" title="Built with vision and discipline.">
         <div className="grid items-center gap-8 md:grid-cols-[280px_1fr]">
           <div className="overflow-hidden rounded-3xl border border-border shadow-glow">
-            <UnsplashImg q="nigerian man kaftan portrait professional" alt="Najeeb, Founder & CEO" w={400} h={500} sig="founder-about" className="h-full w-full object-cover" />
+            <img src={founderAsset.url} alt="Ataurrahman Najeeb Ahmad, Founder & CEO" className="h-full w-full object-cover" />
           </div>
           <div>
             <div className="text-xs font-semibold uppercase tracking-widest text-[oklch(0.65_0.19_252)]">Founder & CEO</div>
-            <div className="mt-1 text-2xl font-extrabold">Najeeb Umar</div>
+            <div className="mt-1 text-2xl font-extrabold">Ataurrahman Najeeb Ahmad</div>
             <p className="mt-3 max-w-2xl text-muted-foreground">"We're building NDH like a serious tech company — measurable quality, fair pay for talents, and outcomes our clients can feel."</p>
             <div className="mt-5 flex gap-3">
               <Link to="/team"><Button variant="brand">Meet the team</Button></Link>
