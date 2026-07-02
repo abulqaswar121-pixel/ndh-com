@@ -6,6 +6,7 @@ import { useCurrency } from "@/lib/currency";
 import { Button } from "@/components/ui/button";
 import { Plus, ListTodo, MessageSquare, Wallet, CheckCircle2, Clock } from "lucide-react";
 import { InstallAppBanner } from "@/components/site/InstallApp";
+import { SetPasswordNudge } from "@/components/auth/SetPasswordNudge";
 import {
   verifyPaystackReference,
   verifyMyPendingPayments,
