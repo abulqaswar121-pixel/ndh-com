@@ -246,7 +246,7 @@ function Index() {
           </Reveal>
           <Reveal delay={0.1}>
             <div className="relative overflow-hidden rounded-3xl border border-border shadow-elegant">
-              <UnsplashImg q="sokoto nigeria architecture culture" alt="NDH headquarters in Sokoto" w={1000} h={1200} className="h-full w-full object-cover" />
+              <UnsplashImg q="modern tech company office team collaboration computers" alt="NDH tech bureau" w={1000} h={1200} className="h-full w-full object-cover" />
             </div>
           </Reveal>
         </div>
