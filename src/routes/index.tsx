@@ -174,7 +174,7 @@ function Index() {
                 <h3 className="text-lg font-bold">{s.title}</h3>
                 <p className="mt-2 text-sm text-muted-foreground">{s.desc}</p>
                 <div className="mt-5 inline-flex items-center gap-1 text-sm font-semibold text-foreground/80 group-hover:text-foreground">
-                  Learn more <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                  Explore {s.title} services <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                 </div>
                 <div className="pointer-events-none absolute -right-12 -top-12 h-32 w-32 rounded-full bg-gradient-brand opacity-0 blur-2xl transition-opacity group-hover:opacity-30" />
               </Link>
