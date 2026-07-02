@@ -188,7 +188,7 @@ export const getInstructorCourses = createServerFn({ method: "GET" })
   .handler(async ({ context }) => {
     const { data, error } = await context.supabase
       .from("courses")
-      .select("id, program_name, slug, program_type, cover_image, is_published, students_count, curriculum_status, instructor_id")
+      .select("id, program_name, slug, program_type, cover_image, is_published, students_count, curriculum_status, instructor_id, tuition_ngn")
       .eq("instructor_id", context.userId)
       .order("program_name");
     if (error) throw new Error(error.message);

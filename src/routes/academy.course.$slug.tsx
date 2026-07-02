@@ -1,4 +1,4 @@
-import { createFileRoute, Link, notFound, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { Section } from "@/components/site/Section";
@@ -42,7 +42,6 @@ function CourseDetail() {
   const { slug } = Route.useParams();
   const { format } = useCurrency();
   const { user } = useAuth();
-  const navigate = useNavigate();
   const [course, setCourse] = useState<CourseRow | null>(null);
   const [modules, setModules] = useState<ModuleRow[]>([]);
   const [lessonsByModule, setLessonsByModule] = useState<Record<string, LessonRow[]>>({});
@@ -83,7 +82,19 @@ function CourseDetail() {
   const totalMinutes = Object.values(lessonsByModule).flat().reduce((a, b) => a + (b.duration_minutes || 0), 0);
   const learn = (course.what_youll_learn as unknown as string[]) || [];
 
-  const applyHref = user ? `/academy/apply/${course.slug}` : `/signup?role=student&next=${encodeURIComponent(`/academy/apply/${course.slug}`)}`;
+  const ApplyButton = ({ className }: { className?: string }) =>
+    user ? (
+      <Link to="/academy/apply/$slug" params={{ slug: course.slug }} className={className}>
+        <Button variant="brand" size="lg" className="w-full">Apply for this course</Button>
+      </Link>
+    ) : (
+      <a
+        href={`/signup?role=student&next=${encodeURIComponent(`/academy/apply/${course.slug}`)}`}
+        className={className}
+      >
+        <Button variant="brand" size="lg" className="w-full">Sign up to apply</Button>
+      </a>
+    );
 
   return (
     <SiteLayout>
@@ -109,7 +120,7 @@ function CourseDetail() {
             <div className="text-xs uppercase tracking-widest text-white/70">Tuition</div>
             <div className="mt-1 text-4xl font-extrabold">{format(Number(course.tuition_ngn))}</div>
             <div className="text-xs text-white/60">Geo-priced · pay in your local currency</div>
-            <Button variant="brand" size="lg" className="mt-5 w-full" onClick={() => navigate({ to: applyHref })}>Apply for this course</Button>
+            <div className="mt-5"><ApplyButton className="block" /></div>
             <ul className="mt-5 space-y-2 text-sm text-white/80">
               <li className="flex items-center gap-2"><Award className="h-4 w-4 text-[oklch(0.78_0.13_180)]" /> Verifiable certificate (QR)</li>
               <li className="flex items-center gap-2"><PlayCircle className="h-4 w-4 text-[oklch(0.78_0.13_180)]" /> Live + recorded classes</li>
@@ -191,7 +202,7 @@ function CourseDetail() {
               <div className="text-xs font-semibold uppercase tracking-widest text-[oklch(0.65_0.19_252)]">Instructor</div>
               <p className="mt-2 text-sm text-muted-foreground">An NDH industry instructor will be assigned to your cohort. Profile published 2 weeks before cohort start.</p>
             </div>
-            <Button variant="brand" size="lg" className="w-full" onClick={() => navigate({ to: applyHref })}>Apply now</Button>
+            <ApplyButton className="block" />
           </aside>
         </div>
       </Section>

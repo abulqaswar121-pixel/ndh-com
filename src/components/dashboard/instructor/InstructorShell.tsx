@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { DashboardShell, type NavItem } from "@/components/dashboard/Sidebar";
-import { LayoutDashboard, BookOpen, Layers, ClipboardList, Video, Users as UsersIcon, GraduationCap } from "lucide-react";
+import { LayoutDashboard, BookOpen, Layers, ClipboardList, Video, Users as UsersIcon, GraduationCap, Wallet } from "lucide-react";
 import { useRouterState, useNavigate } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
@@ -19,7 +19,7 @@ import {
   getInstructorCourses, getCourseRoster,
 } from "@/lib/instructor/instructor.functions";
 
-type Course = { id: string; program_name: string; slug: string | null; program_type: string; cover_image: string | null; is_published: boolean; students_count: number | null; curriculum_status: string; instructor_id: string | null };
+type Course = { id: string; program_name: string; slug: string | null; program_type: string; cover_image: string | null; is_published: boolean; students_count: number | null; curriculum_status: string; instructor_id: string | null; tuition_ngn: number | null };
 type Module = { id: string; course_id: string; title: string; description: string | null; position: number };
 type Lesson = { id: string; module_id: string; title: string; type: "video"|"pdf"|"text"; content_url: string | null; content_text: string | null; duration_minutes: number | null; position: number; is_preview: boolean };
 type Assignment = { id: string; course_id: string; title: string; instructions: string | null; max_score: number; due_at: string | null };
@@ -34,6 +34,7 @@ const NAV: NavItem[] = [
   { label: "Assignments", to: "/dashboard/instructor", search: { tab: "assignments" }, icon: ClipboardList },
   { label: "Live Classes", to: "/dashboard/instructor", search: { tab: "live" }, icon: Video },
   { label: "Students", to: "/dashboard/instructor", search: { tab: "students" }, icon: UsersIcon },
+  { label: "Earnings", to: "/dashboard/instructor", search: { tab: "earnings" }, icon: Wallet },
 ];
 
 export function InstructorShell() {
@@ -71,9 +72,77 @@ export function InstructorShell() {
           {tab === "assignments" && activeCourse && <Assignments course={activeCourse} />}
           {tab === "live" && activeCourse && <Live course={activeCourse} />}
           {tab === "students" && activeCourse && <Roster course={activeCourse} />}
+          {tab === "earnings" && <Earnings courses={courses} />}
         </div>
       )}
     </DashboardShell>
+  );
+}
+
+// ---------- EARNINGS ----------
+const INSTRUCTOR_REVENUE_SHARE = 0.2; // 20% of tuition per active enrollment
+function Earnings({ courses }: { courses: Course[] }) {
+  const [rows, setRows] = useState<Array<{ course: Course; active: number; completed: number; gross: number; share: number }>>([]);
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    (async () => {
+      if (courses.length === 0) { setLoading(false); return; }
+      const results = await Promise.all(courses.map(async (c) => {
+        const [{ count: active }, { count: completed }] = await Promise.all([
+          supabase.from("enrollments").select("id", { count: "exact", head: true }).eq("course_id", c.id).in("status", ["active", "completed"]).eq("payment_status", "paid"),
+          supabase.from("enrollments").select("id", { count: "exact", head: true }).eq("course_id", c.id).eq("status", "completed"),
+        ]);
+        const tuition = Number(c.tuition_ngn ?? 0);
+        const paidCount = active ?? 0;
+        const gross = paidCount * tuition;
+        return { course: c, active: paidCount, completed: completed ?? 0, gross, share: gross * INSTRUCTOR_REVENUE_SHARE };
+      }));
+      setRows(results);
+      setLoading(false);
+    })();
+  }, [courses]);
+  const totalShare = rows.reduce((a, b) => a + b.share, 0);
+  const totalStudents = rows.reduce((a, b) => a + b.active, 0);
+  const fmt = (n: number) => "₦" + Math.round(n).toLocaleString();
+  return (
+    <div className="space-y-6">
+      <div className="grid gap-4 md:grid-cols-3">
+        <Kpi label="Paid students" value={totalStudents} />
+        <div className="rounded-xl border border-border bg-card p-5 shadow-elegant md:col-span-2">
+          <div className="text-xs uppercase tracking-wider text-muted-foreground">Estimated earnings (all courses)</div>
+          <div className="mt-2 text-3xl font-extrabold text-gradient-brand">{fmt(totalShare)}</div>
+          <div className="mt-1 text-xs text-muted-foreground">Based on {Math.round(INSTRUCTOR_REVENUE_SHARE * 100)}% revenue share of paid enrollments. Payouts issued monthly by Finance.</div>
+        </div>
+      </div>
+      <div className="overflow-hidden rounded-2xl border border-border bg-card shadow-elegant">
+        <table className="w-full text-sm">
+          <thead className="bg-secondary/50 text-xs uppercase tracking-wider text-muted-foreground">
+            <tr>
+              <th className="px-4 py-3 text-left">Course</th>
+              <th className="px-4 py-3 text-right">Tuition</th>
+              <th className="px-4 py-3 text-right">Paid students</th>
+              <th className="px-4 py-3 text-right">Completed</th>
+              <th className="px-4 py-3 text-right">Gross revenue</th>
+              <th className="px-4 py-3 text-right">Your share</th>
+            </tr>
+          </thead>
+          <tbody>
+            {loading && <tr><td className="px-4 py-6 text-center text-muted-foreground" colSpan={6}>Loading…</td></tr>}
+            {!loading && rows.length === 0 && <tr><td className="px-4 py-6 text-center text-muted-foreground" colSpan={6}>No courses assigned yet.</td></tr>}
+            {rows.map((r) => (
+              <tr key={r.course.id} className="border-t border-border">
+                <td className="px-4 py-3 font-semibold">{r.course.program_name}</td>
+                <td className="px-4 py-3 text-right">{fmt(Number(r.course.tuition_ngn ?? 0))}</td>
+                <td className="px-4 py-3 text-right">{r.active}</td>
+                <td className="px-4 py-3 text-right">{r.completed}</td>
+                <td className="px-4 py-3 text-right">{fmt(r.gross)}</td>
+                <td className="px-4 py-3 text-right font-bold text-[oklch(0.65_0.19_252)]">{fmt(r.share)}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
   );
 }
 
