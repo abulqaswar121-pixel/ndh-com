@@ -1,9 +1,16 @@
 import { useEffect, useState } from "react";
+import { useServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import { useCurrency } from "@/lib/currency";
 import { Button } from "@/components/ui/button";
 import { Plus, ListTodo, MessageSquare, Wallet, CheckCircle2, Clock } from "lucide-react";
+import { InstallAppBanner } from "@/components/site/InstallApp";
+import {
+  verifyPaystackReference,
+  verifyMyPendingPayments,
+} from "@/lib/payments/verify.functions";
+import { toast } from "sonner";
 
 type Stats = { active: number; completed: number; totalSpent: number; unread: number };
 type Activity = { id: string; title: string; status: string; created_at: string };
@@ -14,6 +21,33 @@ export function ClientOverview({ onSubmit, onSeeTasks }: { onSubmit: () => void;
   const [stats, setStats] = useState<Stats>({ active: 0, completed: 0, totalSpent: 0, unread: 0 });
   const [activity, setActivity] = useState<Activity[]>([]);
   const [name, setName] = useState("");
+  const verifyRef = useServerFn(verifyPaystackReference);
+  const verifyPending = useServerFn(verifyMyPendingPayments);
+  const [reloadKey, setReloadKey] = useState(0);
+
+  useEffect(() => {
+    if (!user) return;
+    (async () => {
+      const params = new URLSearchParams(window.location.search);
+      const ref = params.get("reference") || params.get("trxref");
+      try {
+        if (ref) {
+          const res: any = await verifyRef({ data: { reference: ref } });
+          if (res?.ok) {
+            toast.success("Payment confirmed");
+            const url = new URL(window.location.href);
+            url.searchParams.delete("reference");
+            url.searchParams.delete("trxref");
+            window.history.replaceState({}, "", url.toString());
+            setReloadKey((k) => k + 1);
+          }
+        } else {
+          const res: any = await verifyPending({});
+          if (res?.updated > 0) setReloadKey((k) => k + 1);
+        }
+      } catch {/* ignore */}
+    })();
+  }, [user, verifyRef, verifyPending]);
 
   useEffect(() => {
     if (!user) return;
@@ -31,7 +65,7 @@ export function ClientOverview({ onSubmit, onSeeTasks }: { onSubmit: () => void;
       setStats({ active, completed, totalSpent, unread: unread || 0 });
       setActivity(tasks || []);
     })();
-  }, [user]);
+  }, [user, reloadKey]);
 
   const cards = [
     { label: "Active Tasks", value: stats.active, icon: Clock, color: "from-blue-500 to-indigo-600" },
@@ -42,6 +76,7 @@ export function ClientOverview({ onSubmit, onSeeTasks }: { onSubmit: () => void;
 
   return (
     <div className="space-y-8">
+      <InstallAppBanner />
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
           <h1 className="text-3xl font-extrabold">Welcome back, {name.split(" ")[0]}.</h1>
