@@ -50,29 +50,29 @@ const features = [
 ];
 
 const testimonials = [
-  { name: "Aisha Bello", role: "Founder, Lagos", quote: "NDH felt like an in-house team. Fast, sharp, and zero drama.", q: "hijabi woman professional nigeria" },
-  { name: "James Rowe", role: "Operations, London", quote: "The PM model is gold — one contact, world-class delivery.", q: "british businessman portrait" },
-  { name: "Tunde Adeyemi", role: "CEO, Abuja", quote: "From brand to web to ads, every piece felt premium.", q: "african businessman portrait suit" },
-  { name: "Maryam Ibrahim", role: "Brand Manager, Dubai", quote: "World-class output with zero project management overhead.", q: "muslim woman professional office" },
-  { name: "Chinedu Okafor", role: "Founder, Enugu", quote: "Their PMs treated my product like their own. Shipped fast.", q: "nigerian man portrait business" },
-  { name: "Sarah Mitchell", role: "Marketing, Toronto", quote: "Best agency-feel I've had at startup pricing. Hire them.", q: "canadian woman professional smiling" },
+  { name: "Aisha Bello", role: "Founder, Lagos", quote: "NDH felt like an in-house team. Fast, sharp, and zero drama.", q: "nigerian hijabi woman entrepreneur portrait smiling" },
+  { name: "James Rowe", role: "Operations, London", quote: "The PM model is gold — one contact, world-class delivery.", q: "british white man business portrait suit office" },
+  { name: "Tunde Adeyemi", role: "CEO, Abuja", quote: "From brand to web to ads, every piece felt premium.", q: "nigerian black man business suit portrait smiling" },
+  { name: "Maryam Ibrahim", role: "Brand Manager, Dubai", quote: "World-class output with zero project management overhead.", q: "arab muslim woman hijab professional portrait office" },
+  { name: "Chinedu Okafor", role: "Founder, Enugu", quote: "Their PMs treated my product like their own. Shipped fast.", q: "igbo nigerian man business portrait shirt" },
+  { name: "Sarah Mitchell", role: "Marketing, Toronto", quote: "Best agency-feel I've had at startup pricing. Hire them.", q: "canadian white woman marketing professional portrait" },
 ];
 
 import founderAsset from "@/assets/founder-ceo.png.asset.json";
 
 const team = [
   { name: "Ataurrahman Najeeb Ahmad", role: "Founder & CEO", q: "african software engineer coding office", image: founderAsset.url },
-  { name: "Fatima Bello", role: "Head of Academy", q: "african woman computer science lecturer laptop" },
-  { name: "Emmanuel Adeyemi", role: "Head of Design", q: "african ui ux designer working on laptop" },
-  { name: "Halima Suleiman", role: "Head of Tech", q: "african woman software developer coding monitor" },
-  { name: "Chinwe Okeke", role: "Head of Marketing", q: "african digital marketer analytics dashboard" },
-  { name: "Yusuf Abdullahi", role: "Head of Operations", q: "african tech operations manager server room" },
+  { name: "Fatima Bello", role: "Head of Academy", q: "nigerian hijabi woman lecturer teaching laptop" },
+  { name: "Emmanuel Adeyemi", role: "Head of Design", q: "nigerian black man ui ux designer working laptop" },
+  { name: "Halima Suleiman", role: "Head of Tech", q: "nigerian hijabi woman software developer coding monitor" },
+  { name: "Chinwe Okeke", role: "Head of Marketing", q: "nigerian black woman marketer analytics dashboard office" },
+  { name: "Yusuf Abdullahi", role: "Head of Operations", q: "nigerian muslim man kaftan tech manager office" },
 ];
 
 const programs = [
-  { tier: "Certificate", duration: "4–8 weeks", q: "online certificate program student", desc: "Short, focused skill-ups in design, code, content, marketing and media." },
-  { tier: "Diploma", duration: "3–6 months", q: "diploma graduation online learning", desc: "Career-ready diplomas with mentorship, projects and capstone." },
-  { tier: "Professional", duration: "6–12 months", q: "professional training program african", desc: "Elite, cohort-based training. Top grads earn a seat in the NDH talent pool." },
+  { tier: "Certificate", duration: "4–8 weeks", q: "african student learning graphic design laptop online course", desc: "Short, focused skill-ups in design, code, content, marketing and media." },
+  { tier: "Diploma", duration: "3–6 months", q: "african students mentorship coding bootcamp classroom laptops", desc: "Career-ready diplomas with mentorship, projects and capstone." },
+  { tier: "Professional", duration: "6–12 months", q: "african tech professionals cohort training workshop office", desc: "Elite, cohort-based training. Top grads earn a seat in the NDH talent pool." },
 ];
 
 const portfolio = [
@@ -246,7 +246,7 @@ function Index() {
           </Reveal>
           <Reveal delay={0.1}>
             <div className="relative overflow-hidden rounded-3xl border border-border shadow-elegant">
-              <UnsplashImg q="modern tech company office team collaboration computers" alt="NDH tech bureau" w={1000} h={1200} className="h-full w-full object-cover" />
+              <UnsplashImg q="nigerian tech startup office lagos developers collaborating computers" alt="NDH tech bureau in Nigeria" w={1000} h={1200} className="h-full w-full object-cover" />
             </div>
           </Reveal>
         </div>

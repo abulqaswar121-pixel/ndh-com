@@ -92,7 +92,7 @@ function ProgramTier({
             <div><div className="text-xs uppercase tracking-widest text-muted-foreground">Outcome</div><div className="mt-1 font-bold">Verified Certificate</div></div>
           </div>
           <div className="mt-5 flex flex-wrap gap-3">
-            <Link to={categoryPath}><Button variant="brand">Browse {tier.toLowerCase()}</Button></Link>
+            <Link to="/signup"><Button variant="brand">Apply Now</Button></Link>
             <Link to="/contact"><Button variant="outline">Talk to admissions</Button></Link>
           </div>
         </div>
