@@ -76,7 +76,7 @@ export function ClientSettings() {
           <div className="sm:col-span-2">
             <label className="text-sm font-medium">Avatar</label>
             <div className="mt-2 flex items-center gap-3">
-              {profile.avatar_url && <img src={profile.avatar_url} alt="avatar" className="h-12 w-12 rounded-full object-cover" />}
+              {profile.avatar_url && <img src={profile.avatar_url} alt="avatar" loading="lazy" decoding="async" width={48} height={48} className="h-12 w-12 rounded-full object-cover" />}
               <input type="file" accept="image/*" onChange={(e) => e.target.files?.[0] && uploadAvatar(e.target.files[0])} />
             </div>
           </div>

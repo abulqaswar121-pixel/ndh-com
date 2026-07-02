@@ -91,7 +91,7 @@ function AboutPage() {
       <Section eyebrow="Founder" title="Built with vision and discipline.">
         <div className="grid items-center gap-8 md:grid-cols-[280px_1fr]">
           <div className="overflow-hidden rounded-3xl border border-border shadow-glow">
-            <img src={founderAsset.url} alt="Ataurrahman Najeeb Ahmad, Founder & CEO" className="h-full w-full object-cover" />
+            <img src={founderAsset.url} alt="Ataurrahman Najeeb Ahmad, Founder & CEO" loading="lazy" decoding="async" className="h-full w-full object-cover" />
           </div>
           <div>
             <div className="text-xs font-semibold uppercase tracking-widest text-[oklch(0.65_0.19_252)]">Founder & CEO</div>

@@ -100,7 +100,7 @@ function CourseDetail() {
     <SiteLayout>
       <section className="relative isolate overflow-hidden bg-hero text-white">
         {course.cover_image && (
-          <img src={course.cover_image} alt="" className="absolute inset-0 h-full w-full object-cover opacity-30" />
+          <img src={course.cover_image} alt="" loading="lazy" decoding="async" className="absolute inset-0 h-full w-full object-cover opacity-30" />
         )}
         <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, oklch(0.1 0.06 268 / 0.85), oklch(0.08 0.05 268 / 0.95))" }} />
         <div className="relative mx-auto grid max-w-7xl gap-10 px-6 py-20 lg:grid-cols-[1.4fr_1fr]">

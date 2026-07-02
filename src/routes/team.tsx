@@ -87,7 +87,7 @@ function TeamPage() {
         <div className="grid items-center gap-8 lg:grid-cols-[1fr_1.3fr]">
           <Reveal>
             <div className="overflow-hidden rounded-3xl border border-border shadow-elegant">
-              <img src={founder.image!} alt={founder.name} className="h-full w-full object-cover" />
+              <img src={founder.image!} alt={founder.name} loading="lazy" decoding="async" className="h-full w-full object-cover" />
             </div>
           </Reveal>
           <Reveal delay={0.1}>
