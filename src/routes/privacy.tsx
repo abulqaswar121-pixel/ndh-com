@@ -5,9 +5,9 @@ import { Section } from "@/components/site/Section";
 export const Route = createFileRoute("/privacy")({
   head: () => ({ meta: [
     { title: "Privacy Policy — NDH" },
-    { name: "description", content: "How NDH collects, uses and protects your data." },
-    { property: "og:title", content: "NDH Privacy Policy" },
-    { property: "og:description", content: "Your data, handled with care." },
+    { name: "description", content: "How Najeeb Digital Hub collects, uses, stores and protects the personal data of clients, students and talents across our services and academy." },
+    { property: "og:title", content: "Privacy Policy · Najeeb Digital Hub" },
+    { property: "og:description", content: "Transparent details on data collection, cookies, third-party processors and your rights to access, correct or delete your NDH data." },
   ]}),
   component: () => (
     <SiteLayout>
