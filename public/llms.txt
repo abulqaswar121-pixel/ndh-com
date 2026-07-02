@@ -1,0 +1,26 @@
+# Najeeb Digital Hub (NDH)
+
+> Premium digital services bureau and online academy based in Sokoto, Nigeria, serving clients across Nigeria and the diaspora (UK, US, Canada, Europe, UAE).
+
+NDH delivers design, development, content, marketing, media and AI & tech projects through a managed team of Project Managers and vetted talents. NDH Academy runs online certificate, diploma and professional programs with verifiable digital certificates.
+
+## Pages
+
+- [Home](/): Overview of NDH's bureau and academy.
+- [Services](/services): Design, development, content, marketing, media and AI & tech offerings.
+- [Academy](/academy): NDH Academy programs and enrolment.
+- [Certificate Programs](/academy/certificate-programs): Short certificate tracks.
+- [Diploma Programs](/academy/diploma-programs): Diploma-level programs.
+- [Professional Programs](/academy/professional-programs): Advanced professional programs.
+- [About](/about): NDH story, mission and leadership.
+- [Team](/team): The people behind NDH.
+- [Contact](/contact): Reach a Project Manager.
+- [Blog](/blog): Insights on design, development, marketing and business.
+- [FAQ](/faq): Common questions about NDH services and academy.
+- [Careers](/careers): Open roles at NDH.
+- [Verify Certificate](/verify): Verify an NDH Academy certificate by ID.
+
+## Optional
+
+- [Privacy Policy](/privacy): How NDH handles personal data.
+- [Terms of Service](/terms): Terms governing use of NDH services.
