@@ -50,12 +50,12 @@ const features = [
 ];
 
 const testimonials = [
-  { name: "Aisha Bello", role: "Founder, Lagos", quote: "NDH felt like an in-house team. Fast, sharp, and zero drama.", q: "nigerian hijabi woman founder headshot face portrait" },
-  { name: "James Rowe", role: "Operations, London", quote: "The PM model is gold — one contact, world-class delivery.", q: "british businessman operations headshot face portrait" },
-  { name: "Tunde Adeyemi", role: "CEO, Abuja", quote: "From brand to web to ads, every piece felt premium.", q: "nigerian ceo man suit headshot face portrait" },
-  { name: "Maryam Ibrahim", role: "Brand Manager, Dubai", quote: "World-class output with zero project management overhead.", q: "arab hijabi woman brand manager headshot face portrait" },
-  { name: "Chinedu Okafor", role: "Founder, Enugu", quote: "Their PMs treated my product like their own. Shipped fast.", q: "nigerian igbo man founder headshot face portrait" },
-  { name: "Sarah Mitchell", role: "Marketing, Toronto", quote: "Best agency-feel I've had at startup pricing. Hire them.", q: "canadian woman marketing manager headshot face portrait" },
+  { name: "Aisha Bello", role: "Founder, Lagos", quote: "NDH felt like an in-house team. Fast, sharp, and zero drama.", q: "portrait african woman hijab smiling face" },
+  { name: "James Rowe", role: "Operations, London", quote: "The PM model is gold — one contact, world-class delivery.", q: "portrait white man business suit face smiling" },
+  { name: "Tunde Adeyemi", role: "CEO, Abuja", quote: "From brand to web to ads, every piece felt premium.", q: "portrait african black man suit face smiling" },
+  { name: "Maryam Ibrahim", role: "Brand Manager, Dubai", quote: "World-class output with zero project management overhead.", q: "portrait arab woman hijab face smiling" },
+  { name: "Chinedu Okafor", role: "Founder, Enugu", quote: "Their PMs treated my product like their own. Shipped fast.", q: "portrait african black man face smiling shirt" },
+  { name: "Sarah Mitchell", role: "Marketing, Toronto", quote: "Best agency-feel I've had at startup pricing. Hire them.", q: "portrait white woman blonde face smiling professional" },
 ];
 
 import founderAsset from "@/assets/founder-ceo.png.asset.json";
@@ -63,8 +63,8 @@ import founderAsset from "@/assets/founder-ceo.png.asset.json";
 const team = [
   { name: "Ataurrahman Najeeb Ahmad", role: "Founder & CEO", q: "african software engineer coding office", image: founderAsset.url },
   { name: "Hamza Suleiman", role: "Head of Academy", q: "nigerian muslim man tech lecturer laptop classroom" },
-  { name: "Grace Adebayo", role: "Head of Design", q: "nigerian christian woman ui ux designer figma laptop" },
-  { name: "Halima Suleiman", role: "Head of Tech", q: "nigerian hijabi muslim woman software developer coding monitor" },
+  { name: "Grace Adebayo", role: "Head of Design", q: "portrait african black woman designer face smiling" },
+  { name: "Halima Suleiman", role: "Head of Tech", q: "portrait african woman hijab developer laptop face" },
   { name: "Saleem Mujahid Basheer", role: "Head of Marketing", q: "nigerian muslim man digital marketer analytics dashboard laptop" },
   { name: "Hassan Al'amin Hassan", role: "Head of Operations", q: "nigerian muslim man tech operations manager laptop office" },
 ];
