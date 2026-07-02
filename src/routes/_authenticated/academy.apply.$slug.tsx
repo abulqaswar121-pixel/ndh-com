@@ -249,7 +249,7 @@ function ApplyWizard() {
             <aside className="space-y-4">
               <div className="overflow-hidden rounded-2xl border border-border bg-card">
                 {course.cover_image && (
-                  <img src={course.cover_image} alt={course.program_name} className="aspect-video w-full object-cover" />
+                  <img src={course.cover_image} alt={course.program_name} loading="lazy" decoding="async" className="aspect-video w-full object-cover" />
                 )}
                 <div className="p-4">
                   <div className="text-xs uppercase tracking-widest text-muted-foreground">{course.program_type}</div>

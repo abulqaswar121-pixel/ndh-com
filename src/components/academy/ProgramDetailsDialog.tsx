@@ -41,7 +41,7 @@ export function ProgramDetailsDialog({ slug, open, onOpenChange }: { slug: strin
           <>
             {course.cover_image && (
               <div className="-m-6 mb-0 h-40 overflow-hidden rounded-t-lg">
-                <img src={course.cover_image} alt="" className="h-full w-full object-cover" />
+                <img src={course.cover_image} alt="" loading="lazy" decoding="async" className="h-full w-full object-cover" />
               </div>
             )}
             <DialogHeader>
