@@ -39,7 +39,7 @@ const hods: Member[] = [
   { name: "Chinwe Okafor", role: "HOD · Development", bio: "Web, mobile and platform engineering across the bureau.", q: "nigerian christian man software engineer developer coding monitor" },
   { name: "Yusuf Bello", role: "HOD · Content", bio: "SEO, brand copy and editorial across client work and the blog.", q: "african man tech writer laptop workspace" },
   { name: "Grace Adeyemi", role: "HOD · Marketing", bio: "Performance ads, growth strategy and analytics.", q: "african woman digital marketer analytics dashboard laptop" },
-  { name: "Aisha Mohammed", role: "HOD · Media", bio: "Video, motion, photography and podcast production.", q: "nigerian hijabi muslim woman video editor computer editing suite" },
+  { name: "Aisha Muhammad", role: "HOD · Media", bio: "Video, motion, photography and podcast production.", q: "portrait african woman hijab video editor laptop tech studio" },
 ];
 
 const pms: Member[] = [
