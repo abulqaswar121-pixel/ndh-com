@@ -51,7 +51,7 @@ function BlogPage() {
           </div>
           <div className="relative max-w-xs">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-            <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search articles…" className="w-full rounded-full border border-border bg-background py-2 pl-9 pr-3 text-sm focus:outline-none focus:ring-2 focus:ring-[oklch(0.65_0.19_252)]/30" />
+           <input aria-label="Search blog articles" value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search articles…" className="w-full rounded-full border border-border bg-background py-2 pl-9 pr-3 text-sm focus:outline-none focus:ring-2 focus:ring-[oklch(0.65_0.19_252)]/30" />
           </div>
         </div>
         <Stagger className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
