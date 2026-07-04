@@ -60,7 +60,10 @@ function LoginPage() {
   };
 
   const handleGoogle = async () => {
-    const result = await lovable.auth.signInWithOAuth("google", { redirect_uri: window.location.origin + "/login" });
+    const suffix = nextPath ? `?next=${encodeURIComponent(nextPath)}` : "";
+    const result = await lovable.auth.signInWithOAuth("google", {
+      redirect_uri: window.location.origin + "/login" + suffix,
+    });
     if (result?.error) toast.error((result.error as Error).message ?? "Google sign-in failed");
   };
 
