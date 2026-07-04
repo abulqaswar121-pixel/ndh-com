@@ -23,6 +23,7 @@ import { Route as SignupRouteImport } from './routes/signup'
 import { Route as ServicesRouteImport } from './routes/services'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as PrivacyRouteImport } from './routes/privacy'
+import { Route as McpRouteImport } from './routes/mcp'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as InstructorRouteImport } from './routes/instructor'
 import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
@@ -50,6 +51,8 @@ import { Route as AdminAcademyRouteImport } from './routes/admin.academy'
 import { Route as AcademyProfessionalProgramsRouteImport } from './routes/academy.professional-programs'
 import { Route as AcademyDiplomaProgramsRouteImport } from './routes/academy.diploma-programs'
 import { Route as AcademyCertificateProgramsRouteImport } from './routes/academy.certificate-programs'
+import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
+import { Route as Char91DotmcpChar93ListToolsRouteImport } from './routes/[.mcp]/list-tools'
 import { Route as LovableEmailSuppressionRouteImport } from './routes/lovable/email/suppression'
 import { Route as AcademyCourseSlugRouteImport } from './routes/academy.course.$slug'
 import { Route as AuthenticatedDashboardTalentRouteImport } from './routes/_authenticated/dashboard/talent'
@@ -63,6 +66,7 @@ import { Route as AuthenticatedDashboardFinanceRouteImport } from './routes/_aut
 import { Route as AuthenticatedDashboardClientRouteImport } from './routes/_authenticated/dashboard/client'
 import { Route as AuthenticatedDashboardAdminRouteImport } from './routes/_authenticated/dashboard/admin'
 import { Route as AuthenticatedDashboardAcademyDirectorRouteImport } from './routes/_authenticated/dashboard/academy-director'
+import { Route as Char91DotmcpChar93InvokeToolToolRouteImport } from './routes/[.mcp]/invoke-tool/$tool'
 import { Route as AuthenticatedDashboardStudentIndexRouteImport } from './routes/_authenticated/dashboard/student.index'
 import { Route as LovableEmailTransactionalSendRouteImport } from './routes/lovable/email/transactional/send'
 import { Route as LovableEmailTransactionalPreviewRouteImport } from './routes/lovable/email/transactional/preview'
@@ -141,6 +145,11 @@ const ResetPasswordRoute = ResetPasswordRouteImport.update({
 const PrivacyRoute = PrivacyRouteImport.update({
   id: '/privacy',
   path: '/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const McpRoute = McpRouteImport.update({
+  id: '/mcp',
+  path: '/mcp',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
@@ -279,6 +288,18 @@ const AcademyCertificateProgramsRoute =
     path: '/certificate-programs',
     getParentRoute: () => AcademyRoute,
   } as any)
+const Char91DotwellKnownChar93OauthProtectedResourceRoute =
+  Char91DotwellKnownChar93OauthProtectedResourceRouteImport.update({
+    id: '/.well-known/oauth-protected-resource',
+    path: '/.well-known/oauth-protected-resource',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const Char91DotmcpChar93ListToolsRoute =
+  Char91DotmcpChar93ListToolsRouteImport.update({
+    id: '/.mcp/list-tools',
+    path: '/.mcp/list-tools',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const LovableEmailSuppressionRoute = LovableEmailSuppressionRouteImport.update({
   id: '/lovable/email/suppression',
   path: '/lovable/email/suppression',
@@ -355,6 +376,12 @@ const AuthenticatedDashboardAcademyDirectorRoute =
     path: '/dashboard/academy-director',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const Char91DotmcpChar93InvokeToolToolRoute =
+  Char91DotmcpChar93InvokeToolToolRouteImport.update({
+    id: '/.mcp/invoke-tool/$tool',
+    path: '/.mcp/invoke-tool/$tool',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const AuthenticatedDashboardStudentIndexRoute =
   AuthenticatedDashboardStudentIndexRouteImport.update({
     id: '/dashboard/student/',
@@ -420,6 +447,7 @@ export interface FileRoutesByFullPath {
   '/forgot-password': typeof ForgotPasswordRoute
   '/instructor': typeof InstructorRoute
   '/login': typeof LoginRoute
+  '/mcp': typeof McpRoute
   '/privacy': typeof PrivacyRoute
   '/reset-password': typeof ResetPasswordRoute
   '/services': typeof ServicesRoute
@@ -434,6 +462,8 @@ export interface FileRoutesByFullPath {
   '/team': typeof TeamRoute
   '/terms': typeof TermsRoute
   '/verify': typeof VerifyRouteWithChildren
+  '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
+  '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/academy/certificate-programs': typeof AcademyCertificateProgramsRoute
   '/academy/diploma-programs': typeof AcademyDiplomaProgramsRoute
   '/academy/professional-programs': typeof AcademyProfessionalProgramsRoute
@@ -449,6 +479,7 @@ export interface FileRoutesByFullPath {
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/verify/$id': typeof VerifyIdRoute
   '/admin/': typeof AdminIndexRoute
+  '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/dashboard/academy-director': typeof AuthenticatedDashboardAcademyDirectorRoute
   '/dashboard/admin': typeof AuthenticatedDashboardAdminRoute
   '/dashboard/client': typeof AuthenticatedDashboardClientRoute
@@ -484,6 +515,7 @@ export interface FileRoutesByTo {
   '/forgot-password': typeof ForgotPasswordRoute
   '/instructor': typeof InstructorRoute
   '/login': typeof LoginRoute
+  '/mcp': typeof McpRoute
   '/privacy': typeof PrivacyRoute
   '/reset-password': typeof ResetPasswordRoute
   '/services': typeof ServicesRoute
@@ -498,6 +530,8 @@ export interface FileRoutesByTo {
   '/team': typeof TeamRoute
   '/terms': typeof TermsRoute
   '/verify': typeof VerifyRouteWithChildren
+  '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
+  '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/academy/certificate-programs': typeof AcademyCertificateProgramsRoute
   '/academy/diploma-programs': typeof AcademyDiplomaProgramsRoute
   '/academy/professional-programs': typeof AcademyProfessionalProgramsRoute
@@ -513,6 +547,7 @@ export interface FileRoutesByTo {
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/verify/$id': typeof VerifyIdRoute
   '/admin': typeof AdminIndexRoute
+  '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/dashboard/academy-director': typeof AuthenticatedDashboardAcademyDirectorRoute
   '/dashboard/admin': typeof AuthenticatedDashboardAdminRoute
   '/dashboard/client': typeof AuthenticatedDashboardClientRoute
@@ -550,6 +585,7 @@ export interface FileRoutesById {
   '/forgot-password': typeof ForgotPasswordRoute
   '/instructor': typeof InstructorRoute
   '/login': typeof LoginRoute
+  '/mcp': typeof McpRoute
   '/privacy': typeof PrivacyRoute
   '/reset-password': typeof ResetPasswordRoute
   '/services': typeof ServicesRoute
@@ -564,6 +600,8 @@ export interface FileRoutesById {
   '/team': typeof TeamRoute
   '/terms': typeof TermsRoute
   '/verify': typeof VerifyRouteWithChildren
+  '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
+  '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/academy/certificate-programs': typeof AcademyCertificateProgramsRoute
   '/academy/diploma-programs': typeof AcademyDiplomaProgramsRoute
   '/academy/professional-programs': typeof AcademyProfessionalProgramsRoute
@@ -579,6 +617,7 @@ export interface FileRoutesById {
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/verify/$id': typeof VerifyIdRoute
   '/admin/': typeof AdminIndexRoute
+  '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/_authenticated/dashboard/academy-director': typeof AuthenticatedDashboardAcademyDirectorRoute
   '/_authenticated/dashboard/admin': typeof AuthenticatedDashboardAdminRoute
   '/_authenticated/dashboard/client': typeof AuthenticatedDashboardClientRoute
@@ -616,6 +655,7 @@ export interface FileRouteTypes {
     | '/forgot-password'
     | '/instructor'
     | '/login'
+    | '/mcp'
     | '/privacy'
     | '/reset-password'
     | '/services'
@@ -630,6 +670,8 @@ export interface FileRouteTypes {
     | '/team'
     | '/terms'
     | '/verify'
+    | '/.mcp/list-tools'
+    | '/.well-known/oauth-protected-resource'
     | '/academy/certificate-programs'
     | '/academy/diploma-programs'
     | '/academy/professional-programs'
@@ -645,6 +687,7 @@ export interface FileRouteTypes {
     | '/email/unsubscribe'
     | '/verify/$id'
     | '/admin/'
+    | '/.mcp/invoke-tool/$tool'
     | '/dashboard/academy-director'
     | '/dashboard/admin'
     | '/dashboard/client'
@@ -680,6 +723,7 @@ export interface FileRouteTypes {
     | '/forgot-password'
     | '/instructor'
     | '/login'
+    | '/mcp'
     | '/privacy'
     | '/reset-password'
     | '/services'
@@ -694,6 +738,8 @@ export interface FileRouteTypes {
     | '/team'
     | '/terms'
     | '/verify'
+    | '/.mcp/list-tools'
+    | '/.well-known/oauth-protected-resource'
     | '/academy/certificate-programs'
     | '/academy/diploma-programs'
     | '/academy/professional-programs'
@@ -709,6 +755,7 @@ export interface FileRouteTypes {
     | '/email/unsubscribe'
     | '/verify/$id'
     | '/admin'
+    | '/.mcp/invoke-tool/$tool'
     | '/dashboard/academy-director'
     | '/dashboard/admin'
     | '/dashboard/client'
@@ -745,6 +792,7 @@ export interface FileRouteTypes {
     | '/forgot-password'
     | '/instructor'
     | '/login'
+    | '/mcp'
     | '/privacy'
     | '/reset-password'
     | '/services'
@@ -759,6 +807,8 @@ export interface FileRouteTypes {
     | '/team'
     | '/terms'
     | '/verify'
+    | '/.mcp/list-tools'
+    | '/.well-known/oauth-protected-resource'
     | '/academy/certificate-programs'
     | '/academy/diploma-programs'
     | '/academy/professional-programs'
@@ -774,6 +824,7 @@ export interface FileRouteTypes {
     | '/email/unsubscribe'
     | '/verify/$id'
     | '/admin/'
+    | '/.mcp/invoke-tool/$tool'
     | '/_authenticated/dashboard/academy-director'
     | '/_authenticated/dashboard/admin'
     | '/_authenticated/dashboard/client'
@@ -811,6 +862,7 @@ export interface RootRouteChildren {
   ForgotPasswordRoute: typeof ForgotPasswordRoute
   InstructorRoute: typeof InstructorRoute
   LoginRoute: typeof LoginRoute
+  McpRoute: typeof McpRoute
   PrivacyRoute: typeof PrivacyRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
   ServicesRoute: typeof ServicesRoute
@@ -825,6 +877,8 @@ export interface RootRouteChildren {
   TeamRoute: typeof TeamRoute
   TermsRoute: typeof TermsRoute
   VerifyRoute: typeof VerifyRouteWithChildren
+  Char91DotmcpChar93ListToolsRoute: typeof Char91DotmcpChar93ListToolsRoute
+  Char91DotwellKnownChar93OauthProtectedResourceRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   AdminAcademyRoute: typeof AdminAcademyRoute
   AdminFinanceRoute: typeof AdminFinanceRoute
   AdminHodRoute: typeof AdminHodRoute
@@ -835,6 +889,7 @@ export interface RootRouteChildren {
   AuthAcceptRoute: typeof AuthAcceptRoute
   EmailUnsubscribeRoute: typeof EmailUnsubscribeRoute
   AdminIndexRoute: typeof AdminIndexRoute
+  Char91DotmcpChar93InvokeToolToolRoute: typeof Char91DotmcpChar93InvokeToolToolRoute
   LovableEmailSuppressionRoute: typeof LovableEmailSuppressionRoute
   ApiPublicWebhooksPaystackRoute: typeof ApiPublicWebhooksPaystackRoute
   LovableEmailAuthPreviewRoute: typeof LovableEmailAuthPreviewRoute
@@ -942,6 +997,13 @@ declare module '@tanstack/react-router' {
       path: '/privacy'
       fullPath: '/privacy'
       preLoaderRoute: typeof PrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/mcp': {
+      id: '/mcp'
+      path: '/mcp'
+      fullPath: '/mcp'
+      preLoaderRoute: typeof McpRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login': {
@@ -1133,6 +1195,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AcademyCertificateProgramsRouteImport
       parentRoute: typeof AcademyRoute
     }
+    '/.well-known/oauth-protected-resource': {
+      id: '/.well-known/oauth-protected-resource'
+      path: '/.well-known/oauth-protected-resource'
+      fullPath: '/.well-known/oauth-protected-resource'
+      preLoaderRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/.mcp/list-tools': {
+      id: '/.mcp/list-tools'
+      path: '/.mcp/list-tools'
+      fullPath: '/.mcp/list-tools'
+      preLoaderRoute: typeof Char91DotmcpChar93ListToolsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/lovable/email/suppression': {
       id: '/lovable/email/suppression'
       path: '/lovable/email/suppression'
@@ -1223,6 +1299,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/dashboard/academy-director'
       preLoaderRoute: typeof AuthenticatedDashboardAcademyDirectorRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/.mcp/invoke-tool/$tool': {
+      id: '/.mcp/invoke-tool/$tool'
+      path: '/.mcp/invoke-tool/$tool'
+      fullPath: '/.mcp/invoke-tool/$tool'
+      preLoaderRoute: typeof Char91DotmcpChar93InvokeToolToolRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/_authenticated/dashboard/student/': {
       id: '/_authenticated/dashboard/student/'
@@ -1382,6 +1465,7 @@ const rootRouteChildren: RootRouteChildren = {
   ForgotPasswordRoute: ForgotPasswordRoute,
   InstructorRoute: InstructorRoute,
   LoginRoute: LoginRoute,
+  McpRoute: McpRoute,
   PrivacyRoute: PrivacyRoute,
   ResetPasswordRoute: ResetPasswordRoute,
   ServicesRoute: ServicesRoute,
@@ -1396,6 +1480,9 @@ const rootRouteChildren: RootRouteChildren = {
   TeamRoute: TeamRoute,
   TermsRoute: TermsRoute,
   VerifyRoute: VerifyRouteWithChildren,
+  Char91DotmcpChar93ListToolsRoute: Char91DotmcpChar93ListToolsRoute,
+  Char91DotwellKnownChar93OauthProtectedResourceRoute:
+    Char91DotwellKnownChar93OauthProtectedResourceRoute,
   AdminAcademyRoute: AdminAcademyRoute,
   AdminFinanceRoute: AdminFinanceRoute,
   AdminHodRoute: AdminHodRoute,
@@ -1406,6 +1493,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthAcceptRoute: AuthAcceptRoute,
   EmailUnsubscribeRoute: EmailUnsubscribeRoute,
   AdminIndexRoute: AdminIndexRoute,
+  Char91DotmcpChar93InvokeToolToolRoute: Char91DotmcpChar93InvokeToolToolRoute,
   LovableEmailSuppressionRoute: LovableEmailSuppressionRoute,
   ApiPublicWebhooksPaystackRoute: ApiPublicWebhooksPaystackRoute,
   LovableEmailAuthPreviewRoute: LovableEmailAuthPreviewRoute,
