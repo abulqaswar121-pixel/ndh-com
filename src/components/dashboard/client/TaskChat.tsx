@@ -102,7 +102,7 @@ export function TaskChat({ taskId, pmId }: { taskId: string; pmId: string | null
   const send = async () => {
     if (!user) return;
     if (!text.trim() && files.length === 0) return;
-    if (!pmId) { toast.error("Chat unavailable until a PM is assigned."); return; }
+    if (!pmId) { toast.error("Chat unavailable until a Project Manager is assigned."); return; }
     setSending(true);
     try {
       const uploaded: { name: string; path: string }[] = [];
@@ -140,7 +140,7 @@ export function TaskChat({ taskId, pmId }: { taskId: string; pmId: string | null
           <div className="grid h-full place-items-center text-center text-sm text-muted-foreground">
             {pmId
               ? "Say hello to your project manager. They'll respond shortly."
-              : "Your PM will join the chat once assigned."}
+              : "Your Project Manager will join the chat once assigned."}
           </div>
         )}
         {messages.map((m) => {
@@ -213,7 +213,7 @@ export function TaskChat({ taskId, pmId }: { taskId: string; pmId: string | null
           onKeyDown={(e) => {
             if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); send(); }
           }}
-          placeholder="Message your PM…"
+          placeholder="Message your Project Manager…"
           rows={1}
           className="min-h-[36px] max-h-32 flex-1 resize-none rounded-lg border border-border bg-background px-3 py-2 text-sm"
         />
