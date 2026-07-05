@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   ArrowRight, Sparkles, Palette, Code2, PenTool, Megaphone, Clapperboard, Brain,
   ShieldCheck, Clock, Globe2, Award, Quote, CheckCircle2,
-  Send, ChevronDown, Heart, Target, Rocket,
+  ChevronDown, Heart, Target, Rocket,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { SiteLayout } from "@/components/site/SiteLayout";
@@ -357,20 +357,6 @@ function Index() {
             <Link to="/signup"><Button variant="brand" size="xl">Sign Up <ArrowRight className="h-4 w-4" /></Button></Link>
             <Link to="/academy"><Button variant="hero" size="xl">Enroll in Academy</Button></Link>
           </div>
-        </div>
-      </section>
-
-      {/* NEWSLETTER */}
-      <section className="mx-6 mb-16 overflow-hidden rounded-3xl bg-hero p-10 text-white">
-        <div className="mx-auto grid max-w-7xl gap-8 md:grid-cols-2 md:items-center">
-          <div>
-            <h3 className="text-2xl font-extrabold sm:text-3xl">Get sharp ideas in your inbox.</h3>
-            <p className="mt-3 text-white/75">Monthly insights on digital craft, freelancing and NDH Academy updates. No spam.</p>
-          </div>
-          <form onSubmit={(e) => { e.preventDefault(); }} className="flex flex-col gap-3 sm:flex-row">
-            <input type="email" required placeholder="you@company.com" className="flex-1 rounded-lg border border-white/15 bg-white/10 px-4 py-3 text-sm text-white placeholder:text-white/50 focus:outline-none focus:ring-2 focus:ring-[oklch(0.65_0.19_252)]" />
-            <Button type="submit" variant="brand" size="xl">Subscribe <Send className="h-4 w-4" /></Button>
-          </form>
         </div>
       </section>
     </SiteLayout>
