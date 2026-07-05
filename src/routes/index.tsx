@@ -45,7 +45,7 @@ const services = [
 
 const steps = [
   { n: "01", title: "Sign Up & Brief", desc: "Create your account and tell us your goal, tier and timeline." },
-  { n: "02", title: "We Match & Build", desc: "A dedicated Project Manager assigns vetted in-house talents and oversees quality." },
+  { n: "02", title: "We Match & Build", desc: "A dedicated Project Manager assigns the right in-house specialists and oversees quality end-to-end." },
   { n: "03", title: "Review & Deliver", desc: "We QA, refine and hand over polished work — directly to you." },
 ];
 
