@@ -352,7 +352,7 @@ function Index() {
         <div className="relative mx-auto max-w-3xl text-center">
           <Heart className="mx-auto h-8 w-8 text-[oklch(0.78_0.13_180)]" />
           <h3 className="mt-4 text-3xl font-extrabold sm:text-5xl">Ready to build something exceptional?</h3>
-          <p className="mx-auto mt-4 max-w-2xl text-white/80">Create your free NDH account in 30 seconds. A PM responds within 24 hours.</p>
+          <p className="mx-auto mt-4 max-w-2xl text-white/80">Create your free NDH account in 30 seconds. A Project Manager responds within 24 hours.</p>
           <div className="mt-8 flex flex-wrap justify-center gap-3">
             <Link to="/signup"><Button variant="brand" size="xl">Sign Up <ArrowRight className="h-4 w-4" /></Button></Link>
             <Link to="/academy"><Button variant="hero" size="xl">Enroll in Academy</Button></Link>
