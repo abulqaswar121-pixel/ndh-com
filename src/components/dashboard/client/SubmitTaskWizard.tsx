@@ -81,7 +81,7 @@ export function SubmitTaskWizard({ onDone }: { onDone: () => void }) {
       }
       // Fire-and-forget: send client + PM notification emails
       notify({ data: { taskId: task.id } }).catch((e) => console.error("notifyTaskCreated", e));
-      toast.success("Task submitted — our PM will reach out shortly.");
+      toast.success("Task submitted — your Project Manager will reach out shortly.");
       onDone();
     } catch (err) {
       toast.error((err as Error).message || "Could not submit task");
@@ -99,7 +99,7 @@ export function SubmitTaskWizard({ onDone }: { onDone: () => void }) {
     <div className="mx-auto max-w-3xl space-y-6">
       <div>
         <h1 className="text-2xl font-extrabold">Submit a Task</h1>
-        <p className="mt-1 text-sm text-muted-foreground">Tell us about your project — we'll route it to the right department.</p>
+        <p className="mt-1 text-sm text-muted-foreground">Tell us about your project — we'll assign the right team for you.</p>
       </div>
 
       {/* Stepper */}
@@ -209,7 +209,7 @@ export function SubmitTaskWizard({ onDone }: { onDone: () => void }) {
               <Row k="Files" v={String(files.length)} />
             </dl>
             <div className="rounded-lg bg-secondary px-4 py-3 text-xs text-muted-foreground">
-              On submit, your task is routed to the {service ?? "—"} department PM and you'll be notified by email.
+              On submit, your task is assigned to the {service ?? "—"} team's Project Manager and you'll be notified by email.
             </div>
           </div>
         )}

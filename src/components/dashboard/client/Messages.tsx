@@ -78,7 +78,7 @@ export function ClientMessages() {
       <div className="overflow-y-auto rounded-2xl border border-border bg-card">
         <div className="border-b border-border px-4 py-3 text-sm font-semibold">Conversations</div>
         {contacts.length === 0 ? (
-          <div className="p-6 text-center text-sm text-muted-foreground">No conversations yet. They start when a PM is assigned to your task.</div>
+          <div className="p-6 text-center text-sm text-muted-foreground">No conversations yet. They start once a Project Manager is assigned to your task.</div>
         ) : (
           <ul className="divide-y divide-border">
             {contacts.map((c) => (

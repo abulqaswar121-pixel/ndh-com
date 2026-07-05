@@ -129,7 +129,7 @@ export function TaskDetailsDialog({ task, onClose }: { task: Task; onClose: () =
       <div className="relative max-h-[92vh] w-full max-w-3xl overflow-y-auto rounded-2xl border border-border bg-card p-6 shadow-elegant" onClick={(e) => e.stopPropagation()}>
         <button onClick={onClose} className="absolute right-4 top-4 text-muted-foreground"><X className="h-5 w-5" /></button>
         <div className="mb-2 text-xs uppercase tracking-widest text-muted-foreground">
-          {task.service_category} · {task.tier}{pmName ? ` · PM: ${pmName}` : ""}
+          {task.service_category} · {task.tier}{pmName ? ` · Project Manager: ${pmName}` : ""}
         </div>
         <h2 className="text-2xl font-extrabold">{task.title}</h2>
 
@@ -183,7 +183,7 @@ export function TaskDetailsDialog({ task, onClose }: { task: Task; onClose: () =
             <div>
               <div className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">Quotes</div>
               {quotes.length === 0 ? (
-                <div className="mt-2 text-sm text-muted-foreground">No quote yet. Your PM will send one shortly.</div>
+                <div className="mt-2 text-sm text-muted-foreground">No quote yet. Your Project Manager will send one shortly.</div>
               ) : (
                 <ul className="mt-2 grid gap-2">
                   {quotes.map((q) => (
@@ -225,7 +225,7 @@ export function TaskDetailsDialog({ task, onClose }: { task: Task; onClose: () =
           <div className="mt-4 space-y-4">
             {deliverables.length === 0 ? (
               <div className="rounded-xl border border-dashed border-border bg-background p-10 text-center text-sm text-muted-foreground">
-                Deliverables will appear here once your PM marks the task as delivered.
+                Deliverables will appear here once your Project Manager marks the task as delivered.
               </div>
             ) : (
               <ul className="grid gap-2">

@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   ArrowRight, Sparkles, Palette, Code2, PenTool, Megaphone, Clapperboard, Brain,
   ShieldCheck, Clock, Globe2, Award, Quote, CheckCircle2,
-  Send, ChevronDown, Heart, Target, Rocket,
+  ChevronDown, Heart, Target, Rocket,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { SiteLayout } from "@/components/site/SiteLayout";
@@ -45,7 +45,7 @@ const services = [
 
 const steps = [
   { n: "01", title: "Sign Up & Brief", desc: "Create your account and tell us your goal, tier and timeline." },
-  { n: "02", title: "We Match & Build", desc: "A dedicated Project Manager assigns vetted in-house talents and oversees quality." },
+  { n: "02", title: "We Match & Build", desc: "A dedicated Project Manager assigns the right in-house specialists and oversees quality end-to-end." },
   { n: "03", title: "Review & Deliver", desc: "We QA, refine and hand over polished work — directly to you." },
 ];
 
@@ -352,25 +352,11 @@ function Index() {
         <div className="relative mx-auto max-w-3xl text-center">
           <Heart className="mx-auto h-8 w-8 text-[oklch(0.78_0.13_180)]" />
           <h3 className="mt-4 text-3xl font-extrabold sm:text-5xl">Ready to build something exceptional?</h3>
-          <p className="mx-auto mt-4 max-w-2xl text-white/80">Create your free NDH account in 30 seconds. A PM responds within 24 hours.</p>
+          <p className="mx-auto mt-4 max-w-2xl text-white/80">Create your free NDH account in 30 seconds. A Project Manager responds within 24 hours.</p>
           <div className="mt-8 flex flex-wrap justify-center gap-3">
             <Link to="/signup"><Button variant="brand" size="xl">Sign Up <ArrowRight className="h-4 w-4" /></Button></Link>
             <Link to="/academy"><Button variant="hero" size="xl">Enroll in Academy</Button></Link>
           </div>
-        </div>
-      </section>
-
-      {/* NEWSLETTER */}
-      <section className="mx-6 mb-16 overflow-hidden rounded-3xl bg-hero p-10 text-white">
-        <div className="mx-auto grid max-w-7xl gap-8 md:grid-cols-2 md:items-center">
-          <div>
-            <h3 className="text-2xl font-extrabold sm:text-3xl">Get sharp ideas in your inbox.</h3>
-            <p className="mt-3 text-white/75">Monthly insights on digital craft, freelancing and NDH Academy updates. No spam.</p>
-          </div>
-          <form onSubmit={(e) => { e.preventDefault(); }} className="flex flex-col gap-3 sm:flex-row">
-            <input type="email" required placeholder="you@company.com" className="flex-1 rounded-lg border border-white/15 bg-white/10 px-4 py-3 text-sm text-white placeholder:text-white/50 focus:outline-none focus:ring-2 focus:ring-[oklch(0.65_0.19_252)]" />
-            <Button type="submit" variant="brand" size="xl">Subscribe <Send className="h-4 w-4" /></Button>
-          </form>
         </div>
       </section>
     </SiteLayout>

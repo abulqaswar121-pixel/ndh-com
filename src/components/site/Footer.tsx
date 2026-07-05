@@ -3,6 +3,10 @@ import { Facebook, Instagram, Mail, MapPin, Phone, Send, Clock } from "lucide-re
 import { Logo } from "./Logo";
 import { Button } from "@/components/ui/button";
 import { CurrencySwitcher } from "@/lib/currency";
+import { useState } from "react";
+import { useServerFn } from "@tanstack/react-start";
+import { subscribeNewsletter } from "@/lib/newsletter.functions";
+import { toast } from "sonner";
 
 const cols = [
   {
@@ -18,20 +22,15 @@ const cols = [
   {
     title: "Services",
     links: [
-      { to: "/services", label: "Design" },
-      { to: "/services", label: "Development" },
-      { to: "/services", label: "Content Writing" },
-      { to: "/services", label: "Digital Marketing" },
-      { to: "/services", label: "Media Production" },
-      { to: "/services", label: "AI & Tech" },
+      { to: "/services", label: "All Services" },
+      { to: "/services", label: "Case Studies" },
+      { to: "/contact", label: "Request a Quote" },
     ],
   },
   {
     title: "NDH Academy",
     links: [
-      { to: "/academy", label: "Certificate Programs" },
-      { to: "/academy", label: "Diploma Programs" },
-      { to: "/academy", label: "Professional Programs" },
+      { to: "/academy", label: "Academy Overview" },
       { to: "/verify", label: "Verify Certificate" },
       { to: "/login", label: "Student Login" },
     ],
@@ -42,7 +41,6 @@ const cols = [
       { to: "/faq", label: "Help Center" },
       { to: "/faq", label: "FAQ" },
       { to: "/careers", label: "Talent Application" },
-      { to: "/staff-access", label: "Staff Access" },
       { to: "/terms", label: "Terms of Service" },
       { to: "/privacy", label: "Privacy Policy" },
     ],
@@ -50,27 +48,49 @@ const cols = [
 ] as const;
 
 export function Footer() {
+  const subscribe = useServerFn(subscribeNewsletter);
+  const [email, setEmail] = useState("");
+  const [busy, setBusy] = useState(false);
+
+  const handleSubscribe = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email) return;
+    setBusy(true);
+    try {
+      await subscribe({ data: { email, source: "footer" } });
+      toast.success("Subscribed! Check your inbox soon for our next update.");
+      setEmail("");
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Could not subscribe. Try again.");
+    } finally {
+      setBusy(false);
+    }
+  };
+
   return (
     <footer className="relative mt-24 overflow-hidden border-t border-border bg-secondary/40">
       {/* Newsletter band */}
       <div className="border-b border-border bg-gradient-to-r from-[#0A0E2A] via-[#1a1052] to-[#0A0E2A] py-12 text-white">
-        <div className="mx-auto grid max-w-7xl items-center gap-6 px-6 md:grid-cols-[1fr_auto]">
+        <div className="mx-auto grid max-w-7xl items-center gap-6 px-6 text-center md:grid-cols-[1fr_auto] md:text-left">
           <div>
             <h3 className="text-2xl font-extrabold sm:text-3xl">Stay in the loop.</h3>
             <p className="mt-2 text-sm text-white/70">Get sharp ideas on digital work, freelancing and NDH Academy updates.</p>
           </div>
           <form
-            onSubmit={(e) => e.preventDefault()}
-            className="flex w-full max-w-md flex-col gap-2 sm:flex-row"
+            onSubmit={handleSubscribe}
+            className="mx-auto flex w-full max-w-md flex-col gap-2 sm:flex-row md:mx-0"
           >
             <input
               type="email"
               required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              aria-label="Email address"
               placeholder="you@email.com"
               className="flex-1 rounded-lg border border-white/15 bg-white/10 px-4 py-2.5 text-sm text-white placeholder:text-white/50 focus:outline-none focus:ring-2 focus:ring-[oklch(0.65_0.19_252)]"
             />
-            <Button type="submit" variant="brand">
-              Subscribe <Send className="h-4 w-4" />
+            <Button type="submit" variant="brand" disabled={busy}>
+              {busy ? "Subscribing…" : "Subscribe"} <Send className="h-4 w-4" />
             </Button>
           </form>
         </div>
