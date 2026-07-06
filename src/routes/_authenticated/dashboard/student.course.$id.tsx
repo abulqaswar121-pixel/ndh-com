@@ -157,7 +157,7 @@ function CoursePlayerPage() {
     return (
       <div className="mx-auto max-w-2xl p-10 text-center">
         <h1 className="text-2xl font-bold">Course not found</h1>
-        <Link to="/dashboard/student" className="mt-4 inline-block text-primary underline">Back to dashboard</Link>
+        <Link to="/dashboard/student" search={{ tab: undefined }} className="mt-4 inline-block text-primary underline">Back to dashboard</Link>
       </div>
     );
   }

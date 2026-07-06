@@ -40,7 +40,7 @@ function TalentDashboardPage() {
   useEffect(() => { (ensure as any)().catch(() => {}); // eslint-disable-next-line
   }, []);
 
-  const go = (t?: string) => navigate({ to: "/dashboard/talent", search: t ? { tab: t } : {} });
+  const go = (t?: string) => navigate({ to: "/dashboard/talent", search: () => (t ? { tab: t, task: undefined } : { tab: undefined, task: undefined }) });
 
   return (
     <DashboardShell title="Talent Portal" items={NAV}>
