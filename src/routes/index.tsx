@@ -394,3 +394,39 @@ function FaqItem({ q, a, defaultOpen }: { q: string; a: string; defaultOpen?: bo
     </div>
   );
 }
+
+function HomepageStats() {
+  const fallback = [
+    { label: "Tasks Delivered", value: 1200, suffix: "+" },
+    { label: "Vetted Talents", value: 180, suffix: "+" },
+    { label: "Academy Students", value: 850, suffix: "+" },
+    { label: "Countries Served", value: 18, suffix: "" },
+  ];
+  const { data } = useQuery({
+    queryKey: ["homepage_stats"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("homepage_stats")
+        .select("label,value,suffix,display_order")
+        .eq("published", true)
+        .order("display_order", { ascending: true });
+      if (error) return fallback;
+      return (data && data.length > 0)
+        ? data.map((r) => ({ label: r.label, value: Number(r.value) || 0, suffix: r.suffix || "" }))
+        : fallback;
+    },
+  });
+  const stats = data || fallback;
+  return (
+    <>
+      {stats.slice(0, 4).map((s) => (
+        <div key={s.label}>
+          <div className="text-3xl font-extrabold text-white sm:text-5xl">
+            <Counter to={s.value} suffix={s.suffix} />
+          </div>
+          <div className="mt-1 text-xs uppercase tracking-widest text-white/60">{s.label}</div>
+        </div>
+      ))}
+    </>
+  );
+}
