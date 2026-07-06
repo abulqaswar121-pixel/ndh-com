@@ -312,7 +312,7 @@ function Index() {
       <Section eyebrow="Portfolio" title="A taste of what NDH ships.">
         <PortfolioGrid items={portfolio} />
         <div className="mt-10 text-center">
-          <Link to="/services"><Button variant="outline" size="lg">See All Work <ArrowRight className="h-4 w-4" /></Button></Link>
+          <Link to="/case-studies"><Button variant="outline" size="lg">See All Work <ArrowRight className="h-4 w-4" /></Button></Link>
         </div>
       </Section>
 
