@@ -24,7 +24,7 @@ function ResetPasswordPage() {
     setLoading(false);
     if (error) { toast.error(error.message); return; }
     toast.success("Password updated");
-    navigate({ to: "/dashboard/client" });
+    navigate({ to: "/dashboard/client", search: () => ({ tab: undefined, task: undefined }) });
   };
 
   return (

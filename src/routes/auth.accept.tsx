@@ -34,7 +34,7 @@ function AcceptInvitePage() {
     setSaving(false);
     if (error) { toast.error(error.message); return; }
     toast.success("Welcome to NDH! Finishing setup…");
-    navigate({ to: "/dashboard/talent" });
+    navigate({ to: "/dashboard/talent", search: () => ({ tab: undefined, task: undefined }) });
   };
 
   return (
