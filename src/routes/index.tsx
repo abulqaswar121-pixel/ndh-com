@@ -11,6 +11,7 @@ import { SiteLayout } from "@/components/site/SiteLayout";
 import { Section } from "@/components/site/Section";
 import { Counter } from "@/components/site/Counter";
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { VideoHero } from "@/components/site/VideoHero";
 import { AnimatedBlobs } from "@/components/site/AnimatedBlobs";
 import { TypingHeadline } from "@/components/site/TypingHeadline";
@@ -60,12 +61,12 @@ const features = [
 ];
 
 const testimonials = [
-  { name: "Aisha Bello", role: "Founder, Lagos", quote: "NDH felt like an in-house team. Fast, sharp, and zero drama.", image: testimonialAisha },
-  { name: "James Rowe", role: "Operations, London", quote: "The PM model is gold — one contact, world-class delivery.", image: testimonialJames },
-  { name: "Tunde Adeyemi", role: "CEO, Abuja", quote: "From brand to web to ads, every piece felt premium.", image: testimonialTunde },
-  { name: "Maryam Ibrahim", role: "Brand Manager, Dubai", quote: "World-class output with zero project management overhead.", image: testimonialMaryam },
-  { name: "Chinedu Okafor", role: "Founder, Enugu", quote: "Their PMs treated my product like their own. Shipped fast.", image: testimonialChinedu },
-  { name: "Sarah Mitchell", role: "Marketing, Toronto", quote: "Best agency-feel I've had at startup pricing. Hire them.", image: testimonialSarah },
+  { name: "Aisha Bello", role: "Founder, Lagos", quote: "NDH felt like an in-house team. Fast, sharp, and zero drama.", image: testimonialAisha, full: "We came to NDH with a half-baked fintech idea and a tight deadline. Within 48 hours we had a PM, a designer and a full-stack dev on our project. They shipped a beautiful onboarding flow in three weeks, handled every revision without complaint, and even flagged growth ideas we hadn't thought about. It genuinely felt like we'd hired an in-house team overnight." },
+  { name: "James Rowe", role: "Operations, London", quote: "The PM model is gold — one contact, world-class delivery.", image: testimonialJames, full: "I've worked with a dozen agencies and freelancers over the years. NDH is the first that gave me one accountable PM who actually ran the project. No chasing, no missed deadlines, no ambiguous quotes. Just weekly updates, clean handoffs and premium output — from London to Sokoto and back." },
+  { name: "Tunde Adeyemi", role: "CEO, Abuja", quote: "From brand to web to ads, every piece felt premium.", image: testimonialTunde, full: "We rebranded our entire retail chain with NDH — new identity, new site, launch campaign across Meta and Google. Every deliverable felt considered and premium. Six months in, our online revenue has more than doubled and the team still supports us on retainer." },
+  { name: "Maryam Ibrahim", role: "Brand Manager, Dubai", quote: "World-class output with zero project management overhead.", image: testimonialMaryam, full: "As a brand manager I usually spend half my week managing vendors. NDH removed that entire burden. Their PM absorbed briefs, ran QA and delivered polished work I could take straight to our CEO. The Dubai launch was our smoothest ever." },
+  { name: "Chinedu Okafor", role: "Founder, Enugu", quote: "Their PMs treated my product like their own. Shipped fast.", image: testimonialChinedu, full: "The energy at NDH is different. Their PM genuinely cared about my product — asked hard questions, pushed back on weak ideas, and delivered features faster than teams five times the size. We're on our third project together." },
+  { name: "Sarah Mitchell", role: "Marketing, Toronto", quote: "Best agency-feel I've had at startup pricing. Hire them.", image: testimonialSarah, full: "I've worked with Toronto and NYC agencies that charged 5x and delivered less. NDH gave me a strategist, designer and paid-media lead — all coordinated by one PM — for a fraction of the price. Our CPA dropped 38% in the first quarter." },
 ];
 
 import founderAsset from "@/assets/founder-ceo.png.asset.json";
@@ -80,18 +81,18 @@ const team = [
 ];
 
 const programs = [
-  { tier: "Certificate", duration: "4–8 weeks", q: "african student learning graphic design laptop online course", desc: "Short, focused skill-ups in design, code, content, marketing and media." },
-  { tier: "Diploma", duration: "3–6 months", q: "african adult professionals coding bootcamp mentor laptop office", desc: "Career-ready diplomas with mentorship, projects and capstone." },
-  { tier: "Professional", duration: "6–12 months", q: "african tech professionals cohort training workshop office", desc: "Elite, cohort-based training. Top grads earn a seat in the NDH talent pool." },
+  { tier: "Certificate", duration: "4–8 weeks", q: "african student learning graphic design laptop online course", desc: "Short, focused skill-ups in design, code, content, marketing and media.", to: "/academy" as const },
+  { tier: "Diploma", duration: "3–6 months", q: "african adult professionals coding bootcamp mentor laptop office", desc: "Career-ready diplomas with mentorship, projects and capstone.", to: "/academy" as const },
+  { tier: "Professional", duration: "6–12 months", q: "african tech professionals cohort training workshop office", desc: "Elite, cohort-based training. Top grads earn a seat in the NDH talent pool.", to: "/academy" as const },
 ];
 
 const portfolio = [
-  { tag: "Web", title: "Fintech onboarding flow", q: "fintech mobile app ui design" },
-  { tag: "Brand", title: "Ramadan rebrand for retail", q: "luxury brand identity packaging" },
-  { tag: "Marketing", title: "Diaspora launch campaign", q: "social media campaign creative" },
-  { tag: "Product", title: "EdTech course platform", q: "edtech web app dashboard" },
-  { tag: "Media", title: "Founder podcast series", q: "podcast studio recording african" },
-  { tag: "AI", title: "Customer-support assistant", q: "ai chatbot dashboard interface" },
+  { tag: "Web", title: "Fintech onboarding flow", q: "fintech mobile app ui design", client: "Neobank startup, Lagos", scope: "UX research, UI design, React Native build", outcome: "Reduced onboarding drop-off by 42% and cut KYC time from 9 minutes to under 3.", details: "We designed and shipped a full onboarding experience for a Nigerian neobank — BVN capture, tiered KYC, biometric login and a delightful first-run tour. Delivered in 6 weeks with a PM, product designer and two React Native engineers." },
+  { tag: "Brand", title: "Ramadan rebrand for retail", q: "luxury brand identity packaging", client: "Multi-store retail chain, Kano", scope: "Brand strategy, identity system, packaging, in-store signage", outcome: "Launch weekend traffic up 3.1×; social mentions up 6×.", details: "A full seasonal rebrand across 14 stores — new mark, packaging system, print collateral and a coordinated in-store rollout. Every asset shipped from a single NDH creative pod in 5 weeks." },
+  { tag: "Marketing", title: "Diaspora launch campaign", q: "social media campaign creative", client: "African skincare DTC brand", scope: "Meta + TikTok ads, influencer seeding, landing pages", outcome: "£142k in first-30-day revenue at a 3.4 ROAS.", details: "A diaspora-focused launch across the UK, US and Canada — creator seeding, paid social, geo-targeted landing pages and a full analytics setup. Managed end-to-end by one NDH growth PM." },
+  { tag: "Product", title: "EdTech course platform", q: "edtech web app dashboard", client: "Vocational training provider, Abuja", scope: "Full-stack platform, payments, certificates", outcome: "10k learners onboarded in the first cohort with 94% uptime.", details: "A complete LMS: course authoring, live classes, quizzes, Paystack + Stripe billing, verifiable QR certificates and an admin analytics dashboard. Built on TypeScript, React and Supabase in 10 weeks." },
+  { tag: "Media", title: "Founder podcast series", q: "podcast studio recording african", client: "African VC firm", scope: "Studio production, editing, distribution, socials", outcome: "Reached #4 in Nigerian Business on Apple Podcasts in season 1.", details: "A 12-episode founder interview series. NDH handled everything: guest coordination, in-studio recording, audio + video editing, show notes, cover art, distribution across Spotify/Apple and short-form clips for LinkedIn and X." },
+  { tag: "AI", title: "Customer-support assistant", q: "ai chatbot dashboard interface", client: "B2B SaaS, London", scope: "RAG assistant, knowledge sync, human handoff", outcome: "Deflected 61% of tier-1 tickets in month one.", details: "A production-grade support assistant integrated into their web app and Slack. Ingests docs and past tickets, answers with citations, escalates to humans cleanly and reports weekly deflection metrics." },
 ];
 
 const faqs = [
@@ -287,7 +288,7 @@ function Index() {
         <Stagger className="grid gap-5 md:grid-cols-3">
           {programs.map((p) => (
             <StaggerItem key={p.tier}>
-              <div className="group relative h-full overflow-hidden rounded-2xl border border-border bg-card transition-all hover:-translate-y-2 hover:shadow-glow">
+              <Link to={p.to} className="group relative block h-full overflow-hidden rounded-2xl border border-border bg-card transition-all hover:-translate-y-2 hover:shadow-glow">
                 <div className="relative aspect-[16/9] overflow-hidden">
                   <Parallax offset={20} className="absolute inset-0">
                     <UnsplashImg q={p.q} alt={p.tier} w={800} h={450} sig={p.tier} className="h-[115%] w-full object-cover transition-transform duration-500 group-hover:scale-110" />
@@ -297,8 +298,11 @@ function Index() {
                   <div className="inline-flex rounded-full bg-gradient-brand px-3 py-1 text-xs font-bold uppercase tracking-widest text-white">{p.tier}</div>
                   <div className="mt-3 text-sm text-muted-foreground">{p.duration}</div>
                   <p className="mt-3 text-sm">{p.desc}</p>
+                  <div className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-foreground/80 group-hover:text-foreground">
+                    Explore Academy <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                  </div>
                 </div>
-              </div>
+              </Link>
             </StaggerItem>
           ))}
         </Stagger>
@@ -309,22 +313,7 @@ function Index() {
 
       {/* PORTFOLIO */}
       <Section eyebrow="Portfolio" title="A taste of what NDH ships.">
-        <Stagger className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {portfolio.map((p) => (
-            <StaggerItem key={p.title}>
-              <div className="group relative aspect-[4/3] overflow-hidden rounded-2xl border border-border">
-                <Parallax offset={24} className="absolute inset-0">
-                  <UnsplashImg q={p.q} alt={p.title} w={800} h={600} sig={p.title} className="h-[115%] w-full object-cover transition-transform duration-700 group-hover:scale-110" />
-                </Parallax>
-                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent" />
-                <div className="absolute bottom-0 p-5 text-white">
-                  <div className="text-xs font-semibold uppercase tracking-widest text-white/70">{p.tag}</div>
-                  <div className="mt-1 text-lg font-bold">{p.title}</div>
-                </div>
-              </div>
-            </StaggerItem>
-          ))}
-        </Stagger>
+        <PortfolioGrid items={portfolio} />
         <div className="mt-10 text-center">
           <Link to="/services"><Button variant="outline" size="lg">See All Work <ArrowRight className="h-4 w-4" /></Button></Link>
         </div>
