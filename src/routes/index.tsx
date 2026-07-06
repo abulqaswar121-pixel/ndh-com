@@ -167,14 +167,14 @@ function Index() {
                 </div>
                 <h3 className="text-lg font-bold">{s.title}</h3>
                 <p className="mt-2 text-sm text-muted-foreground">{s.desc}</p>
-                <div className="mt-5 inline-flex items-center gap-1 text-sm font-semibold text-foreground/80 group-hover:text-foreground">
-                  Explore {s.title} services <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-                </div>
                 <div className="pointer-events-none absolute -right-12 -top-12 h-32 w-32 rounded-full bg-gradient-brand opacity-0 blur-2xl transition-opacity group-hover:opacity-30" />
               </Link>
             </StaggerItem>
           ))}
         </Stagger>
+        <div className="mt-10 text-center">
+          <Link to="/services"><Button variant="brand" size="lg">See All Services <ArrowRight className="h-4 w-4" /></Button></Link>
+        </div>
       </Section>
 
       {/* HOW IT WORKS */}
@@ -298,9 +298,6 @@ function Index() {
                   <div className="inline-flex rounded-full bg-gradient-brand px-3 py-1 text-xs font-bold uppercase tracking-widest text-white">{p.tier}</div>
                   <div className="mt-3 text-sm text-muted-foreground">{p.duration}</div>
                   <p className="mt-3 text-sm">{p.desc}</p>
-                  <div className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-foreground/80 group-hover:text-foreground">
-                    Explore Academy <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-                  </div>
                 </div>
               </Link>
             </StaggerItem>
