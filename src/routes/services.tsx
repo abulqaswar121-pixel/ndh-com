@@ -10,6 +10,7 @@ import { UnsplashImg } from "@/components/site/UnsplashImg";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { PortfolioGrid } from "@/routes/index";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/services")({
   head: () => ({ meta: [
@@ -48,8 +49,13 @@ function ServicesPage() {
       .select("name,icon,included,image_url")
       .eq("published", true)
       .order("display_order", { ascending: true })
-      .then(({ data }) => {
-        setCats((data || []).map((r) => ({
+      .then(({ data, error }) => {
+        if (error || !data || data.length === 0) {
+          toast("No services available right now.");
+          setCats([]);
+          return;
+        }
+        setCats(data.map((r) => ({
           icon: r.icon || "Sparkles",
           title: r.name,
           q: QUERIES[r.name] || r.name.toLowerCase(),
