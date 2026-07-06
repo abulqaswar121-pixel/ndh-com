@@ -246,7 +246,9 @@ function Index() {
           </Reveal>
           <Reveal delay={0.1}>
             <div className="relative overflow-hidden rounded-3xl border border-border shadow-elegant">
-              <UnsplashImg q="nigerian tech startup office lagos developers collaborating computers" alt="NDH tech bureau in Nigeria" w={1000} h={1200} className="h-full w-full object-cover" />
+              <Parallax offset={40} className="h-full w-full">
+                <UnsplashImg q="nigerian tech startup office lagos developers collaborating computers" alt="NDH tech bureau in Nigeria" w={1000} h={1200} className="h-full w-full object-cover" />
+              </Parallax>
             </div>
           </Reveal>
         </div>
