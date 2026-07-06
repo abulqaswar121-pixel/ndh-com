@@ -145,7 +145,10 @@ function UserRow({ user, roles, departments, isSuper, onGrant, onRevoke }: {
   const [newRole, setNewRole] = useState<Role | "">("");
   const [dept, setDept] = useState<string>(user.department_id || "");
   const sensitive = (r: Role) => r === "admin" || r === "super_admin" || r === "finance";
-  const grantable: Role[] = isSuper ? [...ROLES] : ROLES.filter((r) => !sensitive(r));
+  // Non-super Admins are Bureau-only: can manage clients, talents, PMs.
+  // Academy roles (student, instructor, hod) are Super Admin-only.
+  const bureauOnly: Role[] = ["client", "talent", "pm"];
+  const grantable: Role[] = isSuper ? [...ROLES] : bureauOnly;
   return (
     <div className="rounded-lg border border-border p-3">
       <div className="flex flex-wrap items-center justify-between gap-3">
