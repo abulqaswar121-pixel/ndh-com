@@ -288,8 +288,10 @@ function Index() {
           {programs.map((p) => (
             <StaggerItem key={p.tier}>
               <div className="group relative h-full overflow-hidden rounded-2xl border border-border bg-card transition-all hover:-translate-y-2 hover:shadow-glow">
-                <div className="aspect-[16/9] overflow-hidden">
-                  <UnsplashImg q={p.q} alt={p.tier} w={800} h={450} sig={p.tier} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" />
+                <div className="relative aspect-[16/9] overflow-hidden">
+                  <Parallax offset={20} className="absolute inset-0">
+                    <UnsplashImg q={p.q} alt={p.tier} w={800} h={450} sig={p.tier} className="h-[115%] w-full object-cover transition-transform duration-500 group-hover:scale-110" />
+                  </Parallax>
                 </div>
                 <div className="p-6">
                   <div className="inline-flex rounded-full bg-gradient-brand px-3 py-1 text-xs font-bold uppercase tracking-widest text-white">{p.tier}</div>
