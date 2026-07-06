@@ -14,9 +14,9 @@ import { Route as TermsRouteImport } from './routes/terms'
 import { Route as TeamRouteImport } from './routes/team'
 import { Route as TalentLoginRouteImport } from './routes/talent-login'
 import { Route as TalentApplicationRouteImport } from './routes/talent-application'
-import { Route as TalentRouteImport } from './routes/talent'
 import { Route as SubmitTaskRouteImport } from './routes/submit-task'
 import { Route as StudentRouteImport } from './routes/student'
+import { Route as StartProjectRouteImport } from './routes/start-project'
 import { Route as StaffAccessRouteImport } from './routes/staff-access'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as SignupRouteImport } from './routes/signup'
@@ -37,8 +37,10 @@ import { Route as AcademyRouteImport } from './routes/academy'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as TalentIndexRouteImport } from './routes/talent.index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as VerifyIdRouteImport } from './routes/verify.$id'
+import { Route as TalentSlugRouteImport } from './routes/talent.$slug'
 import { Route as EmailUnsubscribeRouteImport } from './routes/email/unsubscribe'
 import { Route as CaseStudiesSlugRouteImport } from './routes/case-studies.$slug'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
@@ -105,11 +107,6 @@ const TalentApplicationRoute = TalentApplicationRouteImport.update({
   path: '/talent-application',
   getParentRoute: () => rootRouteImport,
 } as any)
-const TalentRoute = TalentRouteImport.update({
-  id: '/talent',
-  path: '/talent',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const SubmitTaskRoute = SubmitTaskRouteImport.update({
   id: '/submit-task',
   path: '/submit-task',
@@ -118,6 +115,11 @@ const SubmitTaskRoute = SubmitTaskRouteImport.update({
 const StudentRoute = StudentRouteImport.update({
   id: '/student',
   path: '/student',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StartProjectRoute = StartProjectRouteImport.update({
+  id: '/start-project',
+  path: '/start-project',
   getParentRoute: () => rootRouteImport,
 } as any)
 const StaffAccessRoute = StaffAccessRouteImport.update({
@@ -219,6 +221,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TalentIndexRoute = TalentIndexRouteImport.update({
+  id: '/talent/',
+  path: '/talent/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminIndexRoute = AdminIndexRouteImport.update({
   id: '/admin/',
   path: '/admin/',
@@ -228,6 +235,11 @@ const VerifyIdRoute = VerifyIdRouteImport.update({
   id: '/$id',
   path: '/$id',
   getParentRoute: () => VerifyRoute,
+} as any)
+const TalentSlugRoute = TalentSlugRouteImport.update({
+  id: '/talent/$slug',
+  path: '/talent/$slug',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const EmailUnsubscribeRoute = EmailUnsubscribeRouteImport.update({
   id: '/email/unsubscribe',
@@ -473,9 +485,9 @@ export interface FileRoutesByFullPath {
   '/signup': typeof SignupRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/staff-access': typeof StaffAccessRoute
+  '/start-project': typeof StartProjectRoute
   '/student': typeof StudentRoute
   '/submit-task': typeof SubmitTaskRoute
-  '/talent': typeof TalentRoute
   '/talent-application': typeof TalentApplicationRoute
   '/talent-login': typeof TalentLoginRoute
   '/team': typeof TeamRoute
@@ -497,8 +509,10 @@ export interface FileRoutesByFullPath {
   '/blog/$slug': typeof BlogSlugRoute
   '/case-studies/$slug': typeof CaseStudiesSlugRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
+  '/talent/$slug': typeof TalentSlugRoute
   '/verify/$id': typeof VerifyIdRoute
   '/admin/': typeof AdminIndexRoute
+  '/talent/': typeof TalentIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/dashboard/academy-director': typeof AuthenticatedDashboardAcademyDirectorRoute
@@ -544,9 +558,9 @@ export interface FileRoutesByTo {
   '/signup': typeof SignupRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/staff-access': typeof StaffAccessRoute
+  '/start-project': typeof StartProjectRoute
   '/student': typeof StudentRoute
   '/submit-task': typeof SubmitTaskRoute
-  '/talent': typeof TalentRoute
   '/talent-application': typeof TalentApplicationRoute
   '/talent-login': typeof TalentLoginRoute
   '/team': typeof TeamRoute
@@ -568,8 +582,10 @@ export interface FileRoutesByTo {
   '/blog/$slug': typeof BlogSlugRoute
   '/case-studies/$slug': typeof CaseStudiesSlugRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
+  '/talent/$slug': typeof TalentSlugRoute
   '/verify/$id': typeof VerifyIdRoute
   '/admin': typeof AdminIndexRoute
+  '/talent': typeof TalentIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/dashboard/academy-director': typeof AuthenticatedDashboardAcademyDirectorRoute
@@ -617,9 +633,9 @@ export interface FileRoutesById {
   '/signup': typeof SignupRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/staff-access': typeof StaffAccessRoute
+  '/start-project': typeof StartProjectRoute
   '/student': typeof StudentRoute
   '/submit-task': typeof SubmitTaskRoute
-  '/talent': typeof TalentRoute
   '/talent-application': typeof TalentApplicationRoute
   '/talent-login': typeof TalentLoginRoute
   '/team': typeof TeamRoute
@@ -641,8 +657,10 @@ export interface FileRoutesById {
   '/blog/$slug': typeof BlogSlugRoute
   '/case-studies/$slug': typeof CaseStudiesSlugRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
+  '/talent/$slug': typeof TalentSlugRoute
   '/verify/$id': typeof VerifyIdRoute
   '/admin/': typeof AdminIndexRoute
+  '/talent/': typeof TalentIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/_authenticated/dashboard/academy-director': typeof AuthenticatedDashboardAcademyDirectorRoute
@@ -690,9 +708,9 @@ export interface FileRouteTypes {
     | '/signup'
     | '/sitemap.xml'
     | '/staff-access'
+    | '/start-project'
     | '/student'
     | '/submit-task'
-    | '/talent'
     | '/talent-application'
     | '/talent-login'
     | '/team'
@@ -714,8 +732,10 @@ export interface FileRouteTypes {
     | '/blog/$slug'
     | '/case-studies/$slug'
     | '/email/unsubscribe'
+    | '/talent/$slug'
     | '/verify/$id'
     | '/admin/'
+    | '/talent/'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
     | '/dashboard/academy-director'
@@ -761,9 +781,9 @@ export interface FileRouteTypes {
     | '/signup'
     | '/sitemap.xml'
     | '/staff-access'
+    | '/start-project'
     | '/student'
     | '/submit-task'
-    | '/talent'
     | '/talent-application'
     | '/talent-login'
     | '/team'
@@ -785,8 +805,10 @@ export interface FileRouteTypes {
     | '/blog/$slug'
     | '/case-studies/$slug'
     | '/email/unsubscribe'
+    | '/talent/$slug'
     | '/verify/$id'
     | '/admin'
+    | '/talent'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
     | '/dashboard/academy-director'
@@ -833,9 +855,9 @@ export interface FileRouteTypes {
     | '/signup'
     | '/sitemap.xml'
     | '/staff-access'
+    | '/start-project'
     | '/student'
     | '/submit-task'
-    | '/talent'
     | '/talent-application'
     | '/talent-login'
     | '/team'
@@ -857,8 +879,10 @@ export interface FileRouteTypes {
     | '/blog/$slug'
     | '/case-studies/$slug'
     | '/email/unsubscribe'
+    | '/talent/$slug'
     | '/verify/$id'
     | '/admin/'
+    | '/talent/'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
     | '/_authenticated/dashboard/academy-director'
@@ -906,9 +930,9 @@ export interface RootRouteChildren {
   SignupRoute: typeof SignupRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   StaffAccessRoute: typeof StaffAccessRoute
+  StartProjectRoute: typeof StartProjectRoute
   StudentRoute: typeof StudentRoute
   SubmitTaskRoute: typeof SubmitTaskRoute
-  TalentRoute: typeof TalentRoute
   TalentApplicationRoute: typeof TalentApplicationRoute
   TalentLoginRoute: typeof TalentLoginRoute
   TeamRoute: typeof TeamRoute
@@ -925,7 +949,9 @@ export interface RootRouteChildren {
   AdminStudentAffairsRoute: typeof AdminStudentAffairsRoute
   AuthAcceptRoute: typeof AuthAcceptRoute
   EmailUnsubscribeRoute: typeof EmailUnsubscribeRoute
+  TalentSlugRoute: typeof TalentSlugRoute
   AdminIndexRoute: typeof AdminIndexRoute
+  TalentIndexRoute: typeof TalentIndexRoute
   DotlovableOauthConsentRoute: typeof DotlovableOauthConsentRoute
   Char91DotmcpChar93InvokeToolToolRoute: typeof Char91DotmcpChar93InvokeToolToolRoute
   LovableEmailSuppressionRoute: typeof LovableEmailSuppressionRoute
@@ -974,13 +1000,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TalentApplicationRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/talent': {
-      id: '/talent'
-      path: '/talent'
-      fullPath: '/talent'
-      preLoaderRoute: typeof TalentRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/submit-task': {
       id: '/submit-task'
       path: '/submit-task'
@@ -993,6 +1012,13 @@ declare module '@tanstack/react-router' {
       path: '/student'
       fullPath: '/student'
       preLoaderRoute: typeof StudentRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/start-project': {
+      id: '/start-project'
+      path: '/start-project'
+      fullPath: '/start-project'
+      preLoaderRoute: typeof StartProjectRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/staff-access': {
@@ -1135,6 +1161,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/talent/': {
+      id: '/talent/'
+      path: '/talent'
+      fullPath: '/talent/'
+      preLoaderRoute: typeof TalentIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin/': {
       id: '/admin/'
       path: '/admin'
@@ -1148,6 +1181,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/verify/$id'
       preLoaderRoute: typeof VerifyIdRouteImport
       parentRoute: typeof VerifyRoute
+    }
+    '/talent/$slug': {
+      id: '/talent/$slug'
+      path: '/talent/$slug'
+      fullPath: '/talent/$slug'
+      preLoaderRoute: typeof TalentSlugRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/email/unsubscribe': {
       id: '/email/unsubscribe'
@@ -1544,9 +1584,9 @@ const rootRouteChildren: RootRouteChildren = {
   SignupRoute: SignupRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   StaffAccessRoute: StaffAccessRoute,
+  StartProjectRoute: StartProjectRoute,
   StudentRoute: StudentRoute,
   SubmitTaskRoute: SubmitTaskRoute,
-  TalentRoute: TalentRoute,
   TalentApplicationRoute: TalentApplicationRoute,
   TalentLoginRoute: TalentLoginRoute,
   TeamRoute: TeamRoute,
@@ -1564,7 +1604,9 @@ const rootRouteChildren: RootRouteChildren = {
   AdminStudentAffairsRoute: AdminStudentAffairsRoute,
   AuthAcceptRoute: AuthAcceptRoute,
   EmailUnsubscribeRoute: EmailUnsubscribeRoute,
+  TalentSlugRoute: TalentSlugRoute,
   AdminIndexRoute: AdminIndexRoute,
+  TalentIndexRoute: TalentIndexRoute,
   DotlovableOauthConsentRoute: DotlovableOauthConsentRoute,
   Char91DotmcpChar93InvokeToolToolRoute: Char91DotmcpChar93InvokeToolToolRoute,
   LovableEmailSuppressionRoute: LovableEmailSuppressionRoute,
@@ -1578,13 +1620,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

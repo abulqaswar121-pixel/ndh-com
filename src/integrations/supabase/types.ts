@@ -2029,6 +2029,71 @@ export type Database = {
           },
         ]
       }
+      project_quotes: {
+        Row: {
+          budget_range: string | null
+          company: string | null
+          converted_task_id: string | null
+          created_at: string
+          description: string | null
+          email: string
+          extra: Json | null
+          id: string
+          name: string
+          phone: string | null
+          project_type: string
+          services: string[] | null
+          status: string
+          timeline: string | null
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          budget_range?: string | null
+          company?: string | null
+          converted_task_id?: string | null
+          created_at?: string
+          description?: string | null
+          email: string
+          extra?: Json | null
+          id?: string
+          name: string
+          phone?: string | null
+          project_type: string
+          services?: string[] | null
+          status?: string
+          timeline?: string | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          budget_range?: string | null
+          company?: string | null
+          converted_task_id?: string | null
+          created_at?: string
+          description?: string | null
+          email?: string
+          extra?: Json | null
+          id?: string
+          name?: string
+          phone?: string | null
+          project_type?: string
+          services?: string[] | null
+          status?: string
+          timeline?: string | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "project_quotes_converted_task_id_fkey"
+            columns: ["converted_task_id"]
+            isOneToOne: false
+            referencedRelation: "tasks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       quotes: {
         Row: {
           amount: number
@@ -2397,6 +2462,53 @@ export type Database = {
         }
         Relationships: []
       }
+      talent_portfolio_items: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          image_url: string | null
+          link_url: string | null
+          position: number
+          tags: string[] | null
+          talent_id: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          image_url?: string | null
+          link_url?: string | null
+          position?: number
+          tags?: string[] | null
+          talent_id: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          image_url?: string | null
+          link_url?: string | null
+          position?: number
+          tags?: string[] | null
+          talent_id?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "talent_portfolio_items_talent_id_fkey"
+            columns: ["talent_id"]
+            isOneToOne: false
+            referencedRelation: "talents"
+            referencedColumns: ["user_id"]
+          },
+        ]
+      }
       talent_reviews: {
         Row: {
           approved: boolean
@@ -2449,58 +2561,85 @@ export type Database = {
           approval_rate: number
           availability: string
           bank_details: Json | null
+          bio: string | null
           created_at: string
           department_id: string | null
+          github_url: string | null
+          headline: string | null
+          hourly_rate: number | null
           invited_at: string | null
           invited_by: string | null
+          is_public: boolean
           joined_at: string | null
+          linkedin_url: string | null
           max_active_tasks: number
           performance_score: number | null
           phone: string | null
+          portfolio_url: string | null
+          public_slug: string | null
           skills: string[] | null
           status: string
           tasks_completed: number
           tier: number
           total_earnings: number | null
           user_id: string
+          years_experience: number | null
         }
         Insert: {
           approval_rate?: number
           availability?: string
           bank_details?: Json | null
+          bio?: string | null
           created_at?: string
           department_id?: string | null
+          github_url?: string | null
+          headline?: string | null
+          hourly_rate?: number | null
           invited_at?: string | null
           invited_by?: string | null
+          is_public?: boolean
           joined_at?: string | null
+          linkedin_url?: string | null
           max_active_tasks?: number
           performance_score?: number | null
           phone?: string | null
+          portfolio_url?: string | null
+          public_slug?: string | null
           skills?: string[] | null
           status?: string
           tasks_completed?: number
           tier?: number
           total_earnings?: number | null
           user_id: string
+          years_experience?: number | null
         }
         Update: {
           approval_rate?: number
           availability?: string
           bank_details?: Json | null
+          bio?: string | null
           created_at?: string
           department_id?: string | null
+          github_url?: string | null
+          headline?: string | null
+          hourly_rate?: number | null
           invited_at?: string | null
           invited_by?: string | null
+          is_public?: boolean
           joined_at?: string | null
+          linkedin_url?: string | null
           max_active_tasks?: number
           performance_score?: number | null
           phone?: string | null
+          portfolio_url?: string | null
+          public_slug?: string | null
           skills?: string[] | null
           status?: string
           tasks_completed?: number
           tier?: number
           total_earnings?: number | null
           user_id?: string
+          years_experience?: number | null
         }
         Relationships: [
           {
