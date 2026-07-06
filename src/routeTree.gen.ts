@@ -55,6 +55,7 @@ import { Route as AdminAcademyRouteImport } from './routes/admin.academy'
 import { Route as AcademyProfessionalProgramsRouteImport } from './routes/academy.professional-programs'
 import { Route as AcademyDiplomaProgramsRouteImport } from './routes/academy.diploma-programs'
 import { Route as AcademyCertificateProgramsRouteImport } from './routes/academy.certificate-programs'
+import { Route as AuthenticatedPortfolioRouteImport } from './routes/_authenticated/portfolio'
 import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
 import { Route as Char91DotmcpChar93ListToolsRouteImport } from './routes/[.mcp]/list-tools'
 import { Route as LovableEmailSuppressionRouteImport } from './routes/lovable/email/suppression'
@@ -313,6 +314,11 @@ const AcademyCertificateProgramsRoute =
     path: '/certificate-programs',
     getParentRoute: () => AcademyRoute,
   } as any)
+const AuthenticatedPortfolioRoute = AuthenticatedPortfolioRouteImport.update({
+  id: '/portfolio',
+  path: '/portfolio',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const Char91DotwellKnownChar93OauthProtectedResourceRoute =
   Char91DotwellKnownChar93OauthProtectedResourceRouteImport.update({
     id: '/.well-known/oauth-protected-resource',
@@ -495,6 +501,7 @@ export interface FileRoutesByFullPath {
   '/verify': typeof VerifyRouteWithChildren
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
+  '/portfolio': typeof AuthenticatedPortfolioRoute
   '/academy/certificate-programs': typeof AcademyCertificateProgramsRoute
   '/academy/diploma-programs': typeof AcademyDiplomaProgramsRoute
   '/academy/professional-programs': typeof AcademyProfessionalProgramsRoute
@@ -568,6 +575,7 @@ export interface FileRoutesByTo {
   '/verify': typeof VerifyRouteWithChildren
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
+  '/portfolio': typeof AuthenticatedPortfolioRoute
   '/academy/certificate-programs': typeof AcademyCertificateProgramsRoute
   '/academy/diploma-programs': typeof AcademyDiplomaProgramsRoute
   '/academy/professional-programs': typeof AcademyProfessionalProgramsRoute
@@ -643,6 +651,7 @@ export interface FileRoutesById {
   '/verify': typeof VerifyRouteWithChildren
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
+  '/_authenticated/portfolio': typeof AuthenticatedPortfolioRoute
   '/academy/certificate-programs': typeof AcademyCertificateProgramsRoute
   '/academy/diploma-programs': typeof AcademyDiplomaProgramsRoute
   '/academy/professional-programs': typeof AcademyProfessionalProgramsRoute
@@ -718,6 +727,7 @@ export interface FileRouteTypes {
     | '/verify'
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
+    | '/portfolio'
     | '/academy/certificate-programs'
     | '/academy/diploma-programs'
     | '/academy/professional-programs'
@@ -791,6 +801,7 @@ export interface FileRouteTypes {
     | '/verify'
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
+    | '/portfolio'
     | '/academy/certificate-programs'
     | '/academy/diploma-programs'
     | '/academy/professional-programs'
@@ -865,6 +876,7 @@ export interface FileRouteTypes {
     | '/verify'
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
+    | '/_authenticated/portfolio'
     | '/academy/certificate-programs'
     | '/academy/diploma-programs'
     | '/academy/professional-programs'
@@ -1287,6 +1299,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AcademyCertificateProgramsRouteImport
       parentRoute: typeof AcademyRoute
     }
+    '/_authenticated/portfolio': {
+      id: '/_authenticated/portfolio'
+      path: '/portfolio'
+      fullPath: '/portfolio'
+      preLoaderRoute: typeof AuthenticatedPortfolioRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/.well-known/oauth-protected-resource': {
       id: '/.well-known/oauth-protected-resource'
       path: '/.well-known/oauth-protected-resource'
@@ -1473,6 +1492,7 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedRouteRouteChildren {
+  AuthenticatedPortfolioRoute: typeof AuthenticatedPortfolioRoute
   AuthenticatedDashboardAcademyDirectorRoute: typeof AuthenticatedDashboardAcademyDirectorRoute
   AuthenticatedDashboardAdminRoute: typeof AuthenticatedDashboardAdminRoute
   AuthenticatedDashboardClientRoute: typeof AuthenticatedDashboardClientRoute
@@ -1490,6 +1510,7 @@ interface AuthenticatedRouteRouteChildren {
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedPortfolioRoute: AuthenticatedPortfolioRoute,
   AuthenticatedDashboardAcademyDirectorRoute:
     AuthenticatedDashboardAcademyDirectorRoute,
   AuthenticatedDashboardAdminRoute: AuthenticatedDashboardAdminRoute,
