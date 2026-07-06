@@ -23,7 +23,7 @@ const cols = [
     title: "Services",
     links: [
       { to: "/services", label: "All Services" },
-      { to: "/services", label: "Case Studies" },
+      { to: "/case-studies", label: "Case Studies" },
       { to: "/contact", label: "Request a Quote" },
     ],
   },
