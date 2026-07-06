@@ -59,6 +59,7 @@ import { Route as AuthenticatedPortfolioRouteImport } from './routes/_authentica
 import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
 import { Route as Char91DotmcpChar93ListToolsRouteImport } from './routes/[.mcp]/list-tools'
 import { Route as LovableEmailSuppressionRouteImport } from './routes/lovable/email/suppression'
+import { Route as ApiPublicChatRouteImport } from './routes/api/public/chat'
 import { Route as AcademyCourseSlugRouteImport } from './routes/academy.course.$slug'
 import { Route as AuthenticatedDashboardTalentRouteImport } from './routes/_authenticated/dashboard/talent'
 import { Route as AuthenticatedDashboardSuperAdminRouteImport } from './routes/_authenticated/dashboard/super-admin'
@@ -336,6 +337,11 @@ const LovableEmailSuppressionRoute = LovableEmailSuppressionRouteImport.update({
   path: '/lovable/email/suppression',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicChatRoute = ApiPublicChatRouteImport.update({
+  id: '/api/public/chat',
+  path: '/api/public/chat',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AcademyCourseSlugRoute = AcademyCourseSlugRouteImport.update({
   id: '/course/$slug',
   path: '/course/$slug',
@@ -534,6 +540,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/super-admin': typeof AuthenticatedDashboardSuperAdminRoute
   '/dashboard/talent': typeof AuthenticatedDashboardTalentRoute
   '/academy/course/$slug': typeof AcademyCourseSlugRoute
+  '/api/public/chat': typeof ApiPublicChatRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/academy/apply/$slug': typeof AuthenticatedAcademyApplySlugRoute
   '/api/public/webhooks/paystack': typeof ApiPublicWebhooksPaystackRoute
@@ -608,6 +615,7 @@ export interface FileRoutesByTo {
   '/dashboard/super-admin': typeof AuthenticatedDashboardSuperAdminRoute
   '/dashboard/talent': typeof AuthenticatedDashboardTalentRoute
   '/academy/course/$slug': typeof AcademyCourseSlugRoute
+  '/api/public/chat': typeof ApiPublicChatRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/academy/apply/$slug': typeof AuthenticatedAcademyApplySlugRoute
   '/api/public/webhooks/paystack': typeof ApiPublicWebhooksPaystackRoute
@@ -684,6 +692,7 @@ export interface FileRoutesById {
   '/_authenticated/dashboard/super-admin': typeof AuthenticatedDashboardSuperAdminRoute
   '/_authenticated/dashboard/talent': typeof AuthenticatedDashboardTalentRoute
   '/academy/course/$slug': typeof AcademyCourseSlugRoute
+  '/api/public/chat': typeof ApiPublicChatRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/_authenticated/academy/apply/$slug': typeof AuthenticatedAcademyApplySlugRoute
   '/api/public/webhooks/paystack': typeof ApiPublicWebhooksPaystackRoute
@@ -760,6 +769,7 @@ export interface FileRouteTypes {
     | '/dashboard/super-admin'
     | '/dashboard/talent'
     | '/academy/course/$slug'
+    | '/api/public/chat'
     | '/lovable/email/suppression'
     | '/academy/apply/$slug'
     | '/api/public/webhooks/paystack'
@@ -834,6 +844,7 @@ export interface FileRouteTypes {
     | '/dashboard/super-admin'
     | '/dashboard/talent'
     | '/academy/course/$slug'
+    | '/api/public/chat'
     | '/lovable/email/suppression'
     | '/academy/apply/$slug'
     | '/api/public/webhooks/paystack'
@@ -909,6 +920,7 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard/super-admin'
     | '/_authenticated/dashboard/talent'
     | '/academy/course/$slug'
+    | '/api/public/chat'
     | '/lovable/email/suppression'
     | '/_authenticated/academy/apply/$slug'
     | '/api/public/webhooks/paystack'
@@ -966,6 +978,7 @@ export interface RootRouteChildren {
   TalentIndexRoute: typeof TalentIndexRoute
   DotlovableOauthConsentRoute: typeof DotlovableOauthConsentRoute
   Char91DotmcpChar93InvokeToolToolRoute: typeof Char91DotmcpChar93InvokeToolToolRoute
+  ApiPublicChatRoute: typeof ApiPublicChatRoute
   LovableEmailSuppressionRoute: typeof LovableEmailSuppressionRoute
   ApiPublicWebhooksPaystackRoute: typeof ApiPublicWebhooksPaystackRoute
   LovableEmailAuthPreviewRoute: typeof LovableEmailAuthPreviewRoute
@@ -1327,6 +1340,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LovableEmailSuppressionRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/chat': {
+      id: '/api/public/chat'
+      path: '/api/public/chat'
+      fullPath: '/api/public/chat'
+      preLoaderRoute: typeof ApiPublicChatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/academy/course/$slug': {
       id: '/academy/course/$slug'
       path: '/course/$slug'
@@ -1630,6 +1650,7 @@ const rootRouteChildren: RootRouteChildren = {
   TalentIndexRoute: TalentIndexRoute,
   DotlovableOauthConsentRoute: DotlovableOauthConsentRoute,
   Char91DotmcpChar93InvokeToolToolRoute: Char91DotmcpChar93InvokeToolToolRoute,
+  ApiPublicChatRoute: ApiPublicChatRoute,
   LovableEmailSuppressionRoute: LovableEmailSuppressionRoute,
   ApiPublicWebhooksPaystackRoute: ApiPublicWebhooksPaystackRoute,
   LovableEmailAuthPreviewRoute: LovableEmailAuthPreviewRoute,
