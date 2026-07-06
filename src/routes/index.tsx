@@ -5,6 +5,8 @@ import {
   ChevronDown, Heart, Target, Rocket,
 } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { Section } from "@/components/site/Section";
 import { Counter } from "@/components/site/Counter";
@@ -13,6 +15,7 @@ import { VideoHero } from "@/components/site/VideoHero";
 import { AnimatedBlobs } from "@/components/site/AnimatedBlobs";
 import { TypingHeadline } from "@/components/site/TypingHeadline";
 import { Reveal, Stagger, StaggerItem } from "@/components/site/Reveal";
+import { Parallax } from "@/components/site/Parallax";
 import { UnsplashImg } from "@/components/site/UnsplashImg";
 import { InstallAppSection } from "@/components/site/InstallApp";
 import testimonialAisha from "@/assets/testimonial-aisha-bello-founder.jpg";
@@ -147,17 +150,7 @@ function Index() {
         {/* Stats */}
         <div className="relative border-t border-white/10">
           <div className="mx-auto grid max-w-7xl grid-cols-2 gap-y-6 px-6 py-10 text-center sm:grid-cols-4">
-            {[
-              { to: 1200, suffix: "+", label: "Tasks Delivered" },
-              { to: 180, suffix: "+", label: "Vetted Talents" },
-              { to: 850, suffix: "+", label: "Academy Students" },
-              { to: 18, suffix: "", label: "Countries Served" },
-            ].map((s) => (
-              <div key={s.label}>
-                <div className="text-3xl font-extrabold text-white sm:text-5xl"><Counter to={s.to} suffix={s.suffix} /></div>
-                <div className="mt-1 text-xs uppercase tracking-widest text-white/60">{s.label}</div>
-              </div>
-            ))}
+            <HomepageStats />
           </div>
         </div>
       </VideoHero>
