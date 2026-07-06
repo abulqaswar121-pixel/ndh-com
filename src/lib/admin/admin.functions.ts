@@ -28,9 +28,13 @@ export const grantRole = createServerFn({ method: "POST" })
     }).parse(d),
   )
   .handler(async ({ data, context }) => {
-    // Only super_admin may grant the admin/super_admin/finance role
+    // Only super_admin may grant sensitive (admin/super_admin/finance) OR
+    // Academy roles (student/instructor/hod). Regular Admin is Bureau-only:
+    // limited to client/talent/pm.
+    const academyRole = data.role === "student" || data.role === "instructor" || data.role === "hod";
     const sensitive = data.role === "admin" || data.role === "super_admin" || data.role === "finance";
-    await assertAdmin(context.supabase, context.userId, sensitive);
+    const requireSuper = sensitive || academyRole;
+    await assertAdmin(context.supabase, context.userId, requireSuper);
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { error } = await supabaseAdmin.from("user_roles").upsert(
       { user_id: data.user_id, role: data.role },
@@ -51,8 +55,9 @@ export const revokeRole = createServerFn({ method: "POST" })
     z.object({ user_id: z.string().uuid(), role: z.enum(ROLES) }).parse(d),
   )
   .handler(async ({ data, context }) => {
+    const academyRole = data.role === "student" || data.role === "instructor" || data.role === "hod";
     const sensitive = data.role === "admin" || data.role === "super_admin" || data.role === "finance";
-    await assertAdmin(context.supabase, context.userId, sensitive);
+    await assertAdmin(context.supabase, context.userId, sensitive || academyRole);
     if (data.user_id === context.userId && data.role === "super_admin") {
       throw new Error("You cannot remove your own super admin role");
     }
