@@ -440,7 +440,7 @@ export function PortfolioGrid({ items }: { items: PortfolioItem[] }) {
         ))}
       </Stagger>
       <Dialog open={!!picked} onOpenChange={(o) => !o && setPicked(null)}>
-        <DialogContent className="max-w-2xl overflow-hidden p-0">
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto p-0">
           {picked && (
             <>
               <div className="relative aspect-[16/9] w-full overflow-hidden">
