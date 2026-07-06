@@ -108,7 +108,7 @@ function useList<T extends { id: string; display_order?: number | null }>(table:
   const [rows, setRows] = useState<T[]>([]);
   const load = async () => {
     const { data } = await supabase.from(table as any).select("*").order(orderBy, { ascending: true, nullsFirst: false });
-    setRows((data as T[]) || []);
+    setRows((data as unknown as T[]) || []);
   };
   useEffect(() => { load(); }, []);
   return { rows, load };
