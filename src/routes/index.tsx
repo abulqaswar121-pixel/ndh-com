@@ -199,7 +199,9 @@ function Index() {
         <div className="grid items-center gap-10 lg:grid-cols-[1fr_1fr]">
           <Reveal>
             <div className="relative overflow-hidden rounded-3xl border border-border shadow-elegant">
-              <UnsplashImg q="african team meeting laptop diverse" alt="NDH team" w={1200} h={900} className="h-full w-full object-cover" />
+              <Parallax offset={50} className="h-full w-full">
+                <UnsplashImg q="african team meeting laptop diverse" alt="NDH team" w={1200} h={900} className="h-full w-full object-cover" />
+              </Parallax>
             </div>
           </Reveal>
           <Stagger className="grid gap-5 sm:grid-cols-2">
