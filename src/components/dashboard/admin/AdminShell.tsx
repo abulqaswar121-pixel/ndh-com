@@ -18,6 +18,7 @@ import { toast } from "sonner";
 import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { CaseStudiesPanel } from "@/components/dashboard/admin/CaseStudiesPanel";
+import { CmsPanel } from "@/components/dashboard/admin/CmsPanels";
 
 const ROLES = [
   "client","talent","student","instructor","pm","hod","finance","admin","super_admin",
@@ -319,13 +320,15 @@ function PlatformTab() {
       <TabsList>
         <TabsTrigger value="settings">Settings</TabsTrigger>
         <TabsTrigger value="permissions">Permissions</TabsTrigger>
-        <TabsTrigger value="content">Content</TabsTrigger>
+        <TabsTrigger value="content">Pages</TabsTrigger>
+        <TabsTrigger value="cms">CMS</TabsTrigger>
         <TabsTrigger value="case-studies">Case Studies</TabsTrigger>
         <TabsTrigger value="broadcasts">Broadcasts</TabsTrigger>
       </TabsList>
       <TabsContent value="settings"><SettingsPanel /></TabsContent>
       <TabsContent value="permissions"><PermissionsPanel /></TabsContent>
       <TabsContent value="content"><ContentPanel /></TabsContent>
+      <TabsContent value="cms"><CmsPanel /></TabsContent>
       <TabsContent value="case-studies"><CaseStudiesPanel /></TabsContent>
       <TabsContent value="broadcasts"><BroadcastsPanel /></TabsContent>
     </Tabs>
