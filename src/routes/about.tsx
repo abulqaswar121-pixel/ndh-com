@@ -3,6 +3,7 @@ import { SiteLayout } from "@/components/site/SiteLayout";
 import { Section } from "@/components/site/Section";
 import { AnimatedBlobs } from "@/components/site/AnimatedBlobs";
 import { Reveal, Stagger, StaggerItem } from "@/components/site/Reveal";
+import { Parallax } from "@/components/site/Parallax";
 import { UnsplashImg } from "@/components/site/UnsplashImg";
 import { Button } from "@/components/ui/button";
 import { HeartHandshake, Compass, Target, Sparkles, MapPin } from "lucide-react";
@@ -50,7 +51,9 @@ function AboutPage() {
           </Reveal>
           <Reveal delay={0.1}>
             <div className="overflow-hidden rounded-3xl border border-border shadow-elegant">
-              <UnsplashImg q="african tech company office developers computers collaboration" alt="NDH story" w={900} h={700} className="h-full w-full object-cover" />
+              <Parallax offset={50} className="h-full w-full">
+                <UnsplashImg q="african tech company office developers computers collaboration" alt="NDH story" w={900} h={700} className="h-full w-full object-cover" />
+              </Parallax>
             </div>
           </Reveal>
         </div>
