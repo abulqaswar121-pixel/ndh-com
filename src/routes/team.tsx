@@ -6,6 +6,8 @@ import { AnimatedBlobs } from "@/components/site/AnimatedBlobs";
 import { UnsplashImg } from "@/components/site/UnsplashImg";
 import { Button } from "@/components/ui/button";
 import founderAsset from "@/assets/founder-ceo.png.asset.json";
+import { useEffect, useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/team")({
   head: () => ({ meta: [
@@ -20,7 +22,7 @@ export const Route = createFileRoute("/team")({
 
 type Member = { name: string; role: string; bio: string; q: string; image?: string };
 
-const founder: Member = {
+const founderFallback: Member = {
   name: "Ataurrahman Najeeb Ahmad",
   role: "Founder & CEO",
   bio: "Builds NDH like a serious tech company — measurable craft, fair pay, real outcomes.",
@@ -28,13 +30,24 @@ const founder: Member = {
   image: founderAsset.url,
 };
 
-const leadership: Member[] = [
+const QUERIES: Record<string, string> = {
+  "Operations Manager": "nigerian muslim man tech operations manager laptop office",
+  "Academy Director": "nigerian muslim man tech lecturer laptop classroom",
+  "Finance Admin": "nigerian muslim man digital marketer analytics dashboard laptop",
+  "HOD · Design": "african ui ux designer figma laptop workspace",
+  "HOD · Development": "nigerian christian man software engineer developer coding monitor",
+  "HOD · Content": "african man tech writer laptop workspace",
+  "HOD · Marketing": "african woman digital marketer analytics dashboard laptop",
+  "HOD · Media": "portrait african woman hijab video editor laptop tech studio",
+};
+
+const leadershipFallback: Member[] = [
   { name: "Hassan Al'amin Hassan", role: "Operations Manager", bio: "Runs day-to-day delivery, PM rituals and QA standards.", q: "nigerian muslim man tech operations manager laptop office" },
   { name: "Hamza Suleiman", role: "Academy Director", bio: "Owns curriculum, faculty and the Learn → Earn pipeline.", q: "nigerian muslim man tech lecturer laptop classroom" },
   { name: "Saleem Mujahid Basheer", role: "Finance Admin", bio: "Billing, payroll, escrow — clean money flow for clients and talents.", q: "nigerian muslim man digital marketer analytics dashboard laptop" },
 ];
 
-const hods: Member[] = [
+const hodsFallback: Member[] = [
   { name: "Ibrahim Lawal", role: "HOD · Design", bio: "Brand systems, UI and the visual standard for every NDH project.", q: "african ui ux designer figma laptop workspace" },
   { name: "Chinwe Okafor", role: "HOD · Development", bio: "Web, mobile and platform engineering across the bureau.", q: "nigerian christian man software engineer developer coding monitor" },
   { name: "Yusuf Bello", role: "HOD · Content", bio: "SEO, brand copy and editorial across client work and the blog.", q: "african man tech writer laptop workspace" },
@@ -70,6 +83,29 @@ function Card({ m, size = "md" }: { m: Member; size?: "lg" | "md" }) {
 }
 
 function TeamPage() {
+  const [founder, setFounder] = useState<Member>(founderFallback);
+  const [leadership, setLeadership] = useState<Member[]>(leadershipFallback);
+  const [hods, setHods] = useState<Member[]>(hodsFallback);
+  useEffect(() => {
+    supabase.from("team_members")
+      .select("full_name,role,department,bio_short,photo_url")
+      .eq("published", true)
+      .order("display_order", { ascending: true })
+      .then(({ data }) => {
+        if (!data || data.length === 0) return;
+        const toMember = (r: typeof data[number]): Member => ({
+          name: r.full_name,
+          role: r.role,
+          bio: r.bio_short || "",
+          q: QUERIES[r.role] || r.role.toLowerCase(),
+          image: r.photo_url || undefined,
+        });
+        const founderRow = data.find((r) => (r.department || "").toLowerCase() === "executive");
+        if (founderRow) setFounder({ ...toMember(founderRow), image: founderRow.photo_url || founderFallback.image });
+        setLeadership(data.filter((r) => (r.department || "").toLowerCase() === "leadership").map(toMember));
+        setHods(data.filter((r) => (r.department || "").toLowerCase() === "hod").map(toMember));
+      });
+  }, []);
   return (
     <SiteLayout>
       <section className="relative isolate overflow-hidden bg-hero py-24 text-white">
