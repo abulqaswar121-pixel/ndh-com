@@ -382,20 +382,18 @@ function TestimonialsCarousel() {
         ))}
       </div>
       <Dialog open={!!picked} onOpenChange={(o) => !o && setPicked(null)}>
-        <DialogContent className="max-w-lg">
+        <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
           {picked && (
             <>
-              <DialogHeader>
-                <div className="flex items-center gap-3">
-                  <img src={picked.image} alt={picked.name} className="h-14 w-14 rounded-full object-cover" />
-                  <div>
-                    <DialogTitle>{picked.name}</DialogTitle>
-                    <DialogDescription>{picked.role}</DialogDescription>
-                  </div>
-                </div>
+              <DialogHeader className="items-center text-center">
+                <img src={picked.image} alt={picked.name} className="h-20 w-20 rounded-full object-cover" />
+                <DialogTitle>{picked.name}</DialogTitle>
+                <DialogDescription>{picked.role}</DialogDescription>
               </DialogHeader>
-              <Quote className="h-6 w-6 text-[oklch(0.62_0.21_290)]" />
-              <p className="text-sm leading-relaxed text-foreground/90">"{picked.full}"</p>
+              <div className="space-y-3">
+                <Quote className="h-6 w-6 text-[oklch(0.62_0.21_290)]" />
+                <p className="text-sm leading-relaxed text-foreground/90">"{picked.full}"</p>
+              </div>
             </>
           )}
         </DialogContent>
