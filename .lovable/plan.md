@@ -1,59 +1,61 @@
-# Beta Review Fixes — Implementation Plan
+# NDH Enhancement Pass — 3 Upgrades
 
-This is a very large scope (21 items across bugs, role refactoring, CMS systems, new features, and polish). I'll break it into 8 sub-phases and proceed sequentially, notifying at milestones.
+This is a very large scope. I'll execute in sub-phases and notify you at each major milestone. Please confirm the plan (and the two decisions below) before I start.
 
-## Sub-Phase 1 — Critical Bugs (Section A, items 1–11)
-- Newsletter: merge to single section, wire Subscribe to a `newsletter_subscribers` table + confirmation email, mobile centering fix
-- Navigation: stop force-redirecting logged-in Clients from public pages (Services, About, Team, Blog, Careers, Contact); add "Back to site" nav from dashboards
-- Academy Apply: role-aware — students go to portal, non-students see enroll-as-student modal (multi-role allowed)
-- Fix `/careers` link routing
-- Fix "Open Settings" link to `/dashboard/client?tab=settings`
-- Password: merge Set/Change into one section; require current password; add strength meter; email on change; Google-only users see "Set" once
-- Phone field: numeric + `+`/`-`/space only, country code select, format-as-you-type
-- Notifications: mark read (single/all), delete (single/all), unread badge
-- Profile page: full mobile responsiveness pass
-- Client-facing copy rewrite: "route" → "assign the right team", "PM" → "Project Manager"
+## Sub-phase order
 
-## Sub-Phase 2 — Admin Role Restriction (Section B, item 12)
-- Remove Academy sections from Admin dashboard (instructors, HODs, courses, students, registrar, director oversight)
-- Keep Bureau only: clients, talents, PMs, tasks, bureau departments, bureau reports
-- Update invitation permissions: Admin can invite PMs/Talents only; Super Admin retains all
-- Update permission checks in server functions and UI guards
+1. **Fix Blog + seed 5 posts** (currently shows "Loading articles…")
+2. **Unify Case Studies system**
+   - Extend existing `case_studies` table with the fields listed (client_photo, client_quote, gallery, video, metrics, featured, display_order, SEO)
+   - Seed 6 sample case studies
+   - Wire homepage Portfolio + Testimonials + Services page portfolio + `/case-studies` list + `/case-studies/[slug]` to the same table
+   - Remove hardcoded testimonials
+   - Super Admin CMS panel (list/create/edit/delete/reorder/publish/feature, gallery upload, rich text, SEO)
+3. **Full CMS for the rest** (each with Super Admin panel + public site pulling from DB)
+   - Team Members (rename founder to "Ataurrahman Najeeb Ahmad")
+   - Homepage Stats
+   - Homepage Copy (hero, section headings, CTAs, feature cards, about text, academy promo, final CTA, newsletter)
+   - Services (6 services with rich fields)
+   - FAQ (homepage + `/faq`)
+   - Careers / Job Openings (fix broken link, functional application form)
+4. **Premium scroll-linked animations** (framer-motion + gsap + @gsap/react)
+   - Global rules: reversible, `prefers-reduced-motion`, reduced intensity on mobile
+   - All 14 sections in your list
+5. **Dashboard micro-animations** (sidebar slide-in, staggered cards, count-ups, chart draw-in, table row stagger, modal fade+scale, toast bounce, theme transition)
+6. **AI chat widget** (replaces current ContactWidget)
+   - Lovable AI (`google/gemini-3-flash-preview`) via `createServerFn`, streamed via `useChat`
+   - New tables: `chat_conversations`, `chat_messages`, `chat_settings`
+   - Full NDH context in system prompt (services, 21 courses, pricing, workflow, contact, hours)
+   - Quick replies, typing indicator, page suggestions, human-handoff → creates `support_tickets` row
+   - Rate limit: 20 msgs/hour/session (IP + session id)
+   - Super Admin panel: edit system prompt, welcome, quick replies, view history, view flagged, enable/disable, position, color
+   - localStorage session persistence, mobile full-screen
 
-## Sub-Phase 3 — Blog Fix + Case Studies CMS (items 14, 13)
-- Debug blog loading (likely RLS/query issue); ensure articles render
-- Super Admin Blog CMS: rich text editor, images, categories, tags, author, SEO, draft/published
-- Seed 5 sample articles
-- `/blog/[slug]` polished detail page (hero, author, reading time, share, related, newsletter)
-- New `case_studies` table + CMS in Super Admin
-- Public `/case-studies` list + `/case-studies/[slug]` detail
-- Homepage portfolio pulls from real case studies
-- Seed 6 sample case studies
+## Two decisions I need from you
 
-## Sub-Phase 4 — Footer Consolidation (item 15)
-- Restructure to 4 columns: Company / Services / NDH Academy / Support
+1. **Rich text editor** for CMS bodies (challenge/solution/results, blog content, FAQ answers, service long descriptions). Pick one:
+   - **Markdown textarea + preview** (fastest, no extra deps, renders via existing markdown pipeline)
+   - **Tiptap WYSIWYG** (heavier, adds ~5 deps, nicer authoring)
 
-## Sub-Phase 5 — Scoping Wizard + Talent Portfolio (items 16, 17)
-- `/start-project` 8-step public wizard, saves to `project_quotes` table, on signup auto-converts to draft task
-- Student "My Portfolio" tab: projects, skills, certifications, availability
-- Public `/talent/[username]` portfolio page
-- Admin/HOD browse + invite to Talent Pool
+2. **AI chat conversation history**: per `chat-agent-ui-contract` I have to ask.
+   - **One conversation per visitor, localStorage** (recommended for a site widget — no auth needed)
+   - **One conversation + database** (persists across devices for logged-in users, anon in localStorage)
+   - **Threaded + database** (overkill for a support widget)
 
-## Sub-Phase 6 — Micro-interactions + Accessibility (items 19, 20)
-- Button press, card hover-lift, skeleton loaders, toast animations, number counters
-- WCAG AA pass: contrast, focus rings, ARIA labels, alt text, keyboard nav
+## Technical notes
 
-## Sub-Phase 7 — Contact Widget (item 21)
-- Floating bottom-right widget on public pages
-- Submits to `support_tickets` table + email to support@ndh.com.ng
+- No new secrets required. `LOVABLE_API_KEY` already provisioned → AI chat works out of the box.
+- Case Studies table already exists from a prior sub-phase; migration will `ALTER TABLE` to add the missing columns (client_photo_url, client_logo_url, client_quote, gallery_images, video_url, metrics jsonb, project_duration, team_members, featured, display_order, SEO fields).
+- Homepage copy stored as a single `site_content` key/value JSONB table so I don't hardcode a rigid schema.
+- Animations: I'll gate the heavy GSAP ScrollTriggers behind a `useReducedMotion` check and `md:` breakpoint intensity so Lighthouse stays ≥85.
+- I will NOT touch dashboard business logic — only presentation for phase 5.
 
-## Sub-Phase 8 — LinkedIn + GitHub OAuth (item 18)
-- LinkedIn/GitHub aren't supported natively by Lovable Cloud auth. I'll enable via Supabase auth providers and provide setup steps for OAuth apps (client ID/secret you'll add).
+## What I'll deliver at the end
 
-## Realism note
+Preview URL, CMS section paths under Super Admin, screenshots of the AI chat widget, list of any env keys (expect: none), confirmation that hardcoded content is now DB-driven, and a note of any breaking changes.
 
-This plan touches ~60+ files, adds 4–5 new tables (newsletter, case_studies, project_quotes, portfolio_projects, support_tickets), and requires many migrations. I'll execute sequentially and notify at end of each sub-phase. Some items (LinkedIn/GitHub OAuth, full a11y audit polish) require your input/credentials to finish.
+## Time expectation
 
-## Confirm to proceed
+This is ~6 sub-phases of substantial work. I'll notify you at the end of each sub-phase, not sub-step, as you previously requested.
 
-Reply "proceed" and I'll start Sub-Phase 1 immediately.
+**Reply with your two choices (or "1 and 1", "2 and 1", etc.) and I'll start with Sub-phase 1 (Blog fix + seed).**
