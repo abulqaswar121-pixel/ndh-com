@@ -6,7 +6,8 @@ import { Reveal, Stagger, StaggerItem } from "@/components/site/Reveal";
 import { UnsplashImg } from "@/components/site/UnsplashImg";
 import { Button } from "@/components/ui/button";
 import { Briefcase, MapPin, Clock, ArrowRight } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
 import { submitCareerApplication } from "@/lib/content/blog.functions";
 import { toast } from "sonner";
 
@@ -20,20 +21,21 @@ export const Route = createFileRoute("/careers")({
   component: CareersPage,
 });
 
-const roles = [
-  { title: "Project Manager · Design", type: "Full-time", loc: "Sokoto / Remote" },
-  { title: "Project Manager · Development", type: "Full-time", loc: "Sokoto / Remote" },
-  { title: "Instructor · UI/UX Design", type: "Part-time", loc: "Remote" },
-  { title: "Instructor · Full-Stack Development", type: "Part-time", loc: "Remote" },
-  { title: "HOD · Marketing", type: "Full-time", loc: "Sokoto / Hybrid" },
-  { title: "Registrar", type: "Full-time", loc: "Sokoto" },
-  { title: "Finance Officer", type: "Full-time", loc: "Sokoto" },
-  { title: "Student Affairs Lead", type: "Full-time", loc: "Sokoto" },
-];
+type Role = { title: string; type: string; loc: string };
 
 function CareersPage() {
   const [sent, setSent] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [roles, setRoles] = useState<Role[]>([]);
+  useEffect(() => {
+    supabase.from("job_openings")
+      .select("title,employment_type,location")
+      .eq("published", true)
+      .order("display_order", { ascending: true })
+      .then(({ data }) => {
+        setRoles((data || []).map((r) => ({ title: r.title, type: r.employment_type || "Full-time", loc: r.location || "Remote" })));
+      });
+  }, []);
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const fd = new FormData(e.currentTarget);
