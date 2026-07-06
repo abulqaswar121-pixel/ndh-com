@@ -44,7 +44,7 @@ function ClientDashboardPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const go = (t?: string) => navigate({ to: "/dashboard/client", search: t ? { tab: t } : {} });
+  const go = (t?: string) => navigate({ to: "/dashboard/client", search: () => (t ? { tab: t, task: undefined } : { tab: undefined, task: undefined }) });
 
   return (
     <DashboardShell title="Client Portal" items={NAV}>
