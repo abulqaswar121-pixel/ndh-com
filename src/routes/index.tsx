@@ -438,17 +438,17 @@ export function PortfolioGrid({ items }: { items: PortfolioItem[] }) {
         ))}
       </Stagger>
       <Dialog open={!!picked} onOpenChange={(o) => !o && setPicked(null)}>
-        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto p-0">
+        <DialogContent className="flex max-w-2xl max-h-[90vh] flex-col p-0">
           {picked && (
             <>
-              <div className="relative aspect-[16/9] w-full overflow-hidden">
+              <div className="relative aspect-[16/9] w-full shrink-0 overflow-hidden">
                 {picked.image_url ? (
                   <img src={picked.image_url} alt={picked.title} className="h-full w-full object-cover" />
                 ) : (
                   <UnsplashImg q={picked.q} alt={picked.title} w={1200} h={675} sig={picked.title} className="h-full w-full object-cover" />
                 )}
               </div>
-              <div className="space-y-4 p-6">
+              <div className="space-y-4 overflow-y-auto p-6">
                 <DialogHeader className="space-y-1">
                   <div className="text-xs font-semibold uppercase tracking-widest text-[oklch(0.65_0.19_252)]">{picked.tag}</div>
                   <DialogTitle className="text-2xl">{picked.title}</DialogTitle>
