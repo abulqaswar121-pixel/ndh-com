@@ -3,7 +3,7 @@ import { Logo } from "@/components/site/Logo";
 import { useAuth } from "@/lib/auth";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { LogOut, type LucideIcon } from "lucide-react";
+import { LogOut, ArrowLeft, type LucideIcon } from "lucide-react";
 
 export type NavItem = { label: string; to: string; search?: Record<string, string>; icon: LucideIcon };
 
@@ -68,6 +68,12 @@ export function DashboardShell({
           </div>
         </nav>
         <div className="shrink-0 border-t border-border bg-card p-3">
+          <Link
+            to="/"
+            className="mb-1 flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-muted-foreground transition hover:bg-secondary hover:text-foreground"
+          >
+            <ArrowLeft className="h-4 w-4" /> Back to site
+          </Link>
           <button
             onClick={signOut}
             className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-muted-foreground transition hover:bg-secondary hover:text-foreground"
