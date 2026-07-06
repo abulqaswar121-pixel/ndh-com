@@ -57,11 +57,12 @@ export const Route = createFileRoute("/api/public/chat")({
 
         const gateway = createLovableAiGatewayProvider(key);
         const model = gateway("google/gemini-3-flash-preview");
+        const uiMessages = body.messages;
 
         const result = streamText({
           model,
           system: systemPrompt,
-          messages: convertToModelMessages(body.messages),
+          messages: await convertToModelMessages(uiMessages),
           onFinish: async ({ text }) => {
             if (!body.sessionId) return;
             try {
@@ -72,14 +73,14 @@ export const Route = createFileRoute("/api/public/chat")({
                   {
                     session_id: body.sessionId,
                     last_message_at: new Date().toISOString(),
-                    message_count: body.messages.length + 1,
+                    message_count: uiMessages.length + 1,
                   },
                   { onConflict: "session_id" },
                 )
                 .select("id")
                 .maybeSingle();
               if (!convo?.id) return;
-              const last = body.messages[body.messages.length - 1];
+              const last = uiMessages[uiMessages.length - 1];
               const userText =
                 last?.parts
                   ?.map((p) => (p.type === "text" ? p.text : ""))
@@ -95,7 +96,7 @@ export const Route = createFileRoute("/api/public/chat")({
         });
 
         return result.toUIMessageStreamResponse({
-          originalMessages: body.messages,
+          originalMessages: uiMessages,
         });
       },
     },
