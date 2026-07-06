@@ -355,27 +355,131 @@ function Index() {
 
 function TestimonialsCarousel() {
   const [i, setI] = useState(0);
+  const [picked, setPicked] = useState<typeof testimonials[number] | null>(null);
   useEffect(() => {
     const id = setInterval(() => setI((v) => (v + 1) % testimonials.length), 4500);
     return () => clearInterval(id);
   }, []);
   const visible = [0, 1, 2].map((o) => testimonials[(i + o) % testimonials.length]);
   return (
-    <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-      {visible.map((t) => (
-        <div key={t.name + i} className="h-full animate-fade-in rounded-2xl border border-border bg-card p-6 transition-all hover:-translate-y-1 hover:shadow-elegant">
-          <Quote className="h-6 w-6 text-[oklch(0.62_0.21_290)]" />
-          <p className="mt-3 text-sm text-foreground/90">"{t.quote}"</p>
-          <div className="mt-5 flex items-center gap-3">
-            <img src={t.image} alt={t.name} width={768} height={768} loading="lazy" className="h-12 w-12 rounded-full object-cover" />
-            <div>
-              <div className="text-sm font-semibold">{t.name}</div>
-              <div className="text-xs text-muted-foreground">{t.role}</div>
+    <>
+      <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        {visible.map((t) => (
+          <button
+            key={t.name + i}
+            type="button"
+            onClick={() => setPicked(t)}
+            className="h-full animate-fade-in rounded-2xl border border-border bg-card p-6 text-left transition-all hover:-translate-y-1 hover:shadow-elegant"
+          >
+            <Quote className="h-6 w-6 text-[oklch(0.62_0.21_290)]" />
+            <p className="mt-3 text-sm text-foreground/90">"{t.quote}"</p>
+            <div className="mt-5 flex items-center gap-3">
+              <img src={t.image} alt={t.name} width={768} height={768} loading="lazy" className="h-12 w-12 rounded-full object-cover" />
+              <div>
+                <div className="text-sm font-semibold">{t.name}</div>
+                <div className="text-xs text-muted-foreground">{t.role}</div>
+              </div>
             </div>
-          </div>
-        </div>
-      ))}
-    </div>
+            <div className="mt-4 text-xs font-semibold text-[oklch(0.65_0.19_252)]">Read full story →</div>
+          </button>
+        ))}
+      </div>
+      <Dialog open={!!picked} onOpenChange={(o) => !o && setPicked(null)}>
+        <DialogContent className="max-w-lg">
+          {picked && (
+            <>
+              <DialogHeader>
+                <div className="flex items-center gap-3">
+                  <img src={picked.image} alt={picked.name} className="h-14 w-14 rounded-full object-cover" />
+                  <div>
+                    <DialogTitle>{picked.name}</DialogTitle>
+                    <DialogDescription>{picked.role}</DialogDescription>
+                  </div>
+                </div>
+              </DialogHeader>
+              <Quote className="h-6 w-6 text-[oklch(0.62_0.21_290)]" />
+              <p className="text-sm leading-relaxed text-foreground/90">"{picked.full}"</p>
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
+    </>
+  );
+}
+
+type PortfolioItem = {
+  tag: string; title: string; q: string;
+  client?: string; scope?: string; outcome?: string; details?: string;
+  image_url?: string;
+};
+
+export function PortfolioGrid({ items }: { items: PortfolioItem[] }) {
+  const [picked, setPicked] = useState<PortfolioItem | null>(null);
+  return (
+    <>
+      <Stagger className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {items.map((p) => (
+          <StaggerItem key={p.title}>
+            <button
+              type="button"
+              onClick={() => setPicked(p)}
+              className="group relative block aspect-[4/3] w-full overflow-hidden rounded-2xl border border-border text-left"
+            >
+              <Parallax offset={24} className="absolute inset-0">
+                {p.image_url ? (
+                  <img src={p.image_url} alt={p.title} loading="lazy" className="h-[115%] w-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                ) : (
+                  <UnsplashImg q={p.q} alt={p.title} w={800} h={600} sig={p.title} className="h-[115%] w-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                )}
+              </Parallax>
+              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent" />
+              <div className="absolute bottom-0 p-5 text-white">
+                <div className="text-xs font-semibold uppercase tracking-widest text-white/70">{p.tag}</div>
+                <div className="mt-1 text-lg font-bold">{p.title}</div>
+                <div className="mt-2 text-xs font-semibold text-white/80">View case →</div>
+              </div>
+            </button>
+          </StaggerItem>
+        ))}
+      </Stagger>
+      <Dialog open={!!picked} onOpenChange={(o) => !o && setPicked(null)}>
+        <DialogContent className="max-w-2xl overflow-hidden p-0">
+          {picked && (
+            <>
+              <div className="relative aspect-[16/9] w-full overflow-hidden">
+                {picked.image_url ? (
+                  <img src={picked.image_url} alt={picked.title} className="h-full w-full object-cover" />
+                ) : (
+                  <UnsplashImg q={picked.q} alt={picked.title} w={1200} h={675} sig={picked.title} className="h-full w-full object-cover" />
+                )}
+              </div>
+              <div className="space-y-4 p-6">
+                <DialogHeader className="space-y-1">
+                  <div className="text-xs font-semibold uppercase tracking-widest text-[oklch(0.65_0.19_252)]">{picked.tag}</div>
+                  <DialogTitle className="text-2xl">{picked.title}</DialogTitle>
+                  {picked.client && <DialogDescription>{picked.client}</DialogDescription>}
+                </DialogHeader>
+                {picked.details && <p className="text-sm leading-relaxed text-foreground/90">{picked.details}</p>}
+                <div className="grid gap-3 sm:grid-cols-2">
+                  {picked.scope && (
+                    <div className="rounded-xl border border-border bg-card p-4">
+                      <div className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">Scope</div>
+                      <div className="mt-1 text-sm">{picked.scope}</div>
+                    </div>
+                  )}
+                  {picked.outcome && (
+                    <div className="rounded-xl border border-border bg-card p-4">
+                      <div className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">Outcome</div>
+                      <div className="mt-1 text-sm">{picked.outcome}</div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
+    </>
   );
 }
 
