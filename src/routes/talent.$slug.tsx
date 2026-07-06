@@ -88,7 +88,10 @@ function TalentDetailPage() {
               <div className="mt-6">
                 <h2 className="text-xl font-bold">Portfolio</h2>
                 <div className="mt-4 grid gap-4 sm:grid-cols-2">
-                  {t.items.map((it) => (
+                  {t.items.map((it: {
+                    id: string; title: string; description: string | null;
+                    image_url: string | null; link_url: string | null; tags: string[] | null;
+                  }) => (
                     <a key={it.id} href={it.link_url ?? "#"} target={it.link_url ? "_blank" : undefined} rel="noreferrer" className="group block overflow-hidden rounded-2xl border border-border bg-card transition hover:-translate-y-1 hover:shadow-elegant">
                       {it.image_url && <img src={it.image_url} alt={it.title} loading="lazy" className="aspect-[16/9] w-full object-cover transition group-hover:scale-105" />}
                       <div className="p-4">
