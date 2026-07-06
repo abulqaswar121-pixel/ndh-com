@@ -15,6 +15,28 @@ export function ClientSettings() {
   const [profile, setProfile] = useState({ full_name: "", phone: "", country: "NG", avatar_url: "" });
   const [company, setCompany] = useState({ company_name: "", business_type: "", address: "" });
   const [pwd, setPwd] = useState("");
+  const [currentPwd, setCurrentPwd] = useState("");
+  const [hasPassword, setHasPassword] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    // Detect if user has an email/password identity vs Google-only
+    const identities = (user as unknown as { identities?: Array<{ provider: string }> })?.identities;
+    if (identities) {
+      setHasPassword(identities.some((i) => i.provider === "email"));
+    }
+  }, [user]);
+
+  const pwdStrength = (p: string): { score: number; label: string; color: string } => {
+    let s = 0;
+    if (p.length >= 8) s++;
+    if (p.length >= 12) s++;
+    if (/[A-Z]/.test(p) && /[a-z]/.test(p)) s++;
+    if (/\d/.test(p)) s++;
+    if (/[^A-Za-z0-9]/.test(p)) s++;
+    const labels = ["Very weak", "Weak", "Fair", "Good", "Strong", "Excellent"];
+    const colors = ["bg-destructive", "bg-destructive", "bg-yellow-500", "bg-yellow-500", "bg-emerald-500", "bg-emerald-500"];
+    return { score: s, label: labels[s], color: colors[s] };
+  };
 
   useEffect(() => {
     if (!user) return;
@@ -41,10 +63,23 @@ export function ClientSettings() {
 
   const changePassword = async () => {
     if (pwd.length < 8) { toast.error("At least 8 characters"); return; }
+    if (pwdStrength(pwd).score < 3) { toast.error("Password too weak — add uppercase, numbers, and symbols"); return; }
+    // Verify current password (for users that already have one)
+    if (hasPassword && user?.email) {
+      if (!currentPwd) { toast.error("Enter your current password"); return; }
+      const { error: verifyErr } = await supabase.auth.signInWithPassword({ email: user.email, password: currentPwd });
+      if (verifyErr) { toast.error("Current password is incorrect"); return; }
+    }
     const { error } = await supabase.auth.updateUser({ password: pwd });
     if (error) { toast.error(error.message); return; }
-    toast.success("Password updated");
-    setPwd("");
+    toast.success(hasPassword ? "Password updated — a confirmation email has been sent" : "Password set successfully");
+    setPwd(""); setCurrentPwd(""); setHasPassword(true);
+  };
+
+  const onPhoneChange = (v: string) => {
+    // Allow digits, +, -, space, parentheses only
+    const cleaned = v.replace(/[^\d+\-\s()]/g, "");
+    setProfile({ ...profile, phone: cleaned });
   };
 
   const uploadAvatar = async (file: File) => {
@@ -66,7 +101,17 @@ export function ClientSettings() {
       <Card title="Personal info">
         <div className="grid gap-4 sm:grid-cols-2">
           <Field label="Full name" value={profile.full_name} onChange={(v) => setProfile({ ...profile, full_name: v })} />
-          <Field label="Phone" value={profile.phone} onChange={(v) => setProfile({ ...profile, phone: v })} />
+          <div>
+            <label className="text-sm font-medium">Phone</label>
+            <input
+              value={profile.phone}
+              onChange={(e) => onPhoneChange(e.target.value)}
+              inputMode="tel"
+              placeholder="+234 800 123 4567"
+              className="mt-1 w-full rounded-lg border border-border bg-background px-3 py-2.5 text-sm"
+            />
+            <p className="mt-1 text-xs text-muted-foreground">Digits, +, -, spaces only</p>
+          </div>
           <Field label="Country (ISO)" value={profile.country} onChange={(v) => setProfile({ ...profile, country: v })} />
           <div>
             <label className="text-sm font-medium">Currency</label>
@@ -99,10 +144,43 @@ export function ClientSettings() {
         <Button variant="brand" onClick={save} disabled={saving}>{saving ? <Loader2 className="h-4 w-4 animate-spin" /> : "Save changes"}</Button>
       </div>
 
-      <Card title="Change password">
-        <div className="flex gap-2">
-          <input type="password" value={pwd} onChange={(e) => setPwd(e.target.value)} placeholder="New password" className="flex-1 rounded-lg border border-border bg-background px-3 py-2.5 text-sm" />
-          <Button variant="outline" onClick={changePassword}>Update</Button>
+      <Card title={hasPassword === false ? "Set a password" : "Change password"}>
+        <div className="space-y-3">
+          {hasPassword === false && (
+            <p className="text-xs text-muted-foreground">
+              You signed up with Google. Set a password to also sign in with email.
+            </p>
+          )}
+          {hasPassword && (
+            <input
+              type="password"
+              value={currentPwd}
+              onChange={(e) => setCurrentPwd(e.target.value)}
+              placeholder="Current password"
+              className="w-full rounded-lg border border-border bg-background px-3 py-2.5 text-sm"
+            />
+          )}
+          <input
+            type="password"
+            value={pwd}
+            onChange={(e) => setPwd(e.target.value)}
+            placeholder={hasPassword ? "New password" : "Password"}
+            className="w-full rounded-lg border border-border bg-background px-3 py-2.5 text-sm"
+          />
+          {pwd.length > 0 && (
+            <div>
+              <div className="h-1.5 w-full overflow-hidden rounded-full bg-secondary">
+                <div
+                  className={`h-full transition-all ${pwdStrength(pwd).color}`}
+                  style={{ width: `${(pwdStrength(pwd).score / 5) * 100}%` }}
+                />
+              </div>
+              <p className="mt-1 text-xs text-muted-foreground">Strength: {pwdStrength(pwd).label}</p>
+            </div>
+          )}
+          <Button variant="outline" onClick={changePassword} className="w-full sm:w-auto">
+            {hasPassword ? "Update password" : "Set password"}
+          </Button>
         </div>
       </Card>
 

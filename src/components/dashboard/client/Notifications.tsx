@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import { Link } from "@tanstack/react-router";
-import { Bell, CheckCheck } from "lucide-react";
+import { Bell, CheckCheck, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 type Notif = {
@@ -65,15 +65,34 @@ export function ClientNotifications() {
     await supabase.from("notifications").update({ read: true }).eq("id", id);
   };
 
+  const deleteOne = async (id: string) => {
+    await supabase.from("notifications").delete().eq("id", id);
+    setItems((p) => p.filter((n) => n.id !== id));
+  };
+
+  const deleteAll = async () => {
+    if (!user) return;
+    if (!confirm("Delete all notifications? This cannot be undone.")) return;
+    await supabase.from("notifications").delete().eq("user_id", user.id);
+    setItems([]);
+  };
+
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-wrap items-center justify-between gap-2">
         <h1 className="text-2xl font-extrabold">Notifications</h1>
-        {items.some((n) => !n.read) && (
-          <Button size="sm" variant="outline" onClick={markAll}>
-            <CheckCheck className="h-4 w-4" /> Mark all as read
-          </Button>
-        )}
+        <div className="flex gap-2">
+          {items.some((n) => !n.read) && (
+            <Button size="sm" variant="outline" onClick={markAll}>
+              <CheckCheck className="h-4 w-4" /> Mark all as read
+            </Button>
+          )}
+          {items.length > 0 && (
+            <Button size="sm" variant="outline" onClick={deleteAll}>
+              <Trash2 className="h-4 w-4" /> Delete all
+            </Button>
+          )}
+        </div>
       </div>
       {loading ? (
         <div className="text-sm text-muted-foreground">Loading…</div>
@@ -96,10 +115,19 @@ export function ClientNotifications() {
               </div>
             );
             return (
-              <li key={n.id} className={`px-5 py-3 text-sm ${!n.read ? "bg-secondary/30" : ""}`} onClick={() => !n.read && markOne(n.id)}>
-                {n.link ? (
-                  <Link to={n.link as any} className="block">{content}</Link>
-                ) : content}
+              <li key={n.id} className={`flex items-start gap-2 px-5 py-3 text-sm ${!n.read ? "bg-secondary/30" : ""}`}>
+                <div className="flex-1 min-w-0" onClick={() => !n.read && markOne(n.id)}>
+                  {n.link ? (
+                    <Link to={n.link as any} className="block">{content}</Link>
+                  ) : content}
+                </div>
+                <button
+                  aria-label="Delete notification"
+                  onClick={(e) => { e.stopPropagation(); deleteOne(n.id); }}
+                  className="mt-1 text-muted-foreground hover:text-destructive"
+                >
+                  <Trash2 className="h-4 w-4" />
+                </button>
               </li>
             );
           })}
