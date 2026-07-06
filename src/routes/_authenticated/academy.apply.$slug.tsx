@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { useCurrency } from "@/lib/currency";
 import { useAuth } from "@/lib/auth";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { initEnrollmentPayment } from "@/lib/academy/enrollment.functions";
 import { toast } from "sonner";
 import {
@@ -28,7 +29,7 @@ const EDU_LEVELS = ["Secondary school (SSCE)","Diploma / OND","Bachelor's degree
 
 function ApplyWizard() {
   const { slug } = Route.useParams();
-  const { user } = useAuth();
+  const { user, role } = useAuth();
   const navigate = useNavigate();
   const { format, currency } = useCurrency();
   const initPay = useServerFn(initEnrollmentPayment);
@@ -36,6 +37,28 @@ function ApplyWizard() {
   const [course, setCourse] = useState<Course | null>(null);
   const [step, setStep] = useState(1);
   const [submitting, setSubmitting] = useState(false);
+  const [showEnrollModal, setShowEnrollModal] = useState(false);
+  const [enrolling, setEnrolling] = useState(false);
+
+  // Non-students see an "add student role" modal instead of a hard redirect.
+  useEffect(() => {
+    if (!user || !role) return;
+    if (role !== "student") setShowEnrollModal(true);
+  }, [user, role]);
+
+  async function addStudentRole() {
+    if (!user) return;
+    setEnrolling(true);
+    const { error } = await supabase.from("user_roles").insert({ user_id: user.id, role: "student" });
+    setEnrolling(false);
+    if (error && !error.message.includes("duplicate")) {
+      toast.error(error.message);
+      return;
+    }
+    toast.success("You're now enrolled as a student — you can keep your current role too.");
+    setShowEnrollModal(false);
+    window.location.reload();
+  }
 
   // Step 1
   const [fullName, setFullName] = useState("");
@@ -127,6 +150,22 @@ function ApplyWizard() {
 
   return (
     <SiteLayout>
+      <Dialog open={showEnrollModal} onOpenChange={(o) => { if (!o) navigate({ to: "/academy" }); }}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Enroll as a student</DialogTitle>
+            <DialogDescription>
+              To apply for an Academy course, we'll add the Student role to your account. You'll keep your existing {role} access — you can be both.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button variant="ghost" onClick={() => navigate({ to: "/academy" })}>Cancel</Button>
+            <Button variant="brand" onClick={addStudentRole} disabled={enrolling}>
+              {enrolling ? <Loader2 className="h-4 w-4 animate-spin" /> : "Add Student role"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
       <Section className="!py-10">
         <div className="mx-auto max-w-4xl">
           <Link to="/academy/course/$slug" params={{ slug: course.slug }} className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground">
