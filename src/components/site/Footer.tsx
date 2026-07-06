@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { Facebook, Instagram, Mail, MapPin, Phone, Send, Clock } from "lucide-react";
+import { Facebook, Instagram, Mail, MapPin, Send } from "lucide-react";
 import { Logo } from "./Logo";
 import { Button } from "@/components/ui/button";
 import { CurrencySwitcher } from "@/lib/currency";
