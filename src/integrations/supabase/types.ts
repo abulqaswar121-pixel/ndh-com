@@ -393,6 +393,63 @@ export type Database = {
         }
         Relationships: []
       }
+      case_studies: {
+        Row: {
+          challenge: string | null
+          client_name: string | null
+          cover_image: string | null
+          created_at: string
+          id: string
+          industry: string | null
+          published: boolean
+          published_at: string | null
+          results: string | null
+          services: string[] | null
+          slug: string
+          solution: string | null
+          summary: string
+          tags: string[] | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          challenge?: string | null
+          client_name?: string | null
+          cover_image?: string | null
+          created_at?: string
+          id?: string
+          industry?: string | null
+          published?: boolean
+          published_at?: string | null
+          results?: string | null
+          services?: string[] | null
+          slug: string
+          solution?: string | null
+          summary: string
+          tags?: string[] | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          challenge?: string | null
+          client_name?: string | null
+          cover_image?: string | null
+          created_at?: string
+          id?: string
+          industry?: string | null
+          published?: boolean
+          published_at?: string | null
+          results?: string | null
+          services?: string[] | null
+          slug?: string
+          solution?: string | null
+          summary?: string
+          tags?: string[] | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       certificates: {
         Row: {
           certificate_number: string
