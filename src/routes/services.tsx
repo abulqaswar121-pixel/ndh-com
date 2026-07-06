@@ -2,10 +2,13 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { Section } from "@/components/site/Section";
 import { Button } from "@/components/ui/button";
-import { Palette, Code2, PenTool, Megaphone, Clapperboard, Brain, ArrowRight } from "lucide-react";
+import * as Icons from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { AnimatedBlobs } from "@/components/site/AnimatedBlobs";
 import { Reveal, Stagger, StaggerItem } from "@/components/site/Reveal";
 import { UnsplashImg } from "@/components/site/UnsplashImg";
+import { useEffect, useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/services")({
   head: () => ({ meta: [
@@ -17,14 +20,16 @@ export const Route = createFileRoute("/services")({
   component: ServicesPage,
 });
 
-const cats = [
-  { icon: Palette, title: "Design", q: "graphic design workspace creative", items: ["Brand identity & logo", "UI/UX design", "Social media creatives", "Print & packaging"] },
-  { icon: Code2, title: "Development", q: "developer coding screen react", items: ["Websites & landing pages", "Web apps & SaaS", "Mobile apps", "Ecommerce & APIs"] },
-  { icon: PenTool, title: "Content Writing", q: "writer laptop notes coffee", items: ["SEO articles", "Brand copy", "Email & newsletters", "Scripts & ghostwriting"] },
-  { icon: Megaphone, title: "Digital Marketing", q: "marketing analytics dashboard screen", items: ["Meta & Google ads", "SEO & content strategy", "Social media management", "Influencer campaigns"] },
-  { icon: Clapperboard, title: "Media Production", q: "video editor production studio camera", items: ["Video production & editing", "Motion graphics", "Photography", "Podcasts"] },
-  { icon: Brain, title: "AI & Tech Services", q: "artificial intelligence dashboard tech", items: ["Workflow automation", "Custom AI agents", "Data dashboards", "Integrations"] },
-];
+type Cat = { icon: string; title: string; q: string; items: string[]; image_url?: string };
+
+const QUERIES: Record<string, string> = {
+  Design: "graphic design workspace creative",
+  Development: "developer coding screen react",
+  "Content Writing": "writer laptop notes coffee",
+  "Digital Marketing": "marketing analytics dashboard screen",
+  "Media Production": "video editor production studio camera",
+  "AI & Tech Services": "artificial intelligence dashboard tech",
+};
 
 const portfolio = [
   { q: "fintech mobile app ui design", title: "Fintech app rebrand", tag: "Design" },
@@ -36,6 +41,22 @@ const portfolio = [
 ];
 
 function ServicesPage() {
+  const [cats, setCats] = useState<Cat[]>([]);
+  useEffect(() => {
+    supabase.from("services")
+      .select("name,icon,included,image_url")
+      .eq("published", true)
+      .order("display_order", { ascending: true })
+      .then(({ data }) => {
+        setCats((data || []).map((r) => ({
+          icon: r.icon || "Sparkles",
+          title: r.name,
+          q: QUERIES[r.name] || r.name.toLowerCase(),
+          items: Array.isArray(r.included) ? (r.included as string[]) : [],
+          image_url: r.image_url || undefined,
+        })));
+      });
+  }, []);
   return (
     <SiteLayout>
       <section className="relative isolate overflow-hidden bg-hero py-24 text-white">
@@ -51,15 +72,21 @@ function ServicesPage() {
 
       <Section>
         <Stagger className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {cats.map((c) => (
+          {cats.map((c) => {
+            const IconEl = (Icons as unknown as Record<string, React.ComponentType<{ className?: string }>>)[c.icon] || Icons.Sparkles;
+            return (
             <StaggerItem key={c.title}>
               <div className="group h-full overflow-hidden rounded-2xl border border-border bg-card transition-all hover:-translate-y-1 hover:shadow-glow">
                 <div className="aspect-[16/10] overflow-hidden">
-                 <UnsplashImg q={c.q} alt={`${c.title} services at Najeeb Digital Hub`} w={800} h={500} sig={c.title} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
+                 {c.image_url ? (
+                   <img src={c.image_url} alt={`${c.title} services at Najeeb Digital Hub`} loading="lazy" className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
+                 ) : (
+                   <UnsplashImg q={c.q} alt={`${c.title} services at Najeeb Digital Hub`} w={800} h={500} sig={c.title} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
+                 )}
                 </div>
                 <div className="p-6">
                   <div className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-brand text-white shadow-glow">
-                    <c.icon className="h-5 w-5" />
+                    <IconEl className="h-5 w-5" />
                   </div>
                   <h3 className="mt-4 text-lg font-bold">{c.title}</h3>
                   <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
@@ -71,7 +98,8 @@ function ServicesPage() {
                 </div>
               </div>
             </StaggerItem>
-          ))}
+            );
+          })}
         </Stagger>
       </Section>
 
