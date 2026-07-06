@@ -81,8 +81,8 @@ export function Navbar() {
           <Link to="/login" className="hidden md:block">
             <Button variant="ghost" size="sm">Sign in</Button>
           </Link>
-          <Link to="/signup" className="hidden md:block">
-            <Button variant="brand" size="sm">Sign up</Button>
+          <Link to="/start-project" className="hidden md:block">
+            <Button variant="brand" size="sm">Start a Project</Button>
           </Link>
           <button
             aria-label="Menu"
@@ -110,8 +110,8 @@ export function Navbar() {
             <Link to="/login" onClick={() => setOpen(false)} className="mt-2">
               <Button variant="outline" className="w-full">Sign in</Button>
             </Link>
-            <Link to="/signup" onClick={() => setOpen(false)} className="mt-2">
-              <Button variant="brand" className="w-full">Sign up</Button>
+            <Link to="/start-project" onClick={() => setOpen(false)} className="mt-2">
+              <Button variant="brand" className="w-full">Start a Project</Button>
             </Link>
             <div className="my-4 h-px bg-border" />
             <div className="grid grid-cols-2 gap-1">

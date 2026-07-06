@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate, useRouterState } from "@tanstack/react-router";
 import { DashboardShell, type NavItem } from "@/components/dashboard/Sidebar";
-import { LayoutDashboard, ListTodo, Upload, Wallet, Award, BarChart3, MessageSquare, GraduationCap, Settings as SettingsIcon } from "lucide-react";
+import { LayoutDashboard, ListTodo, Upload, Wallet, Award, BarChart3, MessageSquare, GraduationCap, Settings as SettingsIcon, Briefcase } from "lucide-react";
 import { useEffect } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { ensureTalentProfile } from "@/lib/talent/talent.functions";
@@ -26,6 +26,7 @@ const NAV: NavItem[] = [
   { label: "My Tier & Rank", to: "/dashboard/talent", search: { tab: "tier" }, icon: Award },
   { label: "My Performance", to: "/dashboard/talent", search: { tab: "performance" }, icon: BarChart3 },
   { label: "Messages", to: "/dashboard/talent", search: { tab: "messages" }, icon: MessageSquare },
+  { label: "My Portfolio", to: "/portfolio", icon: Briefcase },
   { label: "NDH Academy", to: "/dashboard/talent", search: { tab: "academy" }, icon: GraduationCap },
   { label: "Settings", to: "/dashboard/talent", search: { tab: "settings" }, icon: SettingsIcon },
 ];
