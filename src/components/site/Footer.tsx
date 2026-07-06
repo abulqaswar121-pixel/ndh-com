@@ -24,7 +24,8 @@ const cols = [
     links: [
       { to: "/services", label: "All Services" },
       { to: "/case-studies", label: "Case Studies" },
-      { to: "/contact", label: "Request a Quote" },
+      { to: "/start-project", label: "Start a Project" },
+      { to: "/talent", label: "Talent Directory" },
     ],
   },
   {
