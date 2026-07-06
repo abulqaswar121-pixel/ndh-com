@@ -396,57 +396,102 @@ export type Database = {
       case_studies: {
         Row: {
           challenge: string | null
+          client_company: string | null
+          client_logo_url: string | null
           client_name: string | null
+          client_photo_url: string | null
+          client_quote: string | null
           cover_image: string | null
           created_at: string
+          display_order: number
+          featured: boolean
+          gallery_images: Json
           id: string
           industry: string | null
+          metrics: Json
+          project_duration: string | null
           published: boolean
           published_at: string | null
           results: string | null
+          seo_description: string | null
+          seo_og_image: string | null
+          seo_title: string | null
+          service_category: string | null
           services: string[] | null
           slug: string
           solution: string | null
           summary: string
           tags: string[] | null
+          team_members: Json
           title: string
           updated_at: string
+          video_url: string | null
         }
         Insert: {
           challenge?: string | null
+          client_company?: string | null
+          client_logo_url?: string | null
           client_name?: string | null
+          client_photo_url?: string | null
+          client_quote?: string | null
           cover_image?: string | null
           created_at?: string
+          display_order?: number
+          featured?: boolean
+          gallery_images?: Json
           id?: string
           industry?: string | null
+          metrics?: Json
+          project_duration?: string | null
           published?: boolean
           published_at?: string | null
           results?: string | null
+          seo_description?: string | null
+          seo_og_image?: string | null
+          seo_title?: string | null
+          service_category?: string | null
           services?: string[] | null
           slug: string
           solution?: string | null
           summary: string
           tags?: string[] | null
+          team_members?: Json
           title: string
           updated_at?: string
+          video_url?: string | null
         }
         Update: {
           challenge?: string | null
+          client_company?: string | null
+          client_logo_url?: string | null
           client_name?: string | null
+          client_photo_url?: string | null
+          client_quote?: string | null
           cover_image?: string | null
           created_at?: string
+          display_order?: number
+          featured?: boolean
+          gallery_images?: Json
           id?: string
           industry?: string | null
+          metrics?: Json
+          project_duration?: string | null
           published?: boolean
           published_at?: string | null
           results?: string | null
+          seo_description?: string | null
+          seo_og_image?: string | null
+          seo_title?: string | null
+          service_category?: string | null
           services?: string[] | null
           slug?: string
           solution?: string | null
           summary?: string
           tags?: string[] | null
+          team_members?: Json
           title?: string
           updated_at?: string
+          video_url?: string | null
         }
         Relationships: []
       }
@@ -525,6 +570,110 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      chat_conversations: {
+        Row: {
+          created_at: string
+          flagged: boolean
+          id: string
+          last_message_at: string
+          message_count: number
+          session_id: string
+          updated_at: string
+          user_id: string | null
+          visitor_email: string | null
+          visitor_name: string | null
+        }
+        Insert: {
+          created_at?: string
+          flagged?: boolean
+          id?: string
+          last_message_at?: string
+          message_count?: number
+          session_id: string
+          updated_at?: string
+          user_id?: string | null
+          visitor_email?: string | null
+          visitor_name?: string | null
+        }
+        Update: {
+          created_at?: string
+          flagged?: boolean
+          id?: string
+          last_message_at?: string
+          message_count?: number
+          session_id?: string
+          updated_at?: string
+          user_id?: string | null
+          visitor_email?: string | null
+          visitor_name?: string | null
+        }
+        Relationships: []
+      }
+      chat_messages: {
+        Row: {
+          content: string
+          conversation_id: string
+          created_at: string
+          id: string
+          role: string
+        }
+        Insert: {
+          content: string
+          conversation_id: string
+          created_at?: string
+          id?: string
+          role: string
+        }
+        Update: {
+          content?: string
+          conversation_id?: string
+          created_at?: string
+          id?: string
+          role?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "chat_messages_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "chat_conversations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      chat_settings: {
+        Row: {
+          color_theme: string
+          enabled: boolean
+          id: number
+          position: string
+          quick_replies: Json
+          system_prompt: string
+          updated_at: string
+          welcome_message: string
+        }
+        Insert: {
+          color_theme?: string
+          enabled?: boolean
+          id?: number
+          position?: string
+          quick_replies?: Json
+          system_prompt?: string
+          updated_at?: string
+          welcome_message?: string
+        }
+        Update: {
+          color_theme?: string
+          enabled?: boolean
+          id?: number
+          position?: string
+          quick_replies?: Json
+          system_prompt?: string
+          updated_at?: string
+          welcome_message?: string
+        }
+        Relationships: []
       }
       clients: {
         Row: {
@@ -1099,6 +1248,42 @@ export type Database = {
         }
         Relationships: []
       }
+      faq_items: {
+        Row: {
+          answer: string
+          category: string | null
+          created_at: string
+          display_order: number
+          featured_home: boolean
+          id: string
+          published: boolean
+          question: string
+          updated_at: string
+        }
+        Insert: {
+          answer: string
+          category?: string | null
+          created_at?: string
+          display_order?: number
+          featured_home?: boolean
+          id?: string
+          published?: boolean
+          question: string
+          updated_at?: string
+        }
+        Update: {
+          answer?: string
+          category?: string | null
+          created_at?: string
+          display_order?: number
+          featured_home?: boolean
+          id?: string
+          published?: boolean
+          question?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       finance_ledger: {
         Row: {
           amount: number
@@ -1304,6 +1489,39 @@ export type Database = {
           },
         ]
       }
+      homepage_stats: {
+        Row: {
+          created_at: string
+          display_order: number
+          id: string
+          label: string
+          published: boolean
+          suffix: string | null
+          updated_at: string
+          value: string
+        }
+        Insert: {
+          created_at?: string
+          display_order?: number
+          id?: string
+          label: string
+          published?: boolean
+          suffix?: string | null
+          updated_at?: string
+          value: string
+        }
+        Update: {
+          created_at?: string
+          display_order?: number
+          id?: string
+          label?: string
+          published?: boolean
+          suffix?: string | null
+          updated_at?: string
+          value?: string
+        }
+        Relationships: []
+      }
       instructors: {
         Row: {
           bio: string | null
@@ -1403,6 +1621,60 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      job_openings: {
+        Row: {
+          created_at: string
+          department: string | null
+          description: string | null
+          display_order: number
+          employment_type: string | null
+          id: string
+          location: string | null
+          published: boolean
+          requirements: string | null
+          responsibilities: string | null
+          salary_range: string | null
+          slug: string
+          status: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          department?: string | null
+          description?: string | null
+          display_order?: number
+          employment_type?: string | null
+          id?: string
+          location?: string | null
+          published?: boolean
+          requirements?: string | null
+          responsibilities?: string | null
+          salary_range?: string | null
+          slug: string
+          status?: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          department?: string | null
+          description?: string | null
+          display_order?: number
+          employment_type?: string | null
+          id?: string
+          location?: string | null
+          published?: boolean
+          requirements?: string | null
+          responsibilities?: string | null
+          salary_range?: string | null
+          slug?: string
+          status?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
       }
       lesson_progress: {
         Row: {
@@ -2250,6 +2522,75 @@ export type Database = {
           },
         ]
       }
+      services: {
+        Row: {
+          created_at: string
+          display_order: number
+          featured: boolean
+          icon: string | null
+          id: string
+          image_url: string | null
+          included: Json
+          long_description: string | null
+          name: string
+          published: boolean
+          short_description: string | null
+          slug: string
+          starting_price: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          display_order?: number
+          featured?: boolean
+          icon?: string | null
+          id?: string
+          image_url?: string | null
+          included?: Json
+          long_description?: string | null
+          name: string
+          published?: boolean
+          short_description?: string | null
+          slug: string
+          starting_price?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          display_order?: number
+          featured?: boolean
+          icon?: string | null
+          id?: string
+          image_url?: string | null
+          included?: Json
+          long_description?: string | null
+          name?: string
+          published?: boolean
+          short_description?: string | null
+          slug?: string
+          starting_price?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      site_content: {
+        Row: {
+          key: string
+          updated_at: string
+          value: Json
+        }
+        Insert: {
+          key: string
+          updated_at?: string
+          value?: Json
+        }
+        Update: {
+          key?: string
+          updated_at?: string
+          value?: Json
+        }
+        Relationships: []
+      }
       site_pages: {
         Row: {
           blocks: Json
@@ -2801,6 +3142,57 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      team_members: {
+        Row: {
+          bio_long: string | null
+          bio_short: string | null
+          created_at: string
+          department: string | null
+          display_order: number
+          email: string | null
+          featured_home: boolean
+          full_name: string
+          id: string
+          linkedin_url: string | null
+          photo_url: string | null
+          published: boolean
+          role: string
+          updated_at: string
+        }
+        Insert: {
+          bio_long?: string | null
+          bio_short?: string | null
+          created_at?: string
+          department?: string | null
+          display_order?: number
+          email?: string | null
+          featured_home?: boolean
+          full_name: string
+          id?: string
+          linkedin_url?: string | null
+          photo_url?: string | null
+          published?: boolean
+          role: string
+          updated_at?: string
+        }
+        Update: {
+          bio_long?: string | null
+          bio_short?: string | null
+          created_at?: string
+          department?: string | null
+          display_order?: number
+          email?: string | null
+          featured_home?: boolean
+          full_name?: string
+          id?: string
+          linkedin_url?: string | null
+          photo_url?: string | null
+          published?: boolean
+          role?: string
+          updated_at?: string
+        }
+        Relationships: []
       }
       transcripts: {
         Row: {
