@@ -10,26 +10,16 @@ import { toast } from "sonner";
 
 const cols = [
   {
-    title: "Company",
-    links: [
-      { to: "/about", label: "About Us" },
-      { to: "/team", label: "Our Team" },
-      { to: "/careers", label: "Careers" },
-      { to: "/blog", label: "Blog" },
-      { to: "/contact", label: "Contact" },
-    ],
-  },
-  {
     title: "Services",
     links: [
       { to: "/services", label: "All Services" },
-      { to: "/case-studies", label: "Case Studies" },
       { to: "/start-project", label: "Start a Project" },
       { to: "/talent", label: "Talent Directory" },
+      { to: "/faq", label: "How it works" },
     ],
   },
   {
-    title: "NDH Academy",
+    title: "Academy",
     links: [
       { to: "/academy", label: "Academy Overview" },
       { to: "/verify", label: "Verify Certificate" },
@@ -37,13 +27,21 @@ const cols = [
     ],
   },
   {
-    title: "Support",
+    title: "Company",
     links: [
-      { to: "/faq", label: "Help Center" },
-      { to: "/faq", label: "FAQ" },
-      { to: "/careers", label: "Talent Application" },
+      { to: "/about", label: "About" },
+      { to: "/blog", label: "Blog" },
+      { to: "/careers", label: "Careers" },
+      { to: "/contact", label: "Contact" },
+    ],
+  },
+  {
+    title: "Legal",
+    links: [
       { to: "/terms", label: "Terms of Service" },
       { to: "/privacy", label: "Privacy Policy" },
+      { to: "/trust", label: "Trust & Safety" },
+      { to: "/refunds", label: "Refund Policy" },
     ],
   },
 ] as const;
@@ -69,17 +67,17 @@ export function Footer() {
   };
 
   return (
-    <footer className="relative mt-24 overflow-hidden border-t border-border bg-secondary/40">
+    <footer className="relative mt-24 border-t border-border bg-background">
       {/* Newsletter band */}
-      <div className="border-b border-border bg-gradient-to-r from-[#0A0E2A] via-[#1a1052] to-[#0A0E2A] py-12 text-white">
-        <div className="mx-auto grid max-w-7xl items-center gap-6 px-6 text-center md:grid-cols-[1fr_auto] md:text-left">
+      <div className="border-b border-border bg-secondary/40 py-10">
+        <div className="mx-auto grid max-w-7xl items-center gap-6 px-6 md:grid-cols-[1fr_auto]">
           <div>
-            <h3 className="text-2xl font-extrabold sm:text-3xl">Stay in the loop.</h3>
-            <p className="mt-2 text-sm text-white/70">Get sharp ideas on digital work, freelancing and NDH Academy updates.</p>
+            <h3 className="text-xl font-semibold sm:text-2xl">Stay in the loop</h3>
+            <p className="mt-1 text-sm text-muted-foreground">Product updates and hiring insights. No spam.</p>
           </div>
           <form
             onSubmit={handleSubscribe}
-            className="mx-auto flex w-full max-w-md flex-col gap-2 sm:flex-row md:mx-0"
+            className="flex w-full max-w-md flex-col gap-2 sm:flex-row"
           >
             <input
               type="email"
@@ -88,7 +86,7 @@ export function Footer() {
               onChange={(e) => setEmail(e.target.value)}
               aria-label="Email address"
               placeholder="you@email.com"
-              className="flex-1 rounded-lg border border-white/15 bg-white/10 px-4 py-2.5 text-sm text-white placeholder:text-white/50 focus:outline-none focus:ring-2 focus:ring-[oklch(0.65_0.19_252)]"
+              className="flex-1 rounded-md border border-border bg-background px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-ring/40"
             />
             <Button type="submit" variant="brand" disabled={busy}>
               {busy ? "Subscribing…" : "Subscribe"} <Send className="h-4 w-4" />
@@ -125,10 +123,10 @@ export function Footer() {
               </li>
             </ul>
             <div className="mt-4 flex items-center gap-3">
-              <a href="https://www.facebook.com/share/1Be6HN8zjS/" target="_blank" rel="noreferrer" aria-label="Facebook" className="grid h-9 w-9 place-items-center rounded-full border border-border transition hover:bg-gradient-brand hover:text-white">
+              <a href="https://www.facebook.com/share/1Be6HN8zjS/" target="_blank" rel="noreferrer" aria-label="Facebook" className="grid h-9 w-9 place-items-center rounded-full border border-border transition hover:border-primary hover:text-primary">
                 <Facebook className="h-4 w-4" />
               </a>
-              <a href="https://www.instagram.com/njb_digital_hub" target="_blank" rel="noreferrer" aria-label="Instagram" className="grid h-9 w-9 place-items-center rounded-full border border-border transition hover:bg-gradient-brand hover:text-white">
+              <a href="https://www.instagram.com/njb_digital_hub" target="_blank" rel="noreferrer" aria-label="Instagram" className="grid h-9 w-9 place-items-center rounded-full border border-border transition hover:border-primary hover:text-primary">
                 <Instagram className="h-4 w-4" />
               </a>
             </div>
@@ -160,37 +158,37 @@ export function Footer() {
             <div className="flex items-center gap-3">
               <Logo className="h-11 w-11" />
               <div>
-                <div className="text-sm font-extrabold tracking-tight">NAJEEB DIGITAL HUB</div>
+                <div className="text-sm font-semibold tracking-tight">Najeeb Digital Hub</div>
                 <div className="text-[10px] font-medium uppercase tracking-[0.2em] text-muted-foreground">NDH</div>
               </div>
             </div>
             <p className="mt-4 max-w-sm text-sm text-muted-foreground">
-              A premium digital services bureau and online academy. Where Digital Excellence Meets Opportunity.
+              Vetted digital talent and a managed delivery bureau. Hire specialists or brief a project.
             </p>
             <ul className="mt-5 space-y-2 text-sm text-muted-foreground">
               <li className="flex items-start gap-2">
-                <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-[oklch(0.65_0.19_252)]" /> Sokoto, Nigeria · Serving worldwide
+                <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-primary" /> Serving clients worldwide
               </li>
               <li className="flex items-center gap-2">
-                <Phone className="h-4 w-4 shrink-0 text-[oklch(0.65_0.19_252)]" /> +234 902 993 2794 <span className="text-xs">(also WhatsApp)</span>
+                <Phone className="h-4 w-4 shrink-0 text-primary" /> +234 902 993 2794
               </li>
               <li className="flex items-center gap-2">
-                <Mail className="h-4 w-4 shrink-0 text-[oklch(0.65_0.19_252)]" />
+                <Mail className="h-4 w-4 shrink-0 text-primary" />
                 <a className="hover:text-foreground" href="mailto:support@ndh.com.ng">support@ndh.com.ng</a>
               </li>
               <li className="flex items-center gap-2">
-                <Mail className="h-4 w-4 shrink-0 text-[oklch(0.65_0.19_252)]" />
+                <Mail className="h-4 w-4 shrink-0 text-primary" />
                 <a className="hover:text-foreground" href="mailto:info@ndh.com.ng">info@ndh.com.ng</a>
               </li>
               <li className="flex items-center gap-2">
-                <Clock className="h-4 w-4 shrink-0 text-[oklch(0.65_0.19_252)]" /> Mon – Sat, 24 hours · Sun closed
+                <Clock className="h-4 w-4 shrink-0 text-primary" /> Response &lt; 4 business hours
               </li>
             </ul>
             <div className="mt-5 flex items-center gap-3">
-              <a href="https://www.facebook.com/share/1Be6HN8zjS/" target="_blank" rel="noreferrer" aria-label="Facebook" className="grid h-10 w-10 place-items-center rounded-full border border-border transition hover:bg-gradient-brand hover:text-white">
+              <a href="https://www.facebook.com/share/1Be6HN8zjS/" target="_blank" rel="noreferrer" aria-label="Facebook" className="grid h-10 w-10 place-items-center rounded-full border border-border transition hover:border-primary hover:text-primary">
                 <Facebook className="h-4 w-4" />
               </a>
-              <a href="https://www.instagram.com/njb_digital_hub" target="_blank" rel="noreferrer" aria-label="Instagram" className="grid h-10 w-10 place-items-center rounded-full border border-border transition hover:bg-gradient-brand hover:text-white">
+              <a href="https://www.instagram.com/njb_digital_hub" target="_blank" rel="noreferrer" aria-label="Instagram" className="grid h-10 w-10 place-items-center rounded-full border border-border transition hover:border-primary hover:text-primary">
                 <Instagram className="h-4 w-4" />
               </a>
             </div>
@@ -217,7 +215,6 @@ export function Footer() {
         <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-3 px-6 py-5 text-xs text-muted-foreground sm:flex-row">
           <div>© {new Date().getFullYear()} Najeeb Digital Hub. All rights reserved.</div>
           <div className="flex flex-wrap items-center justify-center gap-4">
-            <span>Built by NDH in Sokoto, Nigeria</span>
             <CurrencySwitcher />
           </div>
         </div>
