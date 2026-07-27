@@ -107,7 +107,9 @@ export type Database = {
           display_order: number
           id: string
           is_published: boolean
+          learning_objectives: string[]
           name: string
+          project_theme: string | null
           region_prices: Json
           school_id: string
           slug: string
@@ -119,7 +121,9 @@ export type Database = {
           display_order?: number
           id?: string
           is_published?: boolean
+          learning_objectives?: string[]
           name: string
+          project_theme?: string | null
           region_prices?: Json
           school_id: string
           slug: string
@@ -131,7 +135,9 @@ export type Database = {
           display_order?: number
           id?: string
           is_published?: boolean
+          learning_objectives?: string[]
           name?: string
+          project_theme?: string | null
           region_prices?: Json
           school_id?: string
           slug?: string
@@ -143,6 +149,91 @@ export type Database = {
             columns: ["school_id"]
             isOneToOne: false
             referencedRelation: "schools"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      academy_exam_attempts: {
+        Row: {
+          ai_essay_score: number | null
+          ai_short_score: number | null
+          answer_key: Json | null
+          answers: Json | null
+          course_id: string
+          created_at: string
+          id: string
+          mcq_score: number | null
+          paper: Json
+          passed: boolean | null
+          started_at: string
+          submitted_at: string | null
+          total_score: number | null
+          user_id: string
+        }
+        Insert: {
+          ai_essay_score?: number | null
+          ai_short_score?: number | null
+          answer_key?: Json | null
+          answers?: Json | null
+          course_id: string
+          created_at?: string
+          id?: string
+          mcq_score?: number | null
+          paper: Json
+          passed?: boolean | null
+          started_at?: string
+          submitted_at?: string | null
+          total_score?: number | null
+          user_id: string
+        }
+        Update: {
+          ai_essay_score?: number | null
+          ai_short_score?: number | null
+          answer_key?: Json | null
+          answers?: Json | null
+          course_id?: string
+          created_at?: string
+          id?: string
+          mcq_score?: number | null
+          paper?: Json
+          passed?: boolean | null
+          started_at?: string
+          submitted_at?: string | null
+          total_score?: number | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "academy_exam_attempts_course_id_fkey"
+            columns: ["course_id"]
+            isOneToOne: false
+            referencedRelation: "academy_courses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      academy_lesson_progress: {
+        Row: {
+          lesson_id: string
+          user_id: string
+          watched_at: string
+        }
+        Insert: {
+          lesson_id: string
+          user_id: string
+          watched_at?: string
+        }
+        Update: {
+          lesson_id?: string
+          user_id?: string
+          watched_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "academy_lesson_progress_lesson_id_fkey"
+            columns: ["lesson_id"]
+            isOneToOne: false
+            referencedRelation: "academy_lessons"
             referencedColumns: ["id"]
           },
         ]
@@ -214,6 +305,68 @@ export type Database = {
           tier?: string
         }
         Relationships: []
+      }
+      academy_project_submissions: {
+        Row: {
+          ai_feedback: Json | null
+          ai_score: number | null
+          ai_verdict: string | null
+          brief: string
+          content: string | null
+          course_id: string
+          created_at: string
+          director_note: string | null
+          file_url: string | null
+          id: string
+          reviewed_at: string | null
+          reviewed_by: string | null
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          ai_feedback?: Json | null
+          ai_score?: number | null
+          ai_verdict?: string | null
+          brief: string
+          content?: string | null
+          course_id: string
+          created_at?: string
+          director_note?: string | null
+          file_url?: string | null
+          id?: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          ai_feedback?: Json | null
+          ai_score?: number | null
+          ai_verdict?: string | null
+          brief?: string
+          content?: string | null
+          course_id?: string
+          created_at?: string
+          director_note?: string | null
+          file_url?: string | null
+          id?: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "academy_project_submissions_course_id_fkey"
+            columns: ["course_id"]
+            isOneToOne: false
+            referencedRelation: "academy_courses"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       academy_projects: {
         Row: {
@@ -725,6 +878,7 @@ export type Database = {
           issue_date: string
           issued_at: string | null
           pdf_url: string | null
+          pipeline_status: string
           qr_code: string | null
           status: string
           student_id: string
@@ -742,6 +896,7 @@ export type Database = {
           issue_date?: string
           issued_at?: string | null
           pdf_url?: string | null
+          pipeline_status?: string
           qr_code?: string | null
           status?: string
           student_id: string
@@ -759,6 +914,7 @@ export type Database = {
           issue_date?: string
           issued_at?: string | null
           pdf_url?: string | null
+          pipeline_status?: string
           qr_code?: string | null
           status?: string
           student_id?: string
