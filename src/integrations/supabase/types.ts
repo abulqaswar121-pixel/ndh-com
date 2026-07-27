@@ -68,6 +68,223 @@ export type Database = {
           },
         ]
       }
+      academy_assignments: {
+        Row: {
+          course_id: string
+          created_at: string
+          id: string
+          instructions: string | null
+          updated_at: string
+        }
+        Insert: {
+          course_id: string
+          created_at?: string
+          id?: string
+          instructions?: string | null
+          updated_at?: string
+        }
+        Update: {
+          course_id?: string
+          created_at?: string
+          id?: string
+          instructions?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "academy_assignments_course_id_fkey"
+            columns: ["course_id"]
+            isOneToOne: false
+            referencedRelation: "academy_courses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      academy_courses: {
+        Row: {
+          created_at: string
+          description: string | null
+          display_order: number
+          id: string
+          is_published: boolean
+          name: string
+          region_prices: Json
+          school_id: string
+          slug: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          display_order?: number
+          id?: string
+          is_published?: boolean
+          name: string
+          region_prices?: Json
+          school_id: string
+          slug: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          display_order?: number
+          id?: string
+          is_published?: boolean
+          name?: string
+          region_prices?: Json
+          school_id?: string
+          slug?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "academy_courses_school_id_fkey"
+            columns: ["school_id"]
+            isOneToOne: false
+            referencedRelation: "schools"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      academy_lessons: {
+        Row: {
+          course_id: string
+          created_at: string
+          id: string
+          notes: string | null
+          position: number
+          title: string
+          updated_at: string
+          video_url: string | null
+        }
+        Insert: {
+          course_id: string
+          created_at?: string
+          id?: string
+          notes?: string | null
+          position?: number
+          title: string
+          updated_at?: string
+          video_url?: string | null
+        }
+        Update: {
+          course_id?: string
+          created_at?: string
+          id?: string
+          notes?: string | null
+          position?: number
+          title?: string
+          updated_at?: string
+          video_url?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "academy_lessons_course_id_fkey"
+            columns: ["course_id"]
+            isOneToOne: false
+            referencedRelation: "academy_courses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      academy_pricing: {
+        Row: {
+          amount: number
+          created_at: string
+          currency: string
+          id: string
+          region: string
+          tier: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          currency: string
+          id?: string
+          region: string
+          tier: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          currency?: string
+          id?: string
+          region?: string
+          tier?: string
+        }
+        Relationships: []
+      }
+      academy_projects: {
+        Row: {
+          brief: string | null
+          course_id: string
+          created_at: string
+          id: string
+          updated_at: string
+        }
+        Insert: {
+          brief?: string | null
+          course_id: string
+          created_at?: string
+          id?: string
+          updated_at?: string
+        }
+        Update: {
+          brief?: string | null
+          course_id?: string
+          created_at?: string
+          id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "academy_projects_course_id_fkey"
+            columns: ["course_id"]
+            isOneToOne: false
+            referencedRelation: "academy_courses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      academy_quiz_questions: {
+        Row: {
+          correct_index: number
+          course_id: string
+          created_at: string
+          id: string
+          options: Json
+          position: number
+          question: string
+        }
+        Insert: {
+          correct_index?: number
+          course_id: string
+          created_at?: string
+          id?: string
+          options?: Json
+          position?: number
+          question: string
+        }
+        Update: {
+          correct_index?: number
+          course_id?: string
+          created_at?: string
+          id?: string
+          options?: Json
+          position?: number
+          question?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "academy_quiz_questions_course_id_fkey"
+            columns: ["course_id"]
+            isOneToOne: false
+            referencedRelation: "academy_courses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       admissions_applications: {
         Row: {
           applicant_id: string | null
@@ -2521,6 +2738,39 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      schools: {
+        Row: {
+          created_at: string
+          description: string | null
+          display_order: number
+          icon: string | null
+          id: string
+          name: string
+          slug: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          display_order?: number
+          icon?: string | null
+          id?: string
+          name: string
+          slug: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          display_order?: number
+          icon?: string | null
+          id?: string
+          name?: string
+          slug?: string
+          updated_at?: string
+        }
+        Relationships: []
       }
       services: {
         Row: {
