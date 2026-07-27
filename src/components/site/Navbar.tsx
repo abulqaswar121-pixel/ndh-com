@@ -5,15 +5,17 @@ import { Logo } from "./Logo";
 import { Button } from "@/components/ui/button";
 
 const primary = [
-  { to: "/", label: "Home" },
   { to: "/services", label: "Services" },
   { to: "/academy", label: "Academy" },
+  { to: "/talent", label: "Talent" },
+  { to: "/blog", label: "Blog" },
+  { to: "/contact", label: "Contact" },
 ] as const;
 
 const secondary = [
   { to: "/about", label: "About" },
-  { to: "/blog", label: "Blog" },
-  { to: "/contact", label: "Contact" },
+  { to: "/faq", label: "Help" },
+  { to: "/trust", label: "Trust & Safety" },
 ] as const;
 
 export function Navbar() {
@@ -43,13 +45,13 @@ export function Navbar() {
   };
 
   return (
-    <header className={`sticky top-0 z-40 transition-all ${scrolled ? "glass shadow-elegant" : ""}`}>
+    <header className={`sticky top-0 z-40 border-b transition-colors ${scrolled ? "border-border bg-background/95 backdrop-blur" : "border-transparent bg-background"}`}>
       <nav className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
         <Link to="/" className="flex min-w-0 items-center gap-2">
           <Logo className="h-9 w-9 shrink-0" />
           <div className="min-w-0">
-            <div className="truncate text-sm font-extrabold leading-tight tracking-tight">NAJEEB DIGITAL HUB</div>
-            <div className="text-[10px] font-medium uppercase tracking-[0.18em] text-muted-foreground">NDH</div>
+            <div className="truncate text-sm font-semibold leading-tight tracking-tight">Najeeb Digital Hub</div>
+            <div className="text-[10px] font-medium uppercase tracking-[0.2em] text-muted-foreground">NDH</div>
           </div>
         </Link>
 
