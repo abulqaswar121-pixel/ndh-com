@@ -112,7 +112,7 @@ export function Footer() {
             </p>
             <ul className="mt-4 space-y-1.5 text-sm text-muted-foreground">
               <li className="flex items-start gap-2">
-                <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-[oklch(0.65_0.19_252)]" /> Sokoto, Nigeria
+                <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-[oklch(0.65_0.19_252)]" /> Nigeria · Worldwide
               </li>
               <li className="flex items-center gap-2">
                 <Phone className="h-4 w-4 shrink-0 text-[oklch(0.65_0.19_252)]" /> +234 902 993 2794

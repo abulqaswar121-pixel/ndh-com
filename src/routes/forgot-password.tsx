@@ -30,10 +30,10 @@ function ForgotPasswordPage() {
 
   return (
     <AuthShell
-      title="Reset your password."
+      title="Reset your password"
       subtitle="We'll email you a secure reset link."
-      illustration="african professional reading email laptop"
-      illustrationAlt="Reset password"
+      illustration=""
+      illustrationAlt=""
       badge="Forgot password"
     >
       {sent ? (

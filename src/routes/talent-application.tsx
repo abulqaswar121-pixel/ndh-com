@@ -1,7 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { Section } from "@/components/site/Section";
-import { AnimatedBlobs } from "@/components/site/AnimatedBlobs";
 import { Reveal } from "@/components/site/Reveal";
 import { Button } from "@/components/ui/button";
 import { CheckCircle2, Mail } from "lucide-react";
@@ -30,14 +29,13 @@ function Page() {
   const [sent, setSent] = useState(false);
   return (
     <SiteLayout>
-      <section className="relative isolate overflow-hidden bg-hero py-24 text-white">
-        <AnimatedBlobs />
-        <div className="relative mx-auto max-w-7xl px-6">
+      <section className="border-b border-border bg-background py-20">
+        <div className="mx-auto max-w-7xl px-6">
           <Reveal>
-            <div className="text-xs font-semibold uppercase tracking-widest text-white/70">Talent Recruitment</div>
-            <h1 className="mt-3 max-w-3xl text-4xl font-extrabold sm:text-5xl">Apply to join our talent pool.</h1>
-            <p className="mt-4 max-w-2xl text-white/75">
-              NDH does not accept open sign-ups for talents. Submit your application below — if you match an opening, our team will reach out by email with portal access.
+            <div className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">Talent Recruitment</div>
+            <h1 className="mt-3 max-w-3xl text-4xl font-bold tracking-tight sm:text-5xl">Apply to join the NDH talent pool</h1>
+            <p className="mt-4 max-w-2xl text-muted-foreground">
+              Access to the NDH talent portal is invitation-only. Submit your application below — if you match a current opening, our team will follow up by email with portal access.
             </p>
           </Reveal>
         </div>
@@ -49,7 +47,7 @@ function Page() {
             <h3 className="font-bold">Why apply to NDH</h3>
             <ul className="mt-4 space-y-3 text-sm">
               {perks.map((p) => (
-                <li key={p} className="flex items-start gap-2"><CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-[oklch(0.78_0.13_180)]" />{p}</li>
+                <li key={p} className="flex items-start gap-2"><CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-primary" />{p}</li>
               ))}
             </ul>
             <div className="mt-6 rounded-xl border border-border bg-secondary/40 p-4 text-sm text-muted-foreground">
@@ -61,8 +59,8 @@ function Page() {
           <form onSubmit={(e) => { e.preventDefault(); setSent(true); }} className="rounded-2xl border border-border bg-card p-6 sm:p-8">
             {sent ? (
               <div className="text-center">
-                <div className="mx-auto grid h-14 w-14 place-items-center rounded-full bg-gradient-brand text-white">✓</div>
-                <h3 className="mt-4 text-xl font-bold">Application received.</h3>
+                <div className="mx-auto grid h-14 w-14 place-items-center rounded-full bg-primary text-primary-foreground">✓</div>
+                <h3 className="mt-4 text-xl font-semibold">Application received.</h3>
                 <p className="mt-2 text-sm text-muted-foreground">If shortlisted, our team will email you portal access within 7 business days.</p>
               </div>
             ) : (

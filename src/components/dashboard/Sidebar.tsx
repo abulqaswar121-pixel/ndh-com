@@ -57,7 +57,7 @@ export function DashboardShell({
               onClick={() => setOpen(false)}
               className={`flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition ${
                 isActive(it)
-                  ? "bg-gradient-brand text-white shadow-glow"
+                  ? "bg-primary text-primary-foreground"
                   : "text-muted-foreground hover:bg-secondary hover:text-foreground"
               }`}
             >

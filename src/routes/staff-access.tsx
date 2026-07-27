@@ -1,7 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { Section } from "@/components/site/Section";
-import { AnimatedBlobs } from "@/components/site/AnimatedBlobs";
 import { Reveal } from "@/components/site/Reveal";
 import { CheckCircle2, Mail, ShieldCheck } from "lucide-react";
 
@@ -33,13 +32,12 @@ const matrix: Array<{ role: string; portal: string; how: string; email?: string 
 function StaffAccessPage() {
   return (
     <SiteLayout>
-      <section className="relative isolate overflow-hidden bg-hero py-24 text-white">
-        <AnimatedBlobs />
-        <div className="relative mx-auto max-w-7xl px-6">
+      <section className="border-b border-border bg-background py-20">
+        <div className="mx-auto max-w-7xl px-6">
           <Reveal>
-            <div className="text-xs font-semibold uppercase tracking-widest text-white/70">Access & Invitations</div>
-            <h1 className="mt-3 max-w-3xl text-4xl font-extrabold sm:text-5xl">Who gets which portal, and how.</h1>
-            <p className="mt-4 max-w-2xl text-white/75">Only Clients and Students can sign up publicly. Every other portal is invitation-only.</p>
+            <div className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">Access & Invitations</div>
+            <h1 className="mt-3 max-w-3xl text-4xl font-bold tracking-tight sm:text-5xl">Portal access matrix</h1>
+            <p className="mt-4 max-w-2xl text-muted-foreground">Only Clients and Students can sign up publicly. Every other portal is invitation-only.</p>
           </Reveal>
         </div>
       </section>
@@ -77,8 +75,8 @@ function StaffAccessPage() {
             const I = Icon as typeof CheckCircle2;
             return (
               <div key={t as string} className="rounded-2xl border border-border bg-card p-6">
-                <I className="h-6 w-6 text-[oklch(0.65_0.19_252)]" />
-                <h3 className="mt-3 font-bold">{t as string}</h3>
+                <I className="h-6 w-6 text-primary" />
+                <h3 className="mt-3 font-semibold">{t as string}</h3>
                 <p className="mt-2 text-sm text-muted-foreground">{d as string}</p>
               </div>
             );

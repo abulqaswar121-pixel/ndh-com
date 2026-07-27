@@ -51,11 +51,11 @@ function ContactPage() {
   const [sent, setSent] = useState(false);
   return (
     <SiteLayout>
-      <section className="bg-hero py-20 text-white">
+      <section className="border-b border-border bg-background py-20">
         <div className="mx-auto max-w-7xl px-6">
-          <div className="text-xs font-semibold uppercase tracking-widest text-white/70">Contact</div>
-          <h1 className="mt-3 max-w-3xl text-4xl font-extrabold sm:text-5xl">Let's build something great.</h1>
-          <p className="mt-4 max-w-2xl text-white/75">Tell us about your project — a Project Manager replies within 24 hours.</p>
+          <div className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">Contact</div>
+          <h1 className="mt-3 max-w-3xl text-4xl font-bold tracking-tight sm:text-5xl">Talk to a project manager.</h1>
+          <p className="mt-4 max-w-2xl text-muted-foreground">Share a brief and a project manager will respond with a scoped quote within one business day.</p>
         </div>
       </section>
 
@@ -64,9 +64,9 @@ function ContactPage() {
           <form onSubmit={(e) => { e.preventDefault(); setSent(true); }} className="rounded-2xl border border-border bg-card p-6 sm:p-8">
             {sent ? (
               <div className="text-center">
-                <div className="mx-auto grid h-14 w-14 place-items-center rounded-full bg-gradient-brand text-white">✓</div>
-                <h3 className="mt-4 text-xl font-bold">Message received.</h3>
-                <p className="mt-2 text-sm text-muted-foreground">A PM will reach out shortly.</p>
+                <div className="mx-auto grid h-14 w-14 place-items-center rounded-full bg-primary text-primary-foreground">✓</div>
+                <h3 className="mt-4 text-xl font-semibold">Message received.</h3>
+                <p className="mt-2 text-sm text-muted-foreground">A project manager will follow up within one business day.</p>
               </div>
             ) : (
               <div className="grid gap-4">
@@ -96,18 +96,23 @@ function ContactPage() {
               <h3 className="font-bold">Talk to us directly</h3>
               <ul className="mt-4 space-y-3 text-sm">
                 <li className="flex items-center gap-3"><Phone className="h-4 w-4" /> +234 902 993 2794</li>
-                <li className="flex items-center gap-3"><MapPin className="h-4 w-4" /> Sokoto, Nigeria · Serving worldwide</li>
+              <li className="flex items-center gap-3"><MapPin className="h-4 w-4" /> Nigeria · Serving clients worldwide</li>
                 <li className="flex items-center gap-3"><Mail className="h-4 w-4" /> support@ndh.com.ng</li>
                 <li className="flex items-center gap-3"><Mail className="h-4 w-4" /> info@ndh.com.ng</li>
                 <li className="flex items-center gap-3 text-xs text-muted-foreground">Mon–Fri · 9:00–18:00 WAT</li>
               </ul>
               <div className="mt-5 flex gap-3">
-                <a href="https://www.facebook.com/share/1Be6HN8zjS/" target="_blank" rel="noreferrer" aria-label="Facebook" className="grid h-10 w-10 place-items-center rounded-full border border-border hover:bg-gradient-brand hover:text-white"><Facebook className="h-4 w-4" /></a>
-                <a href="https://www.instagram.com/njb_digital_hub" target="_blank" rel="noreferrer" aria-label="Instagram" className="grid h-10 w-10 place-items-center rounded-full border border-border hover:bg-gradient-brand hover:text-white"><Instagram className="h-4 w-4" /></a>
+                <a href="https://www.facebook.com/share/1Be6HN8zjS/" target="_blank" rel="noreferrer" aria-label="Facebook" className="grid h-10 w-10 place-items-center rounded-full border border-border hover:bg-primary hover:text-primary-foreground"><Facebook className="h-4 w-4" /></a>
+                <a href="https://www.instagram.com/njb_digital_hub" target="_blank" rel="noreferrer" aria-label="Instagram" className="grid h-10 w-10 place-items-center rounded-full border border-border hover:bg-primary hover:text-primary-foreground"><Instagram className="h-4 w-4" /></a>
               </div>
             </div>
-            <div className="overflow-hidden rounded-2xl border border-border">
-              <iframe title="Sokoto, Nigeria map" className="h-72 w-full" src="https://www.google.com/maps?q=Sokoto,Nigeria&output=embed" loading="lazy" />
+            <div className="rounded-2xl border border-border bg-card p-6 text-sm">
+              <h3 className="font-semibold">Response times</h3>
+              <ul className="mt-3 space-y-2 text-muted-foreground">
+                <li>· Quotes: within 4 business hours</li>
+                <li>· General enquiries: within 1 business day</li>
+                <li>· Support tickets: within 1 business day</li>
+              </ul>
             </div>
           </div>
         </div>
