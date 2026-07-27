@@ -2,7 +2,6 @@ import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { Section } from "@/components/site/Section";
 import { UnsplashImg } from "@/components/site/UnsplashImg";
-import { AnimatedBlobs } from "@/components/site/AnimatedBlobs";
 import { ArrowLeft } from "lucide-react";
 import { getBlogPost } from "@/lib/content/blog.functions";
 
@@ -31,7 +30,7 @@ export const Route = createFileRoute("/blog/$slug")({
         <div className="mx-auto max-w-xl text-center">
           <h1 className="text-3xl font-bold">Article not found</h1>
           <p className="mt-2 text-muted-foreground">This post may have been unpublished.</p>
-          <Link to="/blog" className="mt-6 inline-block text-sm font-semibold text-[oklch(0.65_0.19_252)]">← Back to blog</Link>
+          <Link to="/blog" className="mt-6 inline-block text-sm font-semibold text-primary">← Back to blog</Link>
         </div>
       </Section>
     </SiteLayout>
@@ -44,9 +43,9 @@ export const Route = createFileRoute("/blog/$slug")({
 
 function renderMd(md: string) {
   return md.split("\n\n").map((block, i) => {
-    if (block.startsWith("# ")) return <h1 key={i} className="mt-6 text-3xl font-bold">{block.slice(2)}</h1>;
-    if (block.startsWith("## ")) return <h2 key={i} className="mt-6 text-2xl font-bold">{block.slice(3)}</h2>;
-    return <p key={i} className="mt-4 leading-relaxed text-muted-foreground">{block}</p>;
+    if (block.startsWith("# ")) return <h1 key={i} className="mt-8 text-2xl font-semibold tracking-tight">{block.slice(2)}</h1>;
+    if (block.startsWith("## ")) return <h2 key={i} className="mt-8 text-xl font-semibold tracking-tight">{block.slice(3)}</h2>;
+    return <p key={i} className="mt-4 text-[15px] leading-7 text-foreground/80">{block}</p>;
   });
 }
 
@@ -54,24 +53,23 @@ function BlogPostPage() {
   const { post } = Route.useLoaderData();
   return (
     <SiteLayout>
-      <section className="relative isolate overflow-hidden bg-hero py-20 text-white">
-        <AnimatedBlobs />
-        <div className="relative mx-auto max-w-4xl px-6">
-          <Link to="/blog" className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-widest text-white/70 hover:text-white">
+      <section className="border-b border-border bg-background">
+        <div className="mx-auto max-w-3xl px-6 py-12">
+          <Link to="/blog" className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground hover:text-foreground">
             <ArrowLeft className="h-3.5 w-3.5" /> Back to blog
           </Link>
-          <div className="mt-4 text-xs font-semibold uppercase tracking-widest text-white/70">{post.tag}</div>
-          <h1 className="mt-3 text-4xl font-extrabold sm:text-5xl">{post.title}</h1>
-          <p className="mt-4 max-w-2xl text-white/75">{post.excerpt}</p>
-          <div className="mt-4 text-xs text-white/60">{post.author} · {post.read_minutes} min read</div>
+          <div className="mt-6 text-[11px] font-semibold uppercase tracking-[0.16em] text-primary">{post.tag}</div>
+          <h1 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">{post.title}</h1>
+          <p className="mt-4 text-base text-muted-foreground">{post.excerpt}</p>
+          <div className="mt-4 text-xs text-muted-foreground">{post.author} · {post.read_minutes} min read</div>
         </div>
       </section>
       <Section>
-        <div className="mx-auto max-w-4xl">
-          <div className="overflow-hidden rounded-3xl border border-border shadow-elegant">
+        <div className="mx-auto max-w-3xl">
+          <div className="overflow-hidden rounded-lg border border-border">
             <UnsplashImg q={post.cover_query} alt={post.title} w={1400} h={800} sig={post.slug} className="h-full w-full object-cover" />
           </div>
-          <article className="prose prose-invert mx-auto mt-10 max-w-none">
+          <article className="mx-auto mt-8 max-w-[68ch]">
             {renderMd(post.body_md || post.excerpt)}
           </article>
         </div>
