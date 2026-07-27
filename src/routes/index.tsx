@@ -11,6 +11,7 @@ import { SiteLayout } from "@/components/site/SiteLayout";
 import { Section } from "@/components/site/Section";
 import { Counter } from "@/components/site/Counter";
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { VideoHero } from "@/components/site/VideoHero";
 import { AnimatedBlobs } from "@/components/site/AnimatedBlobs";
 import { TypingHeadline } from "@/components/site/TypingHeadline";
