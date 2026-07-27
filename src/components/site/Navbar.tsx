@@ -60,7 +60,7 @@ export function Navbar() {
             <Link
               key={l.to}
               to={l.to}
-              activeOptions={{ exact: l.to === "/" }}
+              activeOptions={{ exact: false }}
               activeProps={{ className: "text-foreground" }}
               inactiveProps={{ className: "text-muted-foreground hover:text-foreground" }}
               className="rounded-md px-3 py-2 text-sm font-medium transition-colors"
