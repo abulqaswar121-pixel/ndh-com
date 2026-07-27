@@ -23,8 +23,9 @@ export function CourseEditorPanel() {
   const { data } = useQuery({ queryKey: ["academy-editor-list"], queryFn: () => list() });
   const [openId, setOpenId] = useState<string | null>(null);
 
-  const bySchool: Record<string, typeof data extends { courses: infer C } ? C : never> = {} as never;
-  (data?.courses ?? []).forEach((c) => { (bySchool[c.school_id] ||= [] as never).push(c as never); });
+  type Course = NonNullable<typeof data>["courses"][number];
+  const bySchool: Record<string, Course[]> = {};
+  (data?.courses ?? []).forEach((c) => { (bySchool[c.school_id] ||= []).push(c); });
 
   return (
     <div className="space-y-6">
