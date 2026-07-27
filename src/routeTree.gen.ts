@@ -83,6 +83,7 @@ import { Route as LovableEmailQueueProcessRouteImport } from './routes/lovable/e
 import { Route as LovableEmailAuthWebhookRouteImport } from './routes/lovable/email/auth/webhook'
 import { Route as LovableEmailAuthPreviewRouteImport } from './routes/lovable/email/auth/preview'
 import { Route as ApiPublicWebhooksPaystackRouteImport } from './routes/api/public/webhooks/paystack'
+import { Route as AuthenticatedAcademyLearnSlugRouteImport } from './routes/_authenticated/academy.learn.$slug'
 import { Route as AuthenticatedAcademyApplySlugRouteImport } from './routes/_authenticated/academy.apply.$slug'
 import { Route as AuthenticatedDashboardStudentCourseIdRouteImport } from './routes/_authenticated/dashboard/student.course.$id'
 
@@ -476,6 +477,12 @@ const ApiPublicWebhooksPaystackRoute =
     path: '/api/public/webhooks/paystack',
     getParentRoute: () => rootRouteImport,
   } as any)
+const AuthenticatedAcademyLearnSlugRoute =
+  AuthenticatedAcademyLearnSlugRouteImport.update({
+    id: '/academy/learn/$slug',
+    path: '/academy/learn/$slug',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedAcademyApplySlugRoute =
   AuthenticatedAcademyApplySlugRouteImport.update({
     id: '/academy/apply/$slug',
@@ -557,6 +564,7 @@ export interface FileRoutesByFullPath {
   '/api/public/chat': typeof ApiPublicChatRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/academy/apply/$slug': typeof AuthenticatedAcademyApplySlugRoute
+  '/academy/learn/$slug': typeof AuthenticatedAcademyLearnSlugRoute
   '/api/public/webhooks/paystack': typeof ApiPublicWebhooksPaystackRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
   '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
@@ -634,6 +642,7 @@ export interface FileRoutesByTo {
   '/api/public/chat': typeof ApiPublicChatRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/academy/apply/$slug': typeof AuthenticatedAcademyApplySlugRoute
+  '/academy/learn/$slug': typeof AuthenticatedAcademyLearnSlugRoute
   '/api/public/webhooks/paystack': typeof ApiPublicWebhooksPaystackRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
   '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
@@ -713,6 +722,7 @@ export interface FileRoutesById {
   '/api/public/chat': typeof ApiPublicChatRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/_authenticated/academy/apply/$slug': typeof AuthenticatedAcademyApplySlugRoute
+  '/_authenticated/academy/learn/$slug': typeof AuthenticatedAcademyLearnSlugRoute
   '/api/public/webhooks/paystack': typeof ApiPublicWebhooksPaystackRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
   '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
@@ -792,6 +802,7 @@ export interface FileRouteTypes {
     | '/api/public/chat'
     | '/lovable/email/suppression'
     | '/academy/apply/$slug'
+    | '/academy/learn/$slug'
     | '/api/public/webhooks/paystack'
     | '/lovable/email/auth/preview'
     | '/lovable/email/auth/webhook'
@@ -869,6 +880,7 @@ export interface FileRouteTypes {
     | '/api/public/chat'
     | '/lovable/email/suppression'
     | '/academy/apply/$slug'
+    | '/academy/learn/$slug'
     | '/api/public/webhooks/paystack'
     | '/lovable/email/auth/preview'
     | '/lovable/email/auth/webhook'
@@ -947,6 +959,7 @@ export interface FileRouteTypes {
     | '/api/public/chat'
     | '/lovable/email/suppression'
     | '/_authenticated/academy/apply/$slug'
+    | '/_authenticated/academy/learn/$slug'
     | '/api/public/webhooks/paystack'
     | '/lovable/email/auth/preview'
     | '/lovable/email/auth/webhook'
@@ -1534,6 +1547,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicWebhooksPaystackRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/academy/learn/$slug': {
+      id: '/_authenticated/academy/learn/$slug'
+      path: '/academy/learn/$slug'
+      fullPath: '/academy/learn/$slug'
+      preLoaderRoute: typeof AuthenticatedAcademyLearnSlugRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/academy/apply/$slug': {
       id: '/_authenticated/academy/apply/$slug'
       path: '/academy/apply/$slug'
@@ -1565,6 +1585,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedDashboardSuperAdminRoute: typeof AuthenticatedDashboardSuperAdminRoute
   AuthenticatedDashboardTalentRoute: typeof AuthenticatedDashboardTalentRoute
   AuthenticatedAcademyApplySlugRoute: typeof AuthenticatedAcademyApplySlugRoute
+  AuthenticatedAcademyLearnSlugRoute: typeof AuthenticatedAcademyLearnSlugRoute
   AuthenticatedDashboardStudentIndexRoute: typeof AuthenticatedDashboardStudentIndexRoute
   AuthenticatedDashboardStudentCourseIdRoute: typeof AuthenticatedDashboardStudentCourseIdRoute
 }
@@ -1585,6 +1606,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDashboardSuperAdminRoute: AuthenticatedDashboardSuperAdminRoute,
   AuthenticatedDashboardTalentRoute: AuthenticatedDashboardTalentRoute,
   AuthenticatedAcademyApplySlugRoute: AuthenticatedAcademyApplySlugRoute,
+  AuthenticatedAcademyLearnSlugRoute: AuthenticatedAcademyLearnSlugRoute,
   AuthenticatedDashboardStudentIndexRoute:
     AuthenticatedDashboardStudentIndexRoute,
   AuthenticatedDashboardStudentCourseIdRoute:

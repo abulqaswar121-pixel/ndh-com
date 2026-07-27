@@ -39,7 +39,11 @@ function SignupPage() {
   })();
 
   useEffect(() => {
-    if (user && currentRole) navigate({ to: nextPath || roleHome(currentRole) });
+    if (user && currentRole) {
+      const dest = nextPath
+        || (currentRole === "student" ? "/academy" : roleHome(currentRole));
+      navigate({ to: dest });
+    }
   }, [user, currentRole, navigate, nextPath]);
 
   const handleSubmit = async (e: React.FormEvent) => {
