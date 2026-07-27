@@ -319,55 +319,7 @@ function Index() {
 }
 
 function TestimonialsCarousel() {
-  const [i, setI] = useState(0);
-  const [picked, setPicked] = useState<typeof testimonials[number] | null>(null);
-  useEffect(() => {
-    const id = setInterval(() => setI((v) => (v + 1) % testimonials.length), 4500);
-    return () => clearInterval(id);
-  }, []);
-  const visible = [0, 1, 2].map((o) => testimonials[(i + o) % testimonials.length]);
-  return (
-    <>
-      <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-        {visible.map((t) => (
-          <button
-            key={t.name + i}
-            type="button"
-            onClick={() => setPicked(t)}
-            className="h-full animate-fade-in rounded-2xl border border-border bg-card p-6 text-left transition-all hover:-translate-y-1 hover:shadow-elegant"
-          >
-            <Quote className="h-6 w-6 text-[oklch(0.62_0.21_290)]" />
-            <p className="mt-3 text-sm text-foreground/90">"{t.quote}"</p>
-            <div className="mt-5 flex items-center gap-3">
-              <img src={t.image} alt={t.name} width={768} height={768} loading="lazy" className="h-12 w-12 rounded-full object-cover" />
-              <div>
-                <div className="text-sm font-semibold">{t.name}</div>
-                <div className="text-xs text-muted-foreground">{t.role}</div>
-              </div>
-            </div>
-            <div className="mt-4 text-xs font-semibold text-[oklch(0.65_0.19_252)]">Read full story →</div>
-          </button>
-        ))}
-      </div>
-      <Dialog open={!!picked} onOpenChange={(o) => !o && setPicked(null)}>
-        <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
-          {picked && (
-            <>
-              <DialogHeader className="items-center text-center">
-                <img src={picked.image} alt={picked.name} className="h-20 w-20 rounded-full object-cover" />
-                <DialogTitle>{picked.name}</DialogTitle>
-                <DialogDescription>{picked.role}</DialogDescription>
-              </DialogHeader>
-              <div className="space-y-3">
-                <Quote className="h-6 w-6 text-[oklch(0.62_0.21_290)]" />
-                <p className="text-sm leading-relaxed text-foreground/90">"{picked.full}"</p>
-              </div>
-            </>
-          )}
-        </DialogContent>
-      </Dialog>
-    </>
-  );
+  return null;
 }
 
 type PortfolioItem = {
@@ -405,7 +357,7 @@ export function PortfolioGrid({ items }: { items: PortfolioItem[] }) {
           </StaggerItem>
         ))}
       </Stagger>
-      <Dialog open={!!picked} onOpenChange={(o) => !o && setPicked(null)}>
+      <Dialog open={!!picked} onOpenChange={(o: boolean) => !o && setPicked(null)}>
         <DialogContent className="flex max-w-2xl max-h-[90vh] flex-col p-0">
           {picked && (
             <>
@@ -445,6 +397,8 @@ export function PortfolioGrid({ items }: { items: PortfolioItem[] }) {
     </>
   );
 }
+
+// Re-add Dialog imports for PortfolioGrid
 
 function FaqItem({ q, a, defaultOpen }: { q: string; a: string; defaultOpen?: boolean }) {
   const [open, setOpen] = useState(!!defaultOpen);
