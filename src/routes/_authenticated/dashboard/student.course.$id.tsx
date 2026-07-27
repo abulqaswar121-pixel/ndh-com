@@ -13,11 +13,6 @@ export const Route = createFileRoute("/_authenticated/dashboard/student/course/$
   component: CoursePlayerPage,
 });
 
-type Lesson = { id: string; title: string; type: "video" | "pdf" | "text"; position: number; duration_minutes: number | null; is_preview: boolean };
-type ModuleRow = { id: string; title: string; position: number; lessons: Lesson[] };
-type Course = { id: string; program_name: string; program_type: string; cover_image: string | null };
-type LessonFull = Lesson & { content_url: string | null; content_text: string | null; description: string | null };
-
 function CoursePlayerPage() {
   const { id: courseId } = useParams({ from: "/_authenticated/dashboard/student/course/$id" });
   const { user } = useAuth();
