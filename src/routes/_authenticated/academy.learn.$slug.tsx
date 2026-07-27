@@ -186,8 +186,9 @@ function ExamPanel({ courseId }: { courseId: string }) {
     setBusy(true);
     try {
       const r = await start({ data: { courseId } });
-      setAttemptId(r.attemptId); setPaper(r.paper);
-      setMcq(new Array(r.paper.mcq.length).fill(-1));
+      const p = r.paper as any;
+      setAttemptId(r.attemptId); setPaper(p);
+      setMcq(new Array(p?.mcq?.length ?? 5).fill(-1));
     } catch (e) { toast.error((e as Error).message); }
     finally { setBusy(false); }
   };
