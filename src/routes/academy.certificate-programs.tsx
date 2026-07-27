@@ -1,4 +1,7 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, redirect } from "@tanstack/react-router";
+export const Route = createFileRoute("/academy/certificate-programs")({
+  beforeLoad: () => { throw redirect({ to: "/academy" }); },
+});
 import { ProgramCategoryPage } from "@/components/academy/ProgramCategoryPage";
 
 export const Route = createFileRoute("/academy/certificate-programs")({
