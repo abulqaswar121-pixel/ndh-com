@@ -9,7 +9,6 @@ import { Reveal, Stagger, StaggerItem } from "@/components/site/Reveal";
 import { UnsplashImg } from "@/components/site/UnsplashImg";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { PortfolioGrid } from "@/routes/index";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/services")({
@@ -32,15 +31,6 @@ const QUERIES: Record<string, string> = {
   "Media Production": "video editor production studio camera",
   "AI & Tech Services": "artificial intelligence dashboard tech",
 };
-
-const portfolio = [
-  { q: "fintech mobile app ui design", title: "Fintech app rebrand", tag: "Design", client: "Neobank, Lagos", scope: "Brand refresh, product UI, design system", outcome: "Doubled activation on the redesigned onboarding.", details: "A full visual refresh of a Nigerian neobank — new mark, colour system, a token-driven UI kit, and a redesigned onboarding + wallet experience shipped in six weeks." },
-  { q: "ecommerce website laptop", title: "Lagos retail e-commerce", tag: "Development", client: "Multi-brand retailer, Lagos", scope: "Headless commerce build, payments, logistics", outcome: "22% conversion lift and 3× faster page loads.", details: "A headless ecommerce platform with Paystack + Flutterwave, courier integrations and an internal fulfilment dashboard. Handles peak Black Friday traffic on autoscaling infra." },
-  { q: "content marketing blog laptop", title: "B2B content engine", tag: "Content", client: "African SaaS scale-up", scope: "Editorial strategy, SEO, weekly production", outcome: "Organic sessions up 5.1× in 9 months.", details: "A managed content programme — pillar strategy, keyword research, ghostwritten founder essays and weekly SEO articles reviewed by an in-house editor." },
-  { q: "social media manager phone", title: "DTC growth campaign", tag: "Marketing", client: "Beauty DTC, UK + Nigeria", scope: "Paid social, creators, landing pages", outcome: "3.4 ROAS at scale across Meta and TikTok.", details: "Coordinated creator seeding, weekly ad iteration and geo-targeted landing pages across two markets. Full analytics and weekly PM report." },
-  { q: "video production studio lights", title: "Brand documentary", tag: "Media", client: "African VC firm", scope: "Concept, direction, production, edit", outcome: "500k+ organic views across LinkedIn and YouTube.", details: "A cinematic 12-minute documentary on Africa's next generation of founders — shot in Lagos and Nairobi and cut into a launch trailer plus 30 short-form clips." },
-  { q: "ai dashboard data visualization", title: "Sales AI agent", tag: "AI & Tech", client: "B2B SaaS, London", scope: "Lead qualification agent, CRM sync", outcome: "42% more qualified meetings booked in month one.", details: "A production AI agent that qualifies inbound leads, drafts personalised replies and syncs the entire thread into HubSpot. Weekly evaluation dashboard included." },
-];
 
 function ServicesPage() {
   const [cats, setCats] = useState<Cat[]>([]);
@@ -108,10 +98,6 @@ function ServicesPage() {
             );
           })}
         </Stagger>
-      </Section>
-
-      <Section eyebrow="Portfolio" title="A taste of what NDH ships.">
-        <PortfolioGrid items={portfolio} />
       </Section>
 
       <Section>
