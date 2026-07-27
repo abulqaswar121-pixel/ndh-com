@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as VerifyRouteImport } from './routes/verify'
+import { Route as TrustRouteImport } from './routes/trust'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as TeamRouteImport } from './routes/team'
 import { Route as TalentLoginRouteImport } from './routes/talent-login'
@@ -22,6 +23,7 @@ import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as SignupRouteImport } from './routes/signup'
 import { Route as ServicesRouteImport } from './routes/services'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
+import { Route as RefundsRouteImport } from './routes/refunds'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as McpRouteImport } from './routes/mcp'
 import { Route as LoginRouteImport } from './routes/login'
@@ -89,6 +91,11 @@ const VerifyRoute = VerifyRouteImport.update({
   path: '/verify',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TrustRoute = TrustRouteImport.update({
+  id: '/trust',
+  path: '/trust',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const TermsRoute = TermsRouteImport.update({
   id: '/terms',
   path: '/terms',
@@ -147,6 +154,11 @@ const ServicesRoute = ServicesRouteImport.update({
 const ResetPasswordRoute = ResetPasswordRouteImport.update({
   id: '/reset-password',
   path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RefundsRoute = RefundsRouteImport.update({
+  id: '/refunds',
+  path: '/refunds',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PrivacyRoute = PrivacyRouteImport.update({
@@ -492,6 +504,7 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/mcp': typeof McpRoute
   '/privacy': typeof PrivacyRoute
+  '/refunds': typeof RefundsRoute
   '/reset-password': typeof ResetPasswordRoute
   '/services': typeof ServicesRoute
   '/signup': typeof SignupRoute
@@ -504,6 +517,7 @@ export interface FileRoutesByFullPath {
   '/talent-login': typeof TalentLoginRoute
   '/team': typeof TeamRoute
   '/terms': typeof TermsRoute
+  '/trust': typeof TrustRoute
   '/verify': typeof VerifyRouteWithChildren
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
@@ -567,6 +581,7 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/mcp': typeof McpRoute
   '/privacy': typeof PrivacyRoute
+  '/refunds': typeof RefundsRoute
   '/reset-password': typeof ResetPasswordRoute
   '/services': typeof ServicesRoute
   '/signup': typeof SignupRoute
@@ -579,6 +594,7 @@ export interface FileRoutesByTo {
   '/talent-login': typeof TalentLoginRoute
   '/team': typeof TeamRoute
   '/terms': typeof TermsRoute
+  '/trust': typeof TrustRoute
   '/verify': typeof VerifyRouteWithChildren
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
@@ -644,6 +660,7 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/mcp': typeof McpRoute
   '/privacy': typeof PrivacyRoute
+  '/refunds': typeof RefundsRoute
   '/reset-password': typeof ResetPasswordRoute
   '/services': typeof ServicesRoute
   '/signup': typeof SignupRoute
@@ -656,6 +673,7 @@ export interface FileRoutesById {
   '/talent-login': typeof TalentLoginRoute
   '/team': typeof TeamRoute
   '/terms': typeof TermsRoute
+  '/trust': typeof TrustRoute
   '/verify': typeof VerifyRouteWithChildren
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
@@ -721,6 +739,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/mcp'
     | '/privacy'
+    | '/refunds'
     | '/reset-password'
     | '/services'
     | '/signup'
@@ -733,6 +752,7 @@ export interface FileRouteTypes {
     | '/talent-login'
     | '/team'
     | '/terms'
+    | '/trust'
     | '/verify'
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
@@ -796,6 +816,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/mcp'
     | '/privacy'
+    | '/refunds'
     | '/reset-password'
     | '/services'
     | '/signup'
@@ -808,6 +829,7 @@ export interface FileRouteTypes {
     | '/talent-login'
     | '/team'
     | '/terms'
+    | '/trust'
     | '/verify'
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
@@ -872,6 +894,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/mcp'
     | '/privacy'
+    | '/refunds'
     | '/reset-password'
     | '/services'
     | '/signup'
@@ -884,6 +907,7 @@ export interface FileRouteTypes {
     | '/talent-login'
     | '/team'
     | '/terms'
+    | '/trust'
     | '/verify'
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
@@ -949,6 +973,7 @@ export interface RootRouteChildren {
   LoginRoute: typeof LoginRoute
   McpRoute: typeof McpRoute
   PrivacyRoute: typeof PrivacyRoute
+  RefundsRoute: typeof RefundsRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
   ServicesRoute: typeof ServicesRoute
   SignupRoute: typeof SignupRoute
@@ -961,6 +986,7 @@ export interface RootRouteChildren {
   TalentLoginRoute: typeof TalentLoginRoute
   TeamRoute: typeof TeamRoute
   TermsRoute: typeof TermsRoute
+  TrustRoute: typeof TrustRoute
   VerifyRoute: typeof VerifyRouteWithChildren
   Char91DotmcpChar93ListToolsRoute: typeof Char91DotmcpChar93ListToolsRoute
   Char91DotwellKnownChar93OauthProtectedResourceRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
@@ -995,6 +1021,13 @@ declare module '@tanstack/react-router' {
       path: '/verify'
       fullPath: '/verify'
       preLoaderRoute: typeof VerifyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/trust': {
+      id: '/trust'
+      path: '/trust'
+      fullPath: '/trust'
+      preLoaderRoute: typeof TrustRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/terms': {
@@ -1079,6 +1112,13 @@ declare module '@tanstack/react-router' {
       path: '/reset-password'
       fullPath: '/reset-password'
       preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/refunds': {
+      id: '/refunds'
+      path: '/refunds'
+      fullPath: '/refunds'
+      preLoaderRoute: typeof RefundsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/privacy': {
@@ -1620,6 +1660,7 @@ const rootRouteChildren: RootRouteChildren = {
   LoginRoute: LoginRoute,
   McpRoute: McpRoute,
   PrivacyRoute: PrivacyRoute,
+  RefundsRoute: RefundsRoute,
   ResetPasswordRoute: ResetPasswordRoute,
   ServicesRoute: ServicesRoute,
   SignupRoute: SignupRoute,
@@ -1632,6 +1673,7 @@ const rootRouteChildren: RootRouteChildren = {
   TalentLoginRoute: TalentLoginRoute,
   TeamRoute: TeamRoute,
   TermsRoute: TermsRoute,
+  TrustRoute: TrustRoute,
   VerifyRoute: VerifyRouteWithChildren,
   Char91DotmcpChar93ListToolsRoute: Char91DotmcpChar93ListToolsRoute,
   Char91DotwellKnownChar93OauthProtectedResourceRoute:
