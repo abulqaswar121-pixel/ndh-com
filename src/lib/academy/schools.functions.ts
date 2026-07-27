@@ -65,7 +65,12 @@ export const saveCourse = createServerFn({ method: "POST" })
     const { data: hod } = await sb.rpc("has_role", { _user_id: context.userId, _role: "hod" });
     if (!allowed && !admin && !hod) throw new Error("Forbidden");
 
-    const update: Record<string, unknown> = {};
+    const update: {
+      name?: string;
+      description?: string;
+      region_prices?: Record<string, number>;
+      is_published?: boolean;
+    } = {};
     if (data.name !== undefined) update.name = data.name;
     if (data.description !== undefined) update.description = data.description;
     if (data.region_prices !== undefined) update.region_prices = data.region_prices;
