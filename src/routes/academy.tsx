@@ -52,9 +52,10 @@ function AcademyPage() {
   useEffect(() => { setRegion(detectRegion()); }, []);
 
   const regionMeta = REGIONS.find((r) => r.code === region) ?? REGIONS[0];
+  type Course = NonNullable<typeof data>["courses"][number];
   const bySchool = useMemo(() => {
-    const map: Record<string, typeof data extends { courses: infer C } ? C : never> = {} as never;
-    (data?.courses ?? []).forEach((c) => { (map[c.school_id] ||= [] as never).push(c as never); });
+    const map: Record<string, Course[]> = {};
+    (data?.courses ?? []).forEach((c) => { (map[c.school_id] ||= []).push(c); });
     return map;
   }, [data]);
 
