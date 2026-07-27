@@ -1,15 +1,13 @@
 import type { ReactNode } from "react";
 import { Link } from "@tanstack/react-router";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, ShieldCheck, Lock, BadgeCheck } from "lucide-react";
 import { Logo } from "./Logo";
-import { AnimatedBlobs } from "./AnimatedBlobs";
-import { UnsplashImg } from "./UnsplashImg";
 
 export function AuthShell({
   title,
   subtitle,
-  illustration,
-  illustrationAlt,
+  illustration: _illustration,
+  illustrationAlt: _illustrationAlt,
   children,
   badge,
 }: {
@@ -21,58 +19,37 @@ export function AuthShell({
   children: ReactNode;
 }) {
   return (
-    <div className="grid min-h-screen lg:grid-cols-2">
-      {/* Left brand panel */}
-      <div className="relative isolate hidden overflow-hidden bg-hero text-white lg:flex lg:flex-col lg:justify-between lg:p-12">
-        <AnimatedBlobs />
-        <Link to="/" className="relative z-10 flex items-center gap-3">
-          <Logo className="h-11 w-11" />
-          <div>
-            <div className="text-sm font-extrabold tracking-tight">NAJEEB DIGITAL HUB</div>
-            <div className="text-[10px] uppercase tracking-[0.2em] text-white/60">NDH</div>
-          </div>
+    <div className="min-h-screen bg-secondary/40">
+      <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-5">
+        <Link to="/" className="flex items-center gap-2">
+          <Logo className="h-9 w-9" />
+          <span className="text-sm font-semibold tracking-tight">Najeeb Digital Hub</span>
         </Link>
-        <div className="relative z-10 max-w-md">
-          {badge && (
-            <div className="mb-3 inline-flex rounded-full border border-white/15 bg-white/10 px-3 py-1 text-xs font-semibold uppercase tracking-widest backdrop-blur">
-              {badge}
-            </div>
-          )}
-          <h2 className="text-4xl font-extrabold leading-[1.05]">
-            <span className="text-gradient-brand">Digital excellence</span>, delivered.
-          </h2>
-          <p className="mt-4 text-sm text-white/75">
-            Join thousands of clients, students and talents already building with NDH across Nigeria and the diaspora.
-          </p>
-        </div>
-        <div className="relative z-10 overflow-hidden rounded-2xl border border-white/10 shadow-glow">
-          <UnsplashImg q={illustration} alt={illustrationAlt} w={800} h={500} className="h-full w-full object-cover" />
-        </div>
+        <Link
+          to="/"
+          className="group inline-flex items-center gap-1.5 text-xs font-semibold text-muted-foreground hover:text-foreground"
+        >
+          <ArrowLeft className="h-3.5 w-3.5 transition-transform group-hover:-translate-x-0.5" />
+          Back to homepage
+        </Link>
       </div>
-
-      {/* Right form panel */}
-      <div className="relative flex flex-col px-6 py-6 sm:px-12">
-        {/* Slim top bar with mobile logo + Back link, never overlaps content */}
-        <div className="mb-8 flex items-center justify-between">
-          <Link to="/" className="inline-flex items-center gap-2 lg:invisible">
-            <Logo className="h-9 w-9" />
-            <span className="text-sm font-extrabold tracking-tight">NDH</span>
-          </Link>
-          <Link
-            to="/"
-            className="group inline-flex items-center gap-1.5 rounded-full border border-border bg-background/80 px-3 py-1.5 text-xs font-semibold text-muted-foreground backdrop-blur transition hover:border-foreground/30 hover:text-foreground"
-          >
-            <ArrowLeft className="h-3.5 w-3.5 transition-transform group-hover:-translate-x-0.5" />
-            Back to Homepage
-          </Link>
+      <div className="mx-auto grid max-w-6xl gap-10 px-6 pb-16 lg:grid-cols-[1fr_360px]">
+        <div className="mx-auto w-full max-w-md rounded-xl border border-border bg-card p-8 shadow-elegant lg:mx-0">
+          {badge && (
+            <div className="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-primary">{badge}</div>
+          )}
+          <h1 className="text-2xl font-semibold tracking-tight">{title}</h1>
+          {subtitle && <p className="mt-2 text-sm text-muted-foreground">{subtitle}</p>}
+          <div className="mt-6">{children}</div>
         </div>
-        <div className="flex flex-1 items-center justify-center">
-          <div className="w-full max-w-md">
-            <h1 className="text-3xl font-extrabold tracking-tight">{title}</h1>
-            {subtitle && <p className="mt-2 text-sm text-muted-foreground">{subtitle}</p>}
-            <div className="mt-8">{children}</div>
-          </div>
-        </div>
+        <aside className="hidden self-start rounded-xl border border-border bg-background p-6 lg:block">
+          <div className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">Why NDH</div>
+          <ul className="mt-4 space-y-4 text-sm">
+            <li className="flex gap-3"><BadgeCheck className="mt-0.5 h-4 w-4 shrink-0 text-primary" /><span><b className="font-semibold text-foreground">Vetted talent.</b><br /><span className="text-muted-foreground">Interviewed, tested, and tiered before entering the roster.</span></span></li>
+            <li className="flex gap-3"><ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-primary" /><span><b className="font-semibold text-foreground">Managed delivery.</b><br /><span className="text-muted-foreground">A PM runs your timeline, quality checks and revisions.</span></span></li>
+            <li className="flex gap-3"><Lock className="mt-0.5 h-4 w-4 shrink-0 text-primary" /><span><b className="font-semibold text-foreground">Secure payments.</b><br /><span className="text-muted-foreground">Funds released after each milestone is approved.</span></span></li>
+          </ul>
+        </aside>
       </div>
     </div>
   );
@@ -82,7 +59,7 @@ export function GoogleButton({ label = "Continue with Google" }: { label?: strin
   return (
     <button
       type="button"
-      className="flex w-full items-center justify-center gap-3 rounded-lg border border-border bg-card px-4 py-3 text-sm font-semibold shadow-sm transition hover:-translate-y-0.5 hover:shadow-elegant"
+      className="flex w-full items-center justify-center gap-3 rounded-md border border-border bg-card px-4 py-2.5 text-sm font-semibold transition hover:bg-secondary"
     >
       <svg className="h-5 w-5" viewBox="0 0 48 48" aria-hidden>
         <path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3c-1.6 4.6-6 8-11.3 8a12 12 0 0 1 0-24c3 0 5.8 1.1 7.9 3l5.7-5.7A20 20 0 1 0 24 44a20 20 0 0 0 20-20c0-1.2-.1-2.4-.4-3.5z" />

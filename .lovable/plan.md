@@ -1,150 +1,111 @@
-# NDH Platform Overhaul — Unified Plan
+## Platform-wide Professional Redesign
 
-Executing in 5 parts, sequentially. Where a decision isn't specified, I'm defaulting as noted.
-
----
-
-## PART 1 — Design System Overhaul
-
-**1.1 Signature Path component** (`src/components/site/Path.tsx`)
-- Reusable SVG-based connected line with glowing nodes (dots)
-- Props: `steps: {label, status?}[]`, `orientation: horizontal|vertical`, `variant: hero|academy|tracker`
-- Animation: continuous shimmer along the line + pulse on nodes; teal (`#2DD4BF`) as the primary glow color
-- Used in: homepage hero (Submit → AI-Powered Work → Delivered), academy hero (Learn → Certify → Earn), and Client Dashboard task tracker (real task status states)
-
-**1.2 Typography**
-- Add Space Grotesk (confident modern display) via Google Fonts `<link>` in `__root.tsx` head
-- Keep Inter for body (add if not already)
-- Update `src/styles.css` `@theme` → `--font-display: "Space Grotesk"`, `--font-sans: "Inter"`
-- Bold, tighter tracking for h1-h4
-
-**1.3 Homepage layout variety** (`src/routes/index.tsx`)
-- Services section: keep card grid but restyle — asymmetric with large left title + right grid
-- Features section: convert to bento-style layout (mixed cell sizes)
-- Steps section: DELETE — replaced by Path component (see 1.4)
-
-**1.4 Remove "01/02/03" pattern**
-- Replace numbered steps with `<Path variant="hero" steps={[Submit, AI-Powered Work, Delivered]} />`
-
-**1.5 Scroll-linked animations**
-- Use `framer-motion` `useScroll` + `useTransform` (already installed via existing Parallax); no GSAP dependency added
-- Hero: parallax + Path node progress tied to scroll
-- Path: line stroke-dashoffset animates with scrollYProgress
-- Mobile (<768px): disable scroll-linked transforms, keep static animations, respect `prefers-reduced-motion`
-
-**1.6 UnsplashImg fix** (`src/components/site/UnsplashImg.tsx`)
-- Remove `picsum.photos` fallback entirely
-- On Pexels failure/empty → render existing `bg-gradient-brand` block directly
+Goal: shift NDH from "founder-story" visuals to a mature global marketplace feel (Fiverr / Upwork / Toptal). Every page gets the same design language: white surfaces, single electric-blue accent, Space Grotesk display + Inter body, no gradient blobs, no personal photos on the marketing site.
 
 ---
 
-## PART 2 — Homepage Content Honesty
+### Design system (foundation, applied to every page)
 
-**2.1 Testimonials** — Remove the 3 fake testimonials (Aisha Bello, James Rowe, Tunde Adeyemi) on homepage. Replace with founder's note card (Ataurrahman Najeeb Ahmad, Founder & CEO) + small text "Client case studies coming soon."
+- Rebuild `src/styles.css` tokens:
+  - Background: pure white; surface: `#F8FAFC`; border: `#E5E7EB`.
+  - Foreground: near-black `#0B1220`; muted `#5B6472`.
+  - Single accent: Electric Blue `#1D4ED8` (hover `#1E40AF`); success/warn/danger reserved for status only.
+  - Retire `--gradient-brand`, `bg-hero`, `shadow-glow`, `AnimatedBlobs` from marketing pages.
+- Typography: Space Grotesk (display, 600/700), Inter (body, 400/500/600). Tight tracking, generous line-height, no all-caps except small eyebrow labels.
+- Components: flatter cards (1px border, subtle shadow only on hover), 8-pt spacing, consistent 14/16/18/24/32/48 type scale, standardized `Container`, `Eyebrow`, `SectionHeader`, `StatPill`, `TrustBar` primitives in `src/components/site/ui/`.
+- Dark mode: keep, but derived from the same neutral scale — no purple/teal glow.
 
-**2.2 Team** — Update `team_members` table via `supabase--insert`: delete all rows, insert only Ataurrahman Najeeb Ahmad. Team page layout unchanged (accepts more rows later).
+### Global chrome
 
-**2.3 Portfolio** — Homepage portfolio grid → "Case studies launching soon" styled placeholder. The `/case-studies` page keeps its CMS-driven grid (12 seeded rows) — user said "keep it" previously. Just remove the homepage portfolio teaser rendering fake ones. Actually re-check: the homepage currently reads from `case_studies` table too. If those 12 are fake, I'll clear them via `supabase--insert` DELETE and show placeholder on both home and `/case-studies`.
+- Navbar (`src/components/site/Navbar.tsx`): Logo · Services · Academy · Talent · Blog · Contact · Sign in · Start a project (blue). Remove theme toggle from primary bar (move into footer).
+- Footer: 4 columns — Services / Academy / Company (About, Blog, Contact, Careers) / Legal (Terms, Privacy, Trust & Safety, Refunds). Newsletter row on top, small print + socials on bottom.
+- Retire `AnimatedBlobs`, `bg-hero`, `TypingHeadline` from all public pages.
 
-Clarification needed → defaulting to: **delete the seeded 12 case studies** (they were AI-generated in an earlier phase), show clean placeholder on both home teaser and `/case-studies` page. Admin CMS still works to add real ones later.
+### Home (`src/routes/index.tsx`)
 
----
+Browse-first layout:
+1. Search hero — headline "Hire vetted digital talent across Africa", subhead, search field routing to `/services?q=`, trust chips ("Vetted talent", "Secure payments", "Quality-checked delivery").
+2. Category grid — 8 service categories with icon + count.
+3. How it works — 3 numbered steps.
+4. Why NDH — 4 bento cards (Vetting, QA, Escrow-safe payments, African-time SLAs).
+5. Featured services strip — pulled from DB (fallback: category cards if empty).
+6. Academy teaser — one row, link to `/academy`.
+7. CTA band — "Post a project" / "Browse talent".
+No founder photo, no testimonials, no "Sokoto to the world".
 
-## PART 3 — Security & Data Fix
+### Services (`src/routes/services.tsx`)
 
-**3.1 AdminShell Overview** (`src/components/dashboard/admin/AdminShell.tsx`)
-- Split stats: Bureau stats (Users, Tasks, Payments) always visible; Academy stats (Courses, Enrollments, Students) only when `isSuper`
-- Audit Users & Roles tab: hide student/instructor/hod filters when not `isSuper`
-- Audit Departments tab: Academy departments hidden when not `isSuper`
-- Audit Activity tab: filter events to Bureau-related when not `isSuper`
+Marketplace pattern: left filter rail (category, budget, delivery time, tier), top search + sort, responsive grid of service cards (title, category, from-price, tier badge). Category landing chips above grid. Mobile: filter drawer.
 
----
+### Academy (`src/routes/academy.tsx` + course/school pages)
 
-## PART 4 — Simplify Navigation
+Coursera-style: clean masthead per school, course grid with duration/level/price, sticky enrollment card on course detail (`academy.course.$slug.tsx`), syllabus accordion, instructor block anonymized to "NDH Faculty" until real instructors are on. Keep the 6 AI Schools rebuild from Part 5.
 
-**4.1 Hide dashboards from nav & role-based redirect** (do not delete code):
-- Hide: HOD, Registrar, Student Affairs, Finance Admin, Instructor
-- In `src/lib/auth.tsx` `roleHome()`: route those roles to `/dashboard/client` or a "coming soon" fallback
-- In `Sidebar.tsx`: hide sidebar entries for those roles
-- Routes remain in `src/routes/_authenticated/dashboard/*` (accessible only via direct URL for testing)
+### Talent directory (`src/routes/talent.index.tsx`, `talent.$slug.tsx`)
 
-**4.2 Active dashboards**: Client, Talent, PM, Academy Director, Super Admin, Admin
+Anonymous expertise cards. Each card shows:
+- Role title (e.g. "Senior Brand Designer")
+- Tier badge (Junior → Elite)
+- Top 5 skills
+- Years of experience, languages, timezone
+- Availability dot + typical turnaround
+- "Request this talent" CTA (opens `/start-project` with prefilled role)
 
-**4.3 Navbar simplification** (`src/components/site/Navbar.tsx`)
-- Reduce to: Logo | Home | Services | Academy | Sign In | Sign Up
-- Remove secondary links from mobile drawer too (About, Team, Blog, Careers, Contact stay accessible via footer only)
-- Replace "Start a Project" CTA with "Sign Up" button
+Suggestion I'm adding: a **"Talent ID"** system — each profile gets a short code like `NDH-DS-041`. Feels like Upwork/Toptal's private-roster pattern, keeps identity protected, and lets clients reference specific talent in briefs. Detail page (`/talent/$slug`) shows the same card expanded with sanitized case snippets (industry + outcome, no client names) and a booking form. No names, no photos anywhere on the public site.
 
----
+### Blog (kept)
 
-## PART 5 — Academy Rebuild (AI Schools)
+- `/blog` index: clean editorial grid (cover, category, title, read time). No gradient hero — just a white masthead with title + short description.
+- `/blog/$slug`: single-column reading layout, 68ch measure, serif-free (Inter), category chip, share row, related posts. Keep DB + CMS as-is.
 
-**5.1 Schema migration** (single migration):
-- New enum `school_type`: `writing`, `design`, `media`, `marketing`, `tech`, `business_support`
-- New table `public.schools` (id, slug, name, description, icon, display_order)
-- New table `public.academy_courses` (id, school_id, slug, name, description, region_prices jsonb, is_published)
-- New table `public.academy_lessons` (id, course_id, position, title, video_url, notes)
-- New table `public.academy_assignments` (id, course_id, instructions)
-- New table `public.academy_quizzes` (id, course_id) + `academy_quiz_questions` (id, quiz_id, question, options jsonb, correct_index)
-- New table `public.academy_projects` (id, course_id, brief)
-- New table `public.academy_pricing` (region text, tier: single|school|full, currency, amount) — seeded per point 17
-- All with GRANTs (anon SELECT for published content; authenticated for enrolled; admin write via RLS using `has_role`)
-- Timestamps + `update_updated_at_column` triggers
+### Case studies
 
-**5.2 Seed data**
-- Insert 6 schools + 23 empty courses (name, school_id, region_prices JSON with 5 regions × single price)
-- Insert pricing rows for all 5 regions × 3 tiers
+Hide from nav for now (routes stay live, no footer/nav links) — bring back when 3+ real cases exist. `/case-studies` shows a "Coming soon — request references" state.
 
-**5.3 Retire old academy structure**
-- Remove/hide routes: `/academy/certificate-programs`, `/academy/diploma-programs`, `/academy/professional-programs`
-- Keep `courses` table (used by legacy code) but Academy public page reads from new `academy_courses`
+### Auth (`login`, `signup`, `forgot-password`, `reset-password`, `talent-login`, `talent-application`, `staff-access`)
 
-**5.4 Public Academy page rebuild** (`src/routes/academy.tsx`)
-- Hero with Path component (Learn → Certify → Earn)
-- 6 school sections, each showing its courses as cards
-- Pricing table showing 5 regions × 3 tiers
-- Region detected by browser locale (default Nigeria), user-switchable
+- Replace `AuthShell` blobs with a centered single-column card on a light neutral background.
+- Left/right split only on desktop ≥1024px: card left, muted testimonial-free trust panel right (icons + short trust statements, no faces).
+- Password rules + strength meter kept; Google button primary style; email second.
+- Consistent copy + error patterns.
 
-**5.5 Course Management form** (`src/components/dashboard/director/CourseEditor.tsx`)
-- Accessible from Academy Director dashboard + Super Admin
-- Fields: School dropdown, Name, Price (per region, editable), Description, dynamic Lessons list, Assignment textarea, dynamic Quiz questions, Project textarea
-- Single "Save" button — saves all present fields, empty ones OK
-- Course list view: shows all 23 with completion badges (has lessons? has quiz? has project?)
+### Client area & dashboards
 
-**5.6 Server functions** (`src/lib/academy/schools.functions.ts`)
-- `listSchoolsWithCourses()` — public
-- `getCourseFull(slug)` — public (published) or director/admin
-- `saveCourse(courseId, {lessons, assignment, quiz, project, name, price, description})` — director/admin only
+Marketing-side polish extends into `_authenticated/*`:
+- Same white surface + blue accent, table-heavy layouts, remove gradient chrome from `DashboardShell`, `AdminShell`, `DirectorShell`, `PmShell`, `TalentOverview`, `ClientOverview`.
+- Keep functionality untouched; visual pass only.
 
----
+### About / Contact / Trust
 
-## Technical notes
+- `/about`: relocate origin story here (Sokoto → global) with restrained tone; company facts, mission, leadership section that can stay anonymous roles until named.
+- `/contact`: two-column form + response commitments ("< 4 business hours"), office/coverage list, WhatsApp + email.
+- New `/trust` page: vetting process, QA, dispute policy, payment safety. Link from footer.
+- New `/refunds` page (or section under Terms). Link from footer.
 
-```text
-Path component data flow
-────────────────────────
-scrollYProgress ──► useTransform ──► strokeDashoffset (line)
-                                └──► node opacity + pulse trigger
-                                
-teal glow: filter: drop-shadow(0 0 12px oklch(0.78 0.13 180 / 0.6))
-```
+### Copy pass
 
-**Migration order**: (a) schools schema + seeds, (b) delete fake team/case_studies data via `supabase--insert`. Both need approval.
-
-**Env/secrets**: none new needed.
+Sweep every public page to remove: "Sokoto to the world", "childish" superlatives, exclamation marks, first-person founder voice on marketing pages. Voice becomes second-person, outcome-first, benchmark-driven.
 
 ---
 
-## Deferred / flagged
+### Sub-phases (I'll notify at the end of each)
 
-- Payment integration for the new tier-based pricing (Paystack for NGN exists; other regions would need Stripe/Paddle) — out of scope this pass, marked TODO
-- Migrating existing legacy `courses` table data — left in place, not surfaced on new Academy page
-- Enrollment flow for new academy courses — schema supports it (`enrollments` table can reference `academy_courses` via a new column later), but UI stays view-only this pass
+1. Design tokens + primitives + Navbar/Footer + retire blobs/gradients platform-wide.
+2. Home rebuild (search hero, categories, how-it-works, bento, CTA).
+3. Services marketplace + category filtering.
+4. Talent directory anonymous cards + Talent ID system + detail page.
+5. Academy visual pass (schools/course pages) on top of Part 5 structure.
+6. Blog + Case Studies visual pass (blog kept, case studies hidden from nav).
+7. Auth flows redesign (all 7 auth routes).
+8. About / Contact / Trust / Refunds pages.
+9. Dashboards visual pass (client, talent, admin, director, pm).
+10. Copy sweep + final QA (mobile 360, tablet, desktop; light + dark).
 
-## Confirmation before I start
+---
 
-Two decisions I'm defaulting on — reply with changes if wrong:
-1. **Delete the 12 seeded case studies** (they were AI-generated, not real) — confirm or say "keep them"
-2. **Legacy `/academy/certificate-programs` etc. routes** — redirect to new `/academy` (confirm or say "keep as archive")
+### Technical notes
 
-Say "go" (or amend) and I'll execute end-to-end, notifying at each part boundary.
+- No schema changes required for the redesign itself. Talent ID = derived display value from existing `public_slug` or a new short `talent_code` column on `talent_profiles` (added in sub-phase 4 with a migration + GRANTs + RLS unchanged).
+- No new dependencies. Space Grotesk + Inter already loaded via `__root.tsx`.
+- Case studies routes stay mounted; only nav/footer links removed.
+- All server functions, auth, RLS, and MCP tooling untouched.

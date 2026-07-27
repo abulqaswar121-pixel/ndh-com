@@ -20,13 +20,12 @@ export function Section({
       {(eyebrow || title || subtitle) && (
         <div className={`mb-12 ${center ? "mx-auto max-w-2xl text-center" : "max-w-2xl"}`}>
           {eyebrow && (
-            <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-border bg-secondary/60 px-3 py-1 text-xs font-semibold uppercase tracking-widest text-muted-foreground">
-              <span className="h-1.5 w-1.5 rounded-full bg-gradient-brand" />
+            <div className="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-primary">
               {eyebrow}
             </div>
           )}
-          {title && <h2 className="text-3xl font-extrabold tracking-tight sm:text-4xl">{title}</h2>}
-          {subtitle && <p className="mt-4 text-base text-muted-foreground sm:text-lg">{subtitle}</p>}
+          {title && <h2 className="text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">{title}</h2>}
+          {subtitle && <p className="mt-3 text-base text-muted-foreground sm:text-lg">{subtitle}</p>}
         </div>
       )}
       {children}
