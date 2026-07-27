@@ -41,8 +41,6 @@ export function UnsplashImg({
   sig?: string | number;
 }) {
   const sigStr = sig !== undefined ? String(sig) : undefined;
-  const seed = encodeURIComponent(sigStr ?? q);
-  const fallback = `https://picsum.photos/seed/${seed}/${w}/${h}`;
   const [src, setSrc] = useState<string | null>(null);
   const [failed, setFailed] = useState(false);
   // Attach server fn once so tree-shaking keeps the reference.
@@ -51,7 +49,10 @@ export function UnsplashImg({
   useEffect(() => {
     let cancelled = false;
     loadPexels(q, w, h, sigStr).then((url) => {
-      if (!cancelled) setSrc(url ?? fallback);
+      if (!cancelled) {
+        if (url) setSrc(url);
+        else setFailed(true);
+      }
     });
     return () => { cancelled = true; };
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -85,11 +86,7 @@ export function UnsplashImg({
       height={h}
       loading="lazy"
       decoding="async"
-      onError={(e) => {
-        const el = e.currentTarget;
-        if (el.src !== fallback) el.src = fallback;
-        else setFailed(true);
-      }}
+      onError={() => setFailed(true)}
       className={className}
     />
   );
