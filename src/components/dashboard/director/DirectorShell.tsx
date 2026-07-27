@@ -15,6 +15,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { InviteHodDialog } from "./InviteHodDialog";
+import { CourseEditorPanel } from "./CourseEditor";
 import { useServerFn } from "@tanstack/react-start";
 import {
   signCertificate, upsertCalendarEntry, deleteCalendarEntry, upsertTuitionPrice,
@@ -28,6 +29,7 @@ const NAV: NavItem[] = [
   { label: "All Instructors", to: "/dashboard/academy-director", search: { tab: "instructors" }, icon: Users },
   { label: "All Students", to: "/dashboard/academy-director", search: { tab: "students" }, icon: GraduationCap },
   { label: "All Courses", to: "/dashboard/academy-director", search: { tab: "courses" }, icon: BookOpen },
+  { label: "AI Schools Editor", to: "/dashboard/academy-director", search: { tab: "ai-schools" }, icon: GraduationCap },
   { label: "Academic Calendar", to: "/dashboard/academy-director", search: { tab: "calendar" }, icon: CalendarDays },
   { label: "Certificate Approvals", to: "/dashboard/academy-director", search: { tab: "certs" }, icon: ClipboardSignature },
   { label: "Tuition & Pricing", to: "/dashboard/academy-director", search: { tab: "tuition" }, icon: DollarSign },
@@ -47,6 +49,7 @@ export function DirectorShell({ title = "Academy Director" }: { title?: string }
       {tab === "instructors" && <PeopleByRole role="instructor" label="Instructors" />}
       {tab === "students" && <PeopleByRole role="student" label="Students" />}
       {tab === "courses" && <CoursesAll />}
+      {tab === "ai-schools" && <CourseEditorPanel />}
       {tab === "calendar" && <Calendar />}
       {tab === "certs" && <CertApprovals />}
       {tab === "tuition" && <TuitionManager />}
