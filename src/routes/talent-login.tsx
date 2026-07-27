@@ -43,10 +43,10 @@ function TalentLoginPage() {
 
   return (
     <AuthShell
-      title="Talent Sign In"
-      subtitle="Access to the talent portal is by invitation only. If you don't have an invite, ask your PM or admin to send one."
-      illustration="african creative designer laptop"
-      illustrationAlt="NDH talent sign in"
+      title="Talent sign in"
+      subtitle="Access to the talent portal is invitation-only. If you don't have an invite, ask your PM or admin to send one."
+      illustration=""
+      illustrationAlt=""
       badge="Talent"
     >
       <button onClick={google} className="w-full"><GoogleButton /></button>

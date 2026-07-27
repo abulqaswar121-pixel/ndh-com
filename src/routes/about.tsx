@@ -1,61 +1,54 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { Section } from "@/components/site/Section";
-import { AnimatedBlobs } from "@/components/site/AnimatedBlobs";
 import { Reveal, Stagger, StaggerItem } from "@/components/site/Reveal";
-import { Parallax } from "@/components/site/Parallax";
-import { UnsplashImg } from "@/components/site/UnsplashImg";
 import { Button } from "@/components/ui/button";
 import { HeartHandshake, Compass, Target, Sparkles, MapPin } from "lucide-react";
-import founderAsset from "@/assets/founder-ceo.png.asset.json";
 
 export const Route = createFileRoute("/about")({
   head: () => ({ meta: [
     { title: "About — Najeeb Digital Hub" },
-    { name: "description", content: "Our story, vision and the team behind NDH." },
+    { name: "description", content: "A managed digital bureau and academy connecting global clients with vetted African talent." },
     { property: "og:title", content: "About NDH" },
-    { property: "og:description", content: "A bureau model built to deliver world-class digital work from Nigeria, for the world." },
+    { property: "og:description", content: "A managed digital bureau built to deliver reliable digital work to clients worldwide." },
   ]}),
   component: AboutPage,
 });
 
 const values = [
-  { icon: Sparkles, title: "Excellence", desc: "We obsess over craft, polish and delivery." },
-  { icon: HeartHandshake, title: "Trust", desc: "Escrow, QA and clear PMs — no surprises." },
-  { icon: Compass, title: "Opportunity", desc: "We open real careers for African digital talent." },
-  { icon: Target, title: "Outcomes", desc: "We measure ourselves by what your business achieves." },
+  { icon: Sparkles, title: "Craft", desc: "Every deliverable is reviewed against a written quality bar." },
+  { icon: HeartHandshake, title: "Trust", desc: "Escrow, milestones and named project managers on every engagement." },
+  { icon: Compass, title: "Opportunity", desc: "We build sustainable careers for vetted African digital talent." },
+  { icon: Target, title: "Outcomes", desc: "We measure success by the outcomes our clients report, not by hours." },
 ];
 
 function AboutPage() {
   return (
     <SiteLayout>
-      <section className="relative isolate overflow-hidden bg-hero py-24 text-white">
-        <AnimatedBlobs />
-        <div className="relative mx-auto max-w-7xl px-6">
+      <section className="border-b border-border bg-background py-20">
+        <div className="mx-auto max-w-7xl px-6">
           <Reveal>
-            <div className="text-xs font-semibold uppercase tracking-widest text-white/70">About NDH</div>
-            <h1 className="mt-3 max-w-3xl text-4xl font-extrabold sm:text-5xl">A digital bureau and academy built for the next generation.</h1>
-            <p className="mt-4 max-w-2xl text-white/75">We bridge global demand for great digital work with Africa's best emerging talent — and we train the rest.</p>
+            <div className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">About</div>
+            <h1 className="mt-3 max-w-3xl text-4xl font-bold tracking-tight sm:text-5xl">A managed digital bureau and academy.</h1>
+            <p className="mt-4 max-w-2xl text-muted-foreground">Najeeb Digital Hub connects global clients with vetted African talent through project managers, escrowed milestones and a written quality bar — and trains the next generation through NDH Academy.</p>
           </Reveal>
         </div>
       </section>
 
-      <Section eyebrow="Our story" title="From a small studio to a multi-department bureau.">
-        <div className="grid gap-10 lg:grid-cols-[1.1fr_1fr]">
-          <Reveal>
-            <div className="space-y-4 text-foreground/80">
-              <p>Najeeb Digital Hub started with a simple belief: African creators and engineers can produce work that competes anywhere in the world — if they are properly trained, properly managed and properly paid.</p>
-              <p>Today, NDH operates as a managed digital bureau with a sister academy. Clients across Nigeria, the UK, US, Canada, Europe and the UAE send us briefs; our Project Managers translate them into work; our vetted in-house talents deliver; our QA ships it. Meanwhile, NDH Academy continuously trains the next wave of professionals.</p>
-              <p>We exist to make digital opportunity borderless.</p>
-            </div>
-          </Reveal>
-          <Reveal delay={0.1}>
-            <div className="overflow-hidden rounded-3xl border border-border shadow-elegant">
-              <Parallax offset={50} className="h-full w-full">
-                <UnsplashImg q="african tech company office developers computers collaboration" alt="NDH story" w={900} h={700} className="h-full w-full object-cover" />
-              </Parallax>
-            </div>
-          </Reveal>
+      <Section eyebrow="Our approach" title="How we operate">
+        <div className="grid gap-8 lg:grid-cols-3">
+          <div className="space-y-3 text-sm text-foreground/80">
+            <div className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">01 · Brief</div>
+            <p>A project manager scopes your brief with a written statement of work, milestones and a fixed quote — usually within 4 business hours.</p>
+          </div>
+          <div className="space-y-3 text-sm text-foreground/80">
+            <div className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">02 · Deliver</div>
+            <p>A vetted team executes against the SOW. You review incremental milestones; funds are held in escrow and released on approval.</p>
+          </div>
+          <div className="space-y-3 text-sm text-foreground/80">
+            <div className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">03 · Handover</div>
+            <p>Every deliverable ships with source files, documentation and a written QA sign-off. Post-delivery support is available on request.</p>
+          </div>
         </div>
       </Section>
 
@@ -63,9 +56,9 @@ function AboutPage() {
         <Stagger className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {values.map((v) => (
             <StaggerItem key={v.title}>
-              <div className="h-full rounded-2xl border border-border bg-card p-6 transition-all hover:-translate-y-1 hover:shadow-elegant">
-                <div className="grid h-10 w-10 place-items-center rounded-lg bg-gradient-brand text-white shadow-glow"><v.icon className="h-5 w-5" /></div>
-                <h3 className="mt-4 font-bold">{v.title}</h3>
+              <div className="h-full rounded-xl border border-border bg-card p-6">
+                <div className="grid h-10 w-10 place-items-center rounded-lg bg-primary/10 text-primary"><v.icon className="h-5 w-5" /></div>
+                <h3 className="mt-4 font-semibold">{v.title}</h3>
                 <p className="mt-2 text-sm text-muted-foreground">{v.desc}</p>
               </div>
             </StaggerItem>
@@ -73,38 +66,35 @@ function AboutPage() {
         </Stagger>
       </Section>
 
-      <Section eyebrow="Where we operate" title="Headquartered in Sokoto. Delivering worldwide.">
+      <Section eyebrow="Coverage" title="Where we work">
         <div className="grid gap-6 lg:grid-cols-2">
           <Reveal>
-            <div className="rounded-2xl border border-border bg-card p-6">
-              <div className="flex items-center gap-2 text-[oklch(0.65_0.19_252)]"><MapPin className="h-4 w-4" /><span className="text-xs font-semibold uppercase tracking-widest">Our regions</span></div>
+            <div className="rounded-xl border border-border bg-card p-6">
+              <div className="flex items-center gap-2 text-primary"><MapPin className="h-4 w-4" /><span className="text-xs font-semibold uppercase tracking-widest">Client regions</span></div>
               <ul className="mt-4 grid grid-cols-2 gap-3 text-sm">
-                {["Nigeria 🇳🇬","United Kingdom 🇬🇧","United States 🇺🇸","Canada 🇨🇦","Germany 🇩🇪","France 🇫🇷","Netherlands 🇳🇱","UAE 🇦🇪"].map((c) => (
-                  <li key={c} className="rounded-lg border border-border bg-secondary/40 px-3 py-2 font-semibold">{c}</li>
+                {["Nigeria","United Kingdom","United States","Canada","Germany","France","Netherlands","United Arab Emirates"].map((c) => (
+                  <li key={c} className="rounded-lg border border-border bg-secondary/40 px-3 py-2 font-medium">{c}</li>
                 ))}
               </ul>
+              <p className="mt-4 text-xs text-muted-foreground">Headquartered in Nigeria. All engagements run in the client's business hours.</p>
             </div>
           </Reveal>
-          <div className="overflow-hidden rounded-2xl border border-border">
-            <iframe title="Sokoto map" src="https://www.google.com/maps?q=Sokoto,Nigeria&output=embed" className="h-80 w-full" loading="lazy" />
+          <div className="rounded-xl border border-border bg-card p-6">
+            <div className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">Working languages</div>
+            <ul className="mt-4 grid grid-cols-2 gap-3 text-sm">
+              {["English","French","Arabic","Hausa"].map((c) => (
+                <li key={c} className="rounded-lg border border-border bg-secondary/40 px-3 py-2 font-medium">{c}</li>
+              ))}
+            </ul>
+            <p className="mt-4 text-xs text-muted-foreground">Contracts and invoices are issued in USD, GBP, EUR or NGN.</p>
           </div>
         </div>
       </Section>
 
-      <Section eyebrow="Founder" title="Built with vision and discipline.">
-        <div className="grid items-center gap-8 md:grid-cols-[280px_1fr]">
-          <div className="overflow-hidden rounded-3xl border border-border shadow-glow">
-            <img src={founderAsset.url} alt="Ataurrahman Najeeb Ahmad, Founder & CEO" loading="lazy" decoding="async" className="h-full w-full object-cover" />
-          </div>
-          <div>
-            <div className="text-xs font-semibold uppercase tracking-widest text-[oklch(0.65_0.19_252)]">Founder & CEO</div>
-            <div className="mt-1 text-2xl font-extrabold">Ataurrahman Najeeb Ahmad</div>
-            <p className="mt-3 max-w-2xl text-muted-foreground">"We're building NDH like a serious tech company — measurable quality, fair pay for talents, and outcomes our clients can feel."</p>
-            <div className="mt-5 flex gap-3">
-              <Link to="/team"><Button variant="brand">Meet the team</Button></Link>
-              <Link to="/contact"><Button variant="outline">Get in touch</Button></Link>
-            </div>
-          </div>
+      <Section eyebrow="Ready to start" title="Talk to a project manager">
+        <div className="flex flex-wrap items-center gap-3">
+          <Link to="/start-project"><Button variant="brand">Start a project</Button></Link>
+          <Link to="/contact"><Button variant="outline">Get in touch</Button></Link>
         </div>
       </Section>
     </SiteLayout>

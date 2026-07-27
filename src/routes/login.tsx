@@ -69,10 +69,10 @@ function LoginPage() {
 
   return (
     <AuthShell
-      title="Welcome back."
-      subtitle="Sign in to your NDH dashboard."
-      illustration="african professional laptop happy"
-      illustrationAlt="Sign in to NDH"
+      title="Sign in"
+      subtitle="Access your NDH dashboard."
+      illustration=""
+      illustrationAlt=""
       badge="Sign in"
     >
       <button onClick={handleGoogle} className="w-full"><GoogleButton /></button>

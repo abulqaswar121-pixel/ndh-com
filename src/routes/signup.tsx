@@ -77,10 +77,10 @@ function SignupPage() {
 
   return (
     <AuthShell
-      title="Create your account."
-      subtitle="Free forever. Get going in 30 seconds."
-      illustration="african student laptop online learning"
-      illustrationAlt="Sign up for NDH"
+      title="Create your account"
+      subtitle="Free to sign up. No credit card required."
+      illustration=""
+      illustrationAlt=""
       badge="Sign up"
     >
       <div className="mb-5 grid grid-cols-2 gap-2 rounded-xl border border-border bg-secondary/40 p-1">
@@ -89,7 +89,7 @@ function SignupPage() {
             key={r}
             type="button"
             onClick={() => setRole(r)}
-            className={`rounded-lg px-3 py-2 text-sm font-semibold capitalize transition ${role === r ? "bg-gradient-brand text-white shadow-glow" : "text-muted-foreground"}`}
+            className={`rounded-lg px-3 py-2 text-sm font-semibold capitalize transition ${role === r ? "bg-primary text-primary-foreground" : "text-muted-foreground"}`}
           >
             I'm a {r}
           </button>

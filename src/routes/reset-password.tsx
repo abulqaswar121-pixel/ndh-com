@@ -29,10 +29,10 @@ function ResetPasswordPage() {
 
   return (
     <AuthShell
-      title="Set a new password."
+      title="Set a new password"
       subtitle="Pick something strong — at least 8 characters."
-      illustration="african professional secure laptop"
-      illustrationAlt="Set new password"
+      illustration=""
+      illustrationAlt=""
       badge="Reset password"
     >
       <form onSubmit={handleSubmit} className="grid gap-4">
