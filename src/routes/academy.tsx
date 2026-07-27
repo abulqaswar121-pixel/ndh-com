@@ -64,22 +64,21 @@ function AcademyPage() {
 
   return (
     <SiteLayout>
-      <section className="relative isolate overflow-hidden bg-hero text-white">
-        <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, oklch(0.1 0.06 268 / 0.9), oklch(0.08 0.05 268 / 0.98))" }} />
-        <div className="relative mx-auto max-w-7xl px-6 py-24 text-center">
-          <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1 text-xs font-semibold uppercase tracking-widest backdrop-blur">
+      <section className="border-b border-border bg-background">
+        <div className="mx-auto max-w-7xl px-6 py-14 sm:py-16">
+          <div className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-primary">
             <Sparkles className="h-3.5 w-3.5" /> NDH Academy
           </div>
-          <h1 className="mt-5 font-display text-4xl font-extrabold leading-[1.05] tracking-tight sm:text-6xl">
-            Six AI Schools.<br/><span className="text-[oklch(0.78_0.13_180)]">Twenty-three ways to earn.</span>
+          <h1 className="mt-3 max-w-3xl text-3xl font-semibold tracking-tight sm:text-4xl">
+            Six AI schools. Twenty-three practical courses.
           </h1>
-          <p className="mx-auto mt-5 max-w-2xl text-lg text-white/80">
-            Learn → Certify → Earn. Master AI-powered skills and join our talent pool for real, paid work.
+          <p className="mt-3 max-w-2xl text-sm text-muted-foreground sm:text-base">
+            Learn AI-powered skills across writing, design, media, marketing, tech and business support. Certify, then join our talent pool for real, paid work.
           </p>
-          <div className="mt-8 flex flex-wrap items-center justify-center gap-6 text-sm">
-            <span className="inline-flex items-center gap-1.5"><GraduationCap className="h-4 w-4 text-[oklch(0.78_0.13_180)]" /> AI-first curriculum</span>
-            <span className="inline-flex items-center gap-1.5"><Award className="h-4 w-4 text-[oklch(0.78_0.13_180)]" /> Verifiable certificates</span>
-            <span className="inline-flex items-center gap-1.5"><Sparkles className="h-4 w-4 text-[oklch(0.78_0.13_180)]" /> Talent pool pipeline</span>
+          <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-2 text-xs text-muted-foreground">
+            <span className="inline-flex items-center gap-1.5"><GraduationCap className="h-3.5 w-3.5 text-primary" /> AI-first curriculum</span>
+            <span className="inline-flex items-center gap-1.5"><Award className="h-3.5 w-3.5 text-primary" /> Verifiable certificates</span>
+            <span className="inline-flex items-center gap-1.5"><Sparkles className="h-3.5 w-3.5 text-primary" /> Talent pool pipeline</span>
           </div>
         </div>
       </section>
@@ -87,12 +86,12 @@ function AcademyPage() {
       <Section>
         <div className="mb-10 flex flex-wrap items-end justify-between gap-4">
           <div>
-            <h2 className="font-display text-3xl font-extrabold tracking-tight">Choose your school</h2>
+            <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">Choose your school</h2>
             <p className="mt-1 text-sm text-muted-foreground">Six focused schools. Twenty-three courses. Real skills.</p>
           </div>
           <div className="flex items-center gap-2">
-            <label className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">Region</label>
-            <select value={region} onChange={(e) => setRegion(e.target.value)} className="rounded-lg border border-border bg-background px-3 py-2 text-sm">
+            <label className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">Region</label>
+            <select value={region} onChange={(e) => setRegion(e.target.value)} className="rounded-md border border-border bg-card px-3 py-2 text-sm">
               {REGIONS.map((r) => <option key={r.code} value={r.code}>{r.label}</option>)}
             </select>
           </div>
@@ -105,11 +104,11 @@ function AcademyPage() {
             return (
               <div key={school.id}>
                 <div className="mb-6 flex items-start gap-4">
-                  <div className="grid h-12 w-12 place-items-center rounded-xl bg-[oklch(0.65_0.19_252)]/10 text-[oklch(0.65_0.19_252)]">
+                  <div className="grid h-11 w-11 place-items-center rounded-md bg-secondary text-primary">
                     <Icon className="h-6 w-6" />
                   </div>
                   <div>
-                    <h3 className="font-display text-2xl font-extrabold tracking-tight">{school.name}</h3>
+                    <h3 className="text-xl font-semibold tracking-tight sm:text-2xl">{school.name}</h3>
                     <p className="text-sm text-muted-foreground">{school.description}</p>
                   </div>
                 </div>
@@ -118,12 +117,12 @@ function AcademyPage() {
                     const prices = c.region_prices as Record<string, number> | null;
                     const amt = prices?.[region];
                     return (
-                      <div key={c.id} className="group rounded-2xl border border-border bg-card p-5 transition hover:border-[oklch(0.65_0.19_252)]/40 hover:shadow-lg">
-                        <div className="text-base font-bold">{c.name}</div>
+                      <div key={c.id} className="group rounded-lg border border-border bg-card p-5 transition-colors hover:border-primary/40">
+                        <div className="text-base font-semibold">{c.name}</div>
                         <p className="mt-1 line-clamp-2 text-sm text-muted-foreground">{c.description}</p>
-                        <div className="mt-4 flex items-center justify-between">
+                        <div className="mt-4 flex items-center justify-between border-t border-border pt-3">
                           <span className="text-sm font-semibold">{amt ? fmt(amt) : "Contact us"}</span>
-                          <span className="text-xs text-[oklch(0.65_0.19_252)] opacity-0 transition group-hover:opacity-100">Coming soon →</span>
+                          <span className="text-xs text-primary opacity-0 transition group-hover:opacity-100">Coming soon →</span>
                         </div>
                       </div>
                     );
@@ -135,9 +134,9 @@ function AcademyPage() {
         </div>
       </Section>
 
-      <Section className="bg-secondary/30">
+      <Section className="bg-secondary/40">
         <div className="mx-auto max-w-4xl text-center">
-          <h2 className="font-display text-3xl font-extrabold tracking-tight">Simple, regional pricing</h2>
+          <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">Simple, regional pricing</h2>
           <p className="mt-2 text-sm text-muted-foreground">Take one course, a full school, or unlock everything.</p>
         </div>
         <div className="mx-auto mt-8 grid max-w-5xl gap-4 md:grid-cols-3">
@@ -150,9 +149,9 @@ function AcademyPage() {
               full: "All 23 courses across 6 schools",
             };
             return (
-              <div key={tier} className={`rounded-2xl border p-6 ${tier === "school" ? "border-[oklch(0.65_0.19_252)] bg-card shadow-lg" : "border-border bg-card"}`}>
-                <div className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">{labels[tier]}</div>
-                <div className="mt-2 font-display text-3xl font-extrabold">
+              <div key={tier} className={`rounded-lg border p-6 ${tier === "school" ? "border-primary/40 bg-card" : "border-border bg-card"}`}>
+                <div className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">{labels[tier]}</div>
+                <div className="mt-2 text-3xl font-semibold tracking-tight">
                   {p ? `${regionMeta.symbol}${Number(p.amount).toLocaleString()}` : "—"}
                 </div>
                 <p className="mt-1 text-sm text-muted-foreground">{desc[tier]}</p>

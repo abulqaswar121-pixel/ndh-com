@@ -1,8 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { Section } from "@/components/site/Section";
-import { AnimatedBlobs } from "@/components/site/AnimatedBlobs";
-import { Reveal, Stagger, StaggerItem } from "@/components/site/Reveal";
 import { UnsplashImg } from "@/components/site/UnsplashImg";
 import { Search } from "lucide-react";
 import { useState } from "react";
@@ -33,44 +31,63 @@ function BlogPage() {
   );
   return (
     <SiteLayout>
-      <section className="relative isolate overflow-hidden bg-hero py-24 text-white">
-        <AnimatedBlobs />
-        <div className="relative mx-auto max-w-7xl px-6">
-          <Reveal>
-            <div className="text-xs font-semibold uppercase tracking-widest text-white/70">Blog & Resources</div>
-            <h1 className="mt-3 max-w-3xl text-4xl font-extrabold sm:text-5xl">Ideas from the NDH team.</h1>
-          </Reveal>
+      <section className="border-b border-border bg-background">
+        <div className="mx-auto max-w-7xl px-6 py-14 sm:py-16">
+          <div className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">Blog &amp; resources</div>
+          <h1 className="mt-3 max-w-3xl text-3xl font-semibold tracking-tight sm:text-4xl">Sharp ideas on digital work.</h1>
+          <p className="mt-3 max-w-2xl text-sm text-muted-foreground sm:text-base">
+            Playbooks, guides and field notes from the NDH team — on design, engineering, marketing, and building for the modern web.
+          </p>
         </div>
       </section>
       <Section>
         <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex flex-wrap gap-2">
             {cats.map((c) => (
-              <button key={c} onClick={() => setCat(c)} className={`rounded-full border px-4 py-1.5 text-xs font-semibold transition ${cat === c ? "border-transparent bg-gradient-brand text-white shadow-glow" : "border-border bg-secondary/40 text-muted-foreground hover:text-foreground"}`}>{c}</button>
+              <button
+                key={c}
+                onClick={() => setCat(c)}
+                className={`rounded-md border px-3 py-1.5 text-xs font-medium transition-colors ${
+                  cat === c
+                    ? "border-primary/40 bg-secondary text-foreground"
+                    : "border-border bg-card text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                {c}
+              </button>
             ))}
           </div>
           <div className="relative max-w-xs">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-           <input aria-label="Search blog articles" value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search articles…" className="w-full rounded-full border border-border bg-background py-2 pl-9 pr-3 text-sm focus:outline-none focus:ring-2 focus:ring-[oklch(0.65_0.19_252)]/30" />
+            <input
+              aria-label="Search blog articles"
+              value={q}
+              onChange={(e) => setQ(e.target.value)}
+              placeholder="Search articles…"
+              className="w-full rounded-md border border-border bg-card py-2 pl-9 pr-3 text-sm focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
+            />
           </div>
         </div>
-        <Stagger className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {filtered.map((p) => (
-            <StaggerItem key={p.slug}>
-              <Link to="/blog/$slug" params={{ slug: p.slug }} className="group block h-full overflow-hidden rounded-2xl border border-border bg-card transition-all hover:-translate-y-1 hover:shadow-elegant">
-                <div className="aspect-[16/10] overflow-hidden">
-                  <UnsplashImg q={p.cover_query} alt={p.title} w={800} h={500} sig={p.slug} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
-                </div>
-                <div className="p-6">
-                  <div className="text-xs font-semibold uppercase tracking-widest text-[oklch(0.65_0.19_252)]">{p.tag}</div>
-                  <h3 className="mt-2 text-lg font-bold leading-snug">{p.title}</h3>
-                  <p className="mt-2 text-sm text-muted-foreground">{p.excerpt}</p>
-                  <div className="mt-3 text-xs text-muted-foreground">{p.read_minutes} min read</div>
-                </div>
-              </Link>
-            </StaggerItem>
+            <Link
+              key={p.slug}
+              to="/blog/$slug"
+              params={{ slug: p.slug }}
+              className="group block h-full overflow-hidden rounded-lg border border-border bg-card transition-colors hover:border-primary/40"
+            >
+              <div className="aspect-[16/9] overflow-hidden border-b border-border">
+                <UnsplashImg q={p.cover_query} alt={p.title} w={800} h={500} sig={p.slug} className="h-full w-full object-cover" />
+              </div>
+              <div className="p-5">
+                <div className="text-[11px] font-semibold uppercase tracking-[0.16em] text-primary">{p.tag}</div>
+                <h3 className="mt-2 text-base font-semibold leading-snug tracking-tight">{p.title}</h3>
+                <p className="mt-2 line-clamp-3 text-sm text-muted-foreground">{p.excerpt}</p>
+                <div className="mt-3 text-xs text-muted-foreground">{p.read_minutes} min read</div>
+              </div>
+            </Link>
           ))}
-        </Stagger>
+        </div>
         {!isLoading && filtered.length === 0 && <p className="mt-10 text-center text-sm text-muted-foreground">No articles match your search.</p>}
         {isLoading && <p className="mt-10 text-center text-sm text-muted-foreground">Loading articles…</p>}
       </Section>
