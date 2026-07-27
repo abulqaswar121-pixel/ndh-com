@@ -1,6 +1,5 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { RegistrarShell } from "@/components/dashboard/registrar/RegistrarShell";
+import { createFileRoute, redirect } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_authenticated/dashboard/registrar")({
-  component: () => <RegistrarShell />,
+  beforeLoad: () => { throw redirect({ to: "/dashboard/academy-director", search: { tab: undefined } }); },
 });

@@ -1,8 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   ArrowRight, Sparkles, Palette, Code2, PenTool, Megaphone, Clapperboard, Brain,
-  ShieldCheck, Clock, Globe2, Award, Quote, CheckCircle2,
-  ChevronDown, Heart, Target, Rocket,
+  ShieldCheck, Clock, Globe2, Award, CheckCircle2,
+  ChevronDown, Heart, Target, Rocket, MessageCircle,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
@@ -19,12 +19,7 @@ import { Reveal, Stagger, StaggerItem } from "@/components/site/Reveal";
 import { Parallax } from "@/components/site/Parallax";
 import { UnsplashImg } from "@/components/site/UnsplashImg";
 import { InstallAppSection } from "@/components/site/InstallApp";
-import testimonialAisha from "@/assets/testimonial-aisha-bello-founder.jpg";
-import testimonialChinedu from "@/assets/testimonial-chinedu-okafor-founder.jpg";
-import testimonialJames from "@/assets/testimonial-james-rowe-operator.jpg";
-import testimonialMaryam from "@/assets/testimonial-maryam-ibrahim-brand-manager.jpg";
-import testimonialSarah from "@/assets/testimonial-sarah-mitchell-marketer.jpg";
-import testimonialTunde from "@/assets/testimonial-tunde-adeyemi-ceo.jpg";
+import founderAsset from "@/assets/founder-ceo.png.asset.json";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -60,39 +55,10 @@ const features = [
   { icon: Award, title: "Academy-grade quality", desc: "Our own NDH Academy trains the next generation." },
 ];
 
-const testimonials = [
-  { name: "Aisha Bello", role: "Founder, Lagos", quote: "NDH felt like an in-house team. Fast, sharp, and zero drama.", image: testimonialAisha, full: "We came to NDH with a half-baked fintech idea and a tight deadline. Within 48 hours we had a PM, a designer and a full-stack dev on our project. They shipped a beautiful onboarding flow in three weeks, handled every revision without complaint, and even flagged growth ideas we hadn't thought about. It genuinely felt like we'd hired an in-house team overnight." },
-  { name: "James Rowe", role: "Operations, London", quote: "The PM model is gold — one contact, world-class delivery.", image: testimonialJames, full: "I've worked with a dozen agencies and freelancers over the years. NDH is the first that gave me one accountable PM who actually ran the project. No chasing, no missed deadlines, no ambiguous quotes. Just weekly updates, clean handoffs and premium output — from London to Sokoto and back." },
-  { name: "Tunde Adeyemi", role: "CEO, Abuja", quote: "From brand to web to ads, every piece felt premium.", image: testimonialTunde, full: "We rebranded our entire retail chain with NDH — new identity, new site, launch campaign across Meta and Google. Every deliverable felt considered and premium. Six months in, our online revenue has more than doubled and the team still supports us on retainer." },
-  { name: "Maryam Ibrahim", role: "Brand Manager, Dubai", quote: "World-class output with zero project management overhead.", image: testimonialMaryam, full: "As a brand manager I usually spend half my week managing vendors. NDH removed that entire burden. Their PM absorbed briefs, ran QA and delivered polished work I could take straight to our CEO. The Dubai launch was our smoothest ever." },
-  { name: "Chinedu Okafor", role: "Founder, Enugu", quote: "Their PMs treated my product like their own. Shipped fast.", image: testimonialChinedu, full: "The energy at NDH is different. Their PM genuinely cared about my product — asked hard questions, pushed back on weak ideas, and delivered features faster than teams five times the size. We're on our third project together." },
-  { name: "Sarah Mitchell", role: "Marketing, Toronto", quote: "Best agency-feel I've had at startup pricing. Hire them.", image: testimonialSarah, full: "I've worked with Toronto and NYC agencies that charged 5x and delivered less. NDH gave me a strategist, designer and paid-media lead — all coordinated by one PM — for a fraction of the price. Our CPA dropped 38% in the first quarter." },
-];
-
-import founderAsset from "@/assets/founder-ceo.png.asset.json";
-
-const team = [
-  { name: "Ataurrahman Najeeb Ahmad", role: "Founder & CEO", q: "african software engineer coding office", image: founderAsset.url },
-  { name: "Hamza Suleiman", role: "Head of Academy", q: "nigerian muslim man tech lecturer laptop classroom" },
-  { name: "Grace Adebayo", role: "Head of Design", q: "portrait african black woman designer face smiling" },
-  { name: "Halima Suleiman", role: "Head of Tech", q: "portrait african woman hijab developer laptop face" },
-  { name: "Saleem Mujahid Basheer", role: "Head of Marketing", q: "nigerian muslim man digital marketer analytics dashboard laptop" },
-  { name: "Hassan Al'amin Hassan", role: "Head of Operations", q: "nigerian muslim man tech operations manager laptop office" },
-];
-
 const programs = [
   { tier: "Certificate", duration: "4–8 weeks", q: "african student learning graphic design laptop online course", desc: "Short, focused skill-ups in design, code, content, marketing and media.", to: "/academy" as const },
   { tier: "Diploma", duration: "3–6 months", q: "african adult professionals coding bootcamp mentor laptop office", desc: "Career-ready diplomas with mentorship, projects and capstone.", to: "/academy" as const },
   { tier: "Professional", duration: "6–12 months", q: "african tech professionals cohort training workshop office", desc: "Elite, cohort-based training. Top grads earn a seat in the NDH talent pool.", to: "/academy" as const },
-];
-
-const portfolio = [
-  { tag: "Web", title: "Fintech onboarding flow", q: "fintech mobile app ui design", client: "Neobank startup, Lagos", scope: "UX research, UI design, React Native build", outcome: "Reduced onboarding drop-off by 42% and cut KYC time from 9 minutes to under 3.", details: "We designed and shipped a full onboarding experience for a Nigerian neobank — BVN capture, tiered KYC, biometric login and a delightful first-run tour. Delivered in 6 weeks with a PM, product designer and two React Native engineers." },
-  { tag: "Brand", title: "Ramadan rebrand for retail", q: "luxury brand identity packaging", client: "Multi-store retail chain, Kano", scope: "Brand strategy, identity system, packaging, in-store signage", outcome: "Launch weekend traffic up 3.1×; social mentions up 6×.", details: "A full seasonal rebrand across 14 stores — new mark, packaging system, print collateral and a coordinated in-store rollout. Every asset shipped from a single NDH creative pod in 5 weeks." },
-  { tag: "Marketing", title: "Diaspora launch campaign", q: "social media campaign creative", client: "African skincare DTC brand", scope: "Meta + TikTok ads, influencer seeding, landing pages", outcome: "£142k in first-30-day revenue at a 3.4 ROAS.", details: "A diaspora-focused launch across the UK, US and Canada — creator seeding, paid social, geo-targeted landing pages and a full analytics setup. Managed end-to-end by one NDH growth PM." },
-  { tag: "Product", title: "EdTech course platform", q: "edtech web app dashboard", client: "Vocational training provider, Abuja", scope: "Full-stack platform, payments, certificates", outcome: "10k learners onboarded in the first cohort with 94% uptime.", details: "A complete LMS: course authoring, live classes, quizzes, Paystack + Stripe billing, verifiable QR certificates and an admin analytics dashboard. Built on TypeScript, React and Supabase in 10 weeks." },
-  { tag: "Media", title: "Founder podcast series", q: "podcast studio recording african", client: "African VC firm", scope: "Studio production, editing, distribution, socials", outcome: "Reached #4 in Nigerian Business on Apple Podcasts in season 1.", details: "A 12-episode founder interview series. NDH handled everything: guest coordination, in-studio recording, audio + video editing, show notes, cover art, distribution across Spotify/Apple and short-form clips for LinkedIn and X." },
-  { tag: "AI", title: "Customer-support assistant", q: "ai chatbot dashboard interface", client: "B2B SaaS, London", scope: "RAG assistant, knowledge sync, human handoff", outcome: "Deflected 61% of tier-1 tickets in month one.", details: "A production-grade support assistant integrated into their web app and Slack. Ingests docs and past tickets, answers with citations, escalates to humans cleanly and reports weekly deflection metrics." },
 ];
 
 const faqs = [
@@ -258,28 +224,31 @@ function Index() {
       </Section>
 
       {/* TEAM PREVIEW */}
-      <Section eyebrow="Our team" title="The people behind NDH." subtitle="Diverse leaders from across Nigeria, united by one craft standard." center>
-        <Stagger className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {team.map((m) => (
-            <StaggerItem key={m.name}>
-              <div className="group overflow-hidden rounded-2xl border border-border bg-card transition-all hover:-translate-y-1 hover:shadow-glow">
-                <div className="aspect-[4/5] overflow-hidden">
-                  {"image" in m && (m as { image?: string }).image ? (
-                    <img src={(m as { image: string }).image} alt={m.name} loading="lazy" className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" />
-                  ) : (
-                    <UnsplashImg q={m.q} alt={m.name} w={600} h={750} sig={m.name} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" />
-                  )}
-                </div>
-                <div className="p-5">
-                  <div className="font-bold">{m.name}</div>
-                  <div className="text-sm text-muted-foreground">{m.role}</div>
-                </div>
+      {/* FOUNDER'S NOTE */}
+      <Section eyebrow="A note from the founder" title="Right now, NDH is one person. On purpose.">
+        <div className="grid items-center gap-10 lg:grid-cols-[1fr_1.4fr]">
+          <Reveal>
+            <div className="relative mx-auto aspect-square w-full max-w-sm overflow-hidden rounded-3xl border border-border shadow-elegant">
+              <img src={founderAsset.url} alt="Ataurrahman Najeeb Ahmad, Founder & CEO" className="h-full w-full object-cover" />
+            </div>
+          </Reveal>
+          <Reveal delay={0.1}>
+            <div className="space-y-5 text-muted-foreground">
+              <p className="text-lg leading-relaxed text-foreground/90">
+                I'm Ataurrahman Najeeb Ahmad — founder of NDH. I'd rather tell you the truth than paste a stock photo of a team I don't have yet.
+              </p>
+              <p>
+                For now, every brief comes through me. I handle strategy, project management and quality control personally, and I only bring in vetted specialists when the work calls for it. That's why we're honest about scope, honest about timelines, and honest about who's actually delivering your project.
+              </p>
+              <p>
+                As NDH grows, this page will fill up with real people, real case studies and real client stories — not before.
+              </p>
+              <div className="flex flex-wrap gap-3 pt-2">
+                <Link to="/about"><Button variant="outline">Read the full story <ArrowRight className="h-4 w-4" /></Button></Link>
+                <Link to="/contact"><Button variant="brand"><MessageCircle className="h-4 w-4" /> Talk to me directly</Button></Link>
               </div>
-            </StaggerItem>
-          ))}
-        </Stagger>
-        <div className="mt-10 text-center">
-          <Link to="/team"><Button variant="outline" size="lg">Meet the Full Team <ArrowRight className="h-4 w-4" /></Button></Link>
+            </div>
+          </Reveal>
         </div>
       </Section>
 
@@ -308,17 +277,17 @@ function Index() {
         </div>
       </Section>
 
-      {/* PORTFOLIO */}
-      <Section eyebrow="Portfolio" title="A taste of what NDH ships.">
-        <PortfolioGrid items={portfolio} />
-        <div className="mt-10 text-center">
-          <Link to="/case-studies"><Button variant="outline" size="lg">See All Work <ArrowRight className="h-4 w-4" /></Button></Link>
+      {/* PORTFOLIO — coming soon */}
+      <Section eyebrow="Portfolio" title="Real case studies, published as we ship them." center>
+        <div className="mx-auto max-w-2xl rounded-3xl border border-dashed border-border bg-card p-10 text-center">
+          <p className="text-sm text-muted-foreground">
+            We publish every project here after it launches — with the client's name, the actual scope and the measured outcome. First public case studies drop as our early clients ship.
+          </p>
+          <div className="mt-6 flex flex-wrap justify-center gap-3">
+            <Link to="/start-project"><Button variant="brand">Become an early client</Button></Link>
+            <Link to="/case-studies"><Button variant="outline">See published work</Button></Link>
+          </div>
         </div>
-      </Section>
-
-      {/* TESTIMONIALS */}
-      <Section eyebrow="Loved by founders" title="Trusted across Nigeria and the diaspora." center>
-        <TestimonialsCarousel />
       </Section>
 
       {/* FAQ */}
@@ -351,55 +320,7 @@ function Index() {
 }
 
 function TestimonialsCarousel() {
-  const [i, setI] = useState(0);
-  const [picked, setPicked] = useState<typeof testimonials[number] | null>(null);
-  useEffect(() => {
-    const id = setInterval(() => setI((v) => (v + 1) % testimonials.length), 4500);
-    return () => clearInterval(id);
-  }, []);
-  const visible = [0, 1, 2].map((o) => testimonials[(i + o) % testimonials.length]);
-  return (
-    <>
-      <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-        {visible.map((t) => (
-          <button
-            key={t.name + i}
-            type="button"
-            onClick={() => setPicked(t)}
-            className="h-full animate-fade-in rounded-2xl border border-border bg-card p-6 text-left transition-all hover:-translate-y-1 hover:shadow-elegant"
-          >
-            <Quote className="h-6 w-6 text-[oklch(0.62_0.21_290)]" />
-            <p className="mt-3 text-sm text-foreground/90">"{t.quote}"</p>
-            <div className="mt-5 flex items-center gap-3">
-              <img src={t.image} alt={t.name} width={768} height={768} loading="lazy" className="h-12 w-12 rounded-full object-cover" />
-              <div>
-                <div className="text-sm font-semibold">{t.name}</div>
-                <div className="text-xs text-muted-foreground">{t.role}</div>
-              </div>
-            </div>
-            <div className="mt-4 text-xs font-semibold text-[oklch(0.65_0.19_252)]">Read full story →</div>
-          </button>
-        ))}
-      </div>
-      <Dialog open={!!picked} onOpenChange={(o) => !o && setPicked(null)}>
-        <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
-          {picked && (
-            <>
-              <DialogHeader className="items-center text-center">
-                <img src={picked.image} alt={picked.name} className="h-20 w-20 rounded-full object-cover" />
-                <DialogTitle>{picked.name}</DialogTitle>
-                <DialogDescription>{picked.role}</DialogDescription>
-              </DialogHeader>
-              <div className="space-y-3">
-                <Quote className="h-6 w-6 text-[oklch(0.62_0.21_290)]" />
-                <p className="text-sm leading-relaxed text-foreground/90">"{picked.full}"</p>
-              </div>
-            </>
-          )}
-        </DialogContent>
-      </Dialog>
-    </>
-  );
+  return null;
 }
 
 type PortfolioItem = {
@@ -437,7 +358,7 @@ export function PortfolioGrid({ items }: { items: PortfolioItem[] }) {
           </StaggerItem>
         ))}
       </Stagger>
-      <Dialog open={!!picked} onOpenChange={(o) => !o && setPicked(null)}>
+      <Dialog open={!!picked} onOpenChange={(o: boolean) => !o && setPicked(null)}>
         <DialogContent className="flex max-w-2xl max-h-[90vh] flex-col p-0">
           {picked && (
             <>
@@ -477,6 +398,8 @@ export function PortfolioGrid({ items }: { items: PortfolioItem[] }) {
     </>
   );
 }
+
+// Re-add Dialog imports for PortfolioGrid
 
 function FaqItem({ q, a, defaultOpen }: { q: string; a: string; defaultOpen?: boolean }) {
   const [open, setOpen] = useState(!!defaultOpen);

@@ -18,10 +18,10 @@ export const ROLE_HOME: Record<AppRole, string> = {
   client: "/dashboard/client",
   talent: "/dashboard/talent",
   student: "/dashboard/student",
-  instructor: "/dashboard/instructor",
+  instructor: "/dashboard/academy-director",
   pm: "/dashboard/pm",
-  hod: "/dashboard/hod",
-  finance: "/dashboard/finance",
+  hod: "/dashboard/admin",
+  finance: "/dashboard/super-admin",
   admin: "/dashboard/admin",
   super_admin: "/dashboard/super-admin",
 };
