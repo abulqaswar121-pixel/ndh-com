@@ -40,7 +40,7 @@ export function AdminShell({ title, isSuper = false }: { title: string; isSuper?
 
   return (
     <DashboardShell title={title} items={NAV}>
-      {tab === "overview" && <Overview />}
+      {tab === "overview" && <Overview isSuper={isSuper} />}
       {tab === "users" && <UsersTab isSuper={isSuper} />}
       {tab === "departments" && <DepartmentsTab isSuper={isSuper} />}
       {tab === "activity" && <ActivityTab />}
@@ -49,32 +49,51 @@ export function AdminShell({ title, isSuper = false }: { title: string; isSuper?
   );
 }
 
-function Overview() {
+function Overview({ isSuper = false }: { isSuper?: boolean }) {
   const [s, setS] = useState({ users: 0, tasks: 0, courses: 0, enrollments: 0, payments: 0 });
   useEffect(() => {
     (async () => {
-      const [u, t, c, e, p] = await Promise.all([
-        supabase.from("profiles").select("id", { count: "exact", head: true }),
-        supabase.from("tasks").select("id", { count: "exact", head: true }),
-        supabase.from("courses").select("id", { count: "exact", head: true }),
-        supabase.from("enrollments").select("id", { count: "exact", head: true }),
-        supabase.from("payments").select("id", { count: "exact", head: true }).eq("status", "paid"),
-      ]);
-      setS({
-        users: u.count ?? 0, tasks: t.count ?? 0, courses: c.count ?? 0,
-        enrollments: e.count ?? 0, payments: p.count ?? 0,
-      });
+      if (isSuper) {
+        const [u, t, c, e, p] = await Promise.all([
+          supabase.from("profiles").select("id", { count: "exact", head: true }),
+          supabase.from("tasks").select("id", { count: "exact", head: true }),
+          supabase.from("courses").select("id", { count: "exact", head: true }),
+          supabase.from("enrollments").select("id", { count: "exact", head: true }),
+          supabase.from("payments").select("id", { count: "exact", head: true }).eq("status", "paid"),
+        ]);
+        setS({
+          users: u.count ?? 0, tasks: t.count ?? 0, courses: c.count ?? 0,
+          enrollments: e.count ?? 0, payments: p.count ?? 0,
+        });
+      } else {
+        // Bureau-only Admin: never surface Academy stats
+        const [u, t, p] = await Promise.all([
+          supabase.from("profiles").select("id", { count: "exact", head: true }),
+          supabase.from("tasks").select("id", { count: "exact", head: true }),
+          supabase.from("payments").select("id", { count: "exact", head: true }).eq("status", "paid"),
+        ]);
+        setS({
+          users: u.count ?? 0, tasks: t.count ?? 0, courses: 0,
+          enrollments: 0, payments: p.count ?? 0,
+        });
+      }
     })();
-  }, []);
-  const cards = [
-    { label: "Users", value: s.users },
-    { label: "Tasks", value: s.tasks },
-    { label: "Courses", value: s.courses },
-    { label: "Enrollments", value: s.enrollments },
-    { label: "Paid orders", value: s.payments },
-  ];
+  }, [isSuper]);
+  const cards = isSuper
+    ? [
+        { label: "Users", value: s.users },
+        { label: "Tasks", value: s.tasks },
+        { label: "Courses", value: s.courses },
+        { label: "Enrollments", value: s.enrollments },
+        { label: "Paid orders", value: s.payments },
+      ]
+    : [
+        { label: "Users", value: s.users },
+        { label: "Bureau tasks", value: s.tasks },
+        { label: "Paid orders", value: s.payments },
+      ];
   return (
-    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+    <div className={`grid gap-4 sm:grid-cols-2 ${isSuper ? "lg:grid-cols-5" : "lg:grid-cols-3"}`}>
       {cards.map((c) => (
         <Card key={c.label} className="p-5">
           <div className="text-xs uppercase tracking-widest text-muted-foreground">{c.label}</div>
