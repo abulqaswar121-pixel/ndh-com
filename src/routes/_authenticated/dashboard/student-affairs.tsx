@@ -1,6 +1,5 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { AffairsShell } from "@/components/dashboard/affairs/AffairsShell";
+import { createFileRoute, redirect } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_authenticated/dashboard/student-affairs")({
-  component: () => <AffairsShell />,
+  beforeLoad: () => { throw redirect({ to: "/dashboard/academy-director", search: { tab: undefined } }); },
 });

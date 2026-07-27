@@ -1,6 +1,5 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { FinanceShell } from "@/components/dashboard/finance/FinanceShell";
+import { createFileRoute, redirect } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_authenticated/dashboard/finance")({
-  component: () => <FinanceShell />,
+  beforeLoad: () => { throw redirect({ to: "/dashboard/super-admin", search: { tab: undefined } }); },
 });
