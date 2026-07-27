@@ -11,7 +11,7 @@ export const Route = createFileRoute("/contact")({
       { title: "Contact — Najeeb Digital Hub" },
       { name: "description", content: "Reach NDH by WhatsApp, email or contact form. We respond within 24 hours." },
       { property: "og:title", content: "Contact NDH — Talk to a Project Manager" },
-      { property: "og:description", content: "Reach the Najeeb Digital Hub team in Sokoto, Nigeria via phone, email or contact form. A Project Manager replies within 24 hours." },
+      { property: "og:description", content: "Reach the Najeeb Digital Hub team by phone, email or contact form. A project manager replies within one business day." },
     ],
     scripts: [{
       type: "application/ld+json",
