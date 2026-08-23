@@ -1,10 +1,6 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { InstructorShell } from "@/components/dashboard/instructor/InstructorShell";
+import { createFileRoute, redirect } from "@tanstack/react-router";
 
+// Collapsed per handoff 5C -> academy-director
 export const Route = createFileRoute("/_authenticated/dashboard/instructor")({
-  component: InstructorShell,
-  validateSearch: (s: Record<string, unknown>) => ({
-    tab: (s.tab as string) ?? undefined,
-    course: (s.course as string) ?? undefined,
-  }),
+  beforeLoad: () => { throw redirect({ to: "/dashboard/academy-director", search: { tab: undefined } }); },
 });

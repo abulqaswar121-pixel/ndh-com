@@ -49,6 +49,8 @@ type SaveInput = {
   description?: string;
   region_prices?: Record<string, number>;
   is_published?: boolean;
+  learning_objectives?: string[];
+  project_theme?: string;
   lessons?: Array<{ id?: string; position: number; title: string; video_url?: string; notes?: string }>;
   assignment?: string;
   quiz?: Array<{ id?: string; position: number; question: string; options: string[]; correct_index: number }>;
@@ -70,11 +72,15 @@ export const saveCourse = createServerFn({ method: "POST" })
       description?: string;
       region_prices?: Record<string, number>;
       is_published?: boolean;
+      learning_objectives?: string[];
+      project_theme?: string | null;
     } = {};
     if (data.name !== undefined) update.name = data.name;
     if (data.description !== undefined) update.description = data.description;
     if (data.region_prices !== undefined) update.region_prices = data.region_prices;
     if (data.is_published !== undefined) update.is_published = data.is_published;
+    if (data.learning_objectives !== undefined) update.learning_objectives = data.learning_objectives;
+    if (data.project_theme !== undefined) update.project_theme = data.project_theme || null;
     if (Object.keys(update).length) {
       const { error } = await sb.from("academy_courses").update(update).eq("id", data.course_id);
       if (error) throw error;

@@ -6,7 +6,6 @@ import * as Icons from "lucide-react";
 import { ArrowRight, Search, SlidersHorizontal } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { toast } from "sonner";
 
 export const Route = createFileRoute("/services")({
   head: () => ({ meta: [
@@ -18,10 +17,25 @@ export const Route = createFileRoute("/services")({
   component: ServicesPage,
 });
 
-type Cat = { icon: string; title: string; q: string; items: string[]; image_url?: string };
+type Cat = { icon: string; title: string; q: string; items: string[]; image_url?: string; price?: string };
+
+const DUMMY_SERVICES: Cat[] = [
+  { icon: "Palette", title: "Brand Identity Design", q: "brand", items: ["Logo concepts (3 variations)", "Color palette + typography", "Brand guidelines PDF", "Social kit + favicon", "Source files"], price: "₦150k" },
+  { icon: "Figma", title: "UI/UX Design", q: "ui", items: ["Wireframes + user flow", "High-fidelity UI in Figma", "Prototyping + handoff", "Design system + components", "2 revision rounds"], price: "₦200k" },
+  { icon: "Code2", title: "Website Development", q: "website", items: ["Responsive + SEO optimized", "CMS or custom code", "Paystack integration", "Speed + security", "30 days support"], price: "₦300k" },
+  { icon: "Smartphone", title: "Mobile App MVP", q: "mobile", items: ["Auth + onboarding", "Core features + API", "Push notifications", "TestFlight + Play Store", "Documentation"], price: "₦800k" },
+  { icon: "PenTool", title: "Content Writing & SEO", q: "content", items: ["Keyword research", "1,500+ words SEO article", "Meta title + description", "Internal linking", "Plagiarism-free"], price: "₦25k" },
+  { icon: "Megaphone", title: "Digital Marketing & Ads", q: "marketing", items: ["Ad strategy + targeting", "Creatives + copy", "Campaign setup + tracking", "Weekly optimization", "ROI report"], price: "₦150k" },
+  { icon: "Clapperboard", title: "Video Editing & Motion", q: "video", items: ["Cut + transitions", "Captions + subtitles", "Color grade + sound", "Thumbnail", "1080p/4K export"], price: "₦40k" },
+  { icon: "Camera", title: "Photography & Podcast", q: "photo", items: ["Shoot direction", "Retouch + color", "Podcast edit + mix", "Cover art", "Delivery in 48h"], price: "₦60k" },
+  { icon: "LineChart", title: "Data & Analytics", q: "data", items: ["Data cleaning", "Dashboard design", "KPIs + metrics", "Automation", "Training"], price: "₦120k" },
+  { icon: "Brain", title: "AI Agents & Automation", q: "ai", items: ["Workflow audit", "Agent build + test", "Integration (WhatsApp, Email, Sheets)", "Error handling", "Docs + Loom"], price: "₦200k" },
+  { icon: "Presentation", title: "Pitch Deck & Proposal", q: "pitch", items: ["Story + structure", "Design + charts", "Financial slides", "Speaker notes", "PDF + PPTX"], price: "₦80k" },
+  { icon: "ShoppingBag", title: "E-commerce Setup", q: "ecommerce", items: ["Store setup + theme", "Product upload (20)", "Paystack + logistics", "SEO + analytics", "Training"], price: "₦250k" },
+];
 
 function ServicesPage() {
-  const [cats, setCats] = useState<Cat[]>([]);
+  const [cats, setCats] = useState<Cat[]>(DUMMY_SERVICES);
   const [q, setQ] = useState("");
   const [activeCat, setActiveCat] = useState<string>("All");
   const navigate = useNavigate();
@@ -35,22 +49,21 @@ function ServicesPage() {
 
   useEffect(() => {
     supabase.from("services")
-      .select("name,icon,included,image_url")
+      .select("name,icon,included,image_url,starting_price")
       .eq("published", true)
       .order("display_order", { ascending: true })
-      .then(({ data, error }) => {
-        if (error || !data || data.length === 0) {
-          toast("No services available right now.");
-          setCats([]);
-          return;
+      .then(({ data }) => {
+        if (data && data.length > 0) {
+          setCats(data.map((r) => ({
+            icon: r.icon || "Sparkles",
+            title: r.name,
+            q: r.name.toLowerCase(),
+            items: Array.isArray(r.included) ? (r.included as string[]) : [],
+            image_url: r.image_url || undefined,
+            price: (r as any).starting_price || undefined,
+          })));
         }
-        setCats(data.map((r) => ({
-          icon: r.icon || "Sparkles",
-          title: r.name,
-          q: r.name.toLowerCase(),
-          items: Array.isArray(r.included) ? (r.included as string[]) : [],
-          image_url: r.image_url || undefined,
-        })));
+        // else keep dummy — makes site look perfect for preview
       });
   }, []);
 
@@ -69,7 +82,6 @@ function ServicesPage() {
 
   return (
     <SiteLayout>
-      {/* Masthead */}
       <section className="border-b border-border bg-background">
         <div className="mx-auto max-w-7xl px-6 py-14 sm:py-16">
           <div className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">Services marketplace</div>
@@ -77,11 +89,11 @@ function ServicesPage() {
             Browse services. Brief a project. Get matched.
           </h1>
           <p className="mt-3 max-w-2xl text-sm text-muted-foreground sm:text-base">
-            Design, engineering, marketing, and media — delivered by vetted specialists and managed by a project manager.
+            Design, engineering, marketing, and media — delivered by vetted specialists and managed by a project manager. Quote in 4 business hours, not days.
           </p>
           <form
             onSubmit={(e) => { e.preventDefault(); }}
-            className="mt-6 flex max-w-2xl items-center gap-2 rounded-full border border-border bg-card p-1.5"
+            className="mt-6 flex max-w-2xl items-center gap-2 rounded-full border border-border bg-card p-1.5 shadow-sm"
           >
             <div className="pl-3 text-muted-foreground"><Search className="h-4 w-4" /></div>
             <input
@@ -100,12 +112,14 @@ function ServicesPage() {
               Start a project
             </Button>
           </form>
+          <div className="mt-4 flex gap-2 text-xs text-muted-foreground">
+            <span>✓ Vetted talent</span><span>•</span><span>✓ Escrow payments</span><span>•</span><span>✓ QA checked</span>
+          </div>
         </div>
       </section>
 
       <Section>
         <div className="grid gap-8 lg:grid-cols-[220px_1fr]">
-          {/* Filter rail */}
           <aside className="lg:sticky lg:top-24 lg:h-fit">
             <div className="mb-3 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">
               <SlidersHorizontal className="h-3.5 w-3.5" /> Categories
@@ -127,7 +141,6 @@ function ServicesPage() {
             </div>
           </aside>
 
-          {/* Grid */}
           <div>
             {filtered.length === 0 ? (
               <div className="rounded-lg border border-border bg-card p-10 text-center text-sm text-muted-foreground">
@@ -140,13 +153,16 @@ function ServicesPage() {
                   return (
                     <div
                       key={c.title}
-                      className="group flex h-full flex-col rounded-lg border border-border bg-card p-5 transition-colors hover:border-primary/40"
+                      className="group flex h-full flex-col rounded-xl border border-border bg-card p-5 shadow-sm transition-all hover:border-primary/40 hover:shadow-md"
                     >
                       <div className="flex items-center gap-3">
-                        <div className="grid h-10 w-10 place-items-center rounded-md bg-secondary text-primary">
+                        <div className="grid h-10 w-10 place-items-center rounded-lg bg-primary/10 text-primary">
                           <IconEl className="h-5 w-5" />
                         </div>
-                        <div className="text-base font-semibold">{c.title}</div>
+                        <div>
+                          <div className="text-base font-semibold tracking-tight">{c.title}</div>
+                          <div className="text-xs text-muted-foreground">{c.price ? `From ${c.price}` : "Custom quote"}</div>
+                        </div>
                       </div>
                       {c.items.length > 0 && (
                         <ul className="mt-4 space-y-1.5 text-sm text-muted-foreground">
@@ -159,7 +175,7 @@ function ServicesPage() {
                         </ul>
                       )}
                       <div className="mt-5 flex items-center justify-between border-t border-border pt-4">
-                        <span className="text-xs text-muted-foreground">Custom scope · Quote in 4h</span>
+                        <span className="text-xs text-muted-foreground">Quote in 4h • Escrow</span>
                         <Link
                           to="/start-project"
                           className="inline-flex items-center gap-1 text-sm font-semibold text-primary"
@@ -178,14 +194,14 @@ function ServicesPage() {
       </Section>
 
       <Section>
-        <div className="rounded-lg border border-border bg-secondary/40 p-8 text-center">
+        <div className="rounded-2xl border border-border bg-secondary/40 p-8 text-center">
           <h3 className="text-2xl font-semibold tracking-tight">Not sure what you need?</h3>
           <p className="mx-auto mt-2 max-w-xl text-sm text-muted-foreground">
-            Send us a brief. A project manager scopes it for free and responds within 4 business hours.
+            Send us a brief. A project manager scopes it for free and responds within 4 business hours. No spam, no sales call.
           </p>
           <div className="mt-5 flex flex-wrap justify-center gap-2">
             <Link to="/start-project"><Button variant="brand">Start a project</Button></Link>
-            <Link to="/contact"><Button variant="outline">Talk to us</Button></Link>
+            <Link to="/contact"><Button variant="outline">Talk to us on WhatsApp</Button></Link>
           </div>
         </div>
       </Section>

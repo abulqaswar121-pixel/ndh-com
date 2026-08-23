@@ -12,7 +12,7 @@ async function assertStaff(supabase: any, userId: string, allow: string[] = STAF
   return r as string[];
 }
 
-/** Admin/Super-admin/HOD invites a PM by email and department. */
+/** Admin/Super-admin/HOD invites a PM by email and department — 7-day single-use token per handoff 5B */
 export const invitePm = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((d: unknown) => z.object({
@@ -28,47 +28,32 @@ export const invitePm = createServerFn({ method: "POST" })
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { sendSystemEmail } = await import("@/lib/email/send-system.server");
 
-    const redirectTo = `${SITE}/auth/accept`;
-    const { data: invited, error: inviteErr } = await supabaseAdmin.auth.admin.inviteUserByEmail(data.email, {
-      data: { full_name: data.full_name, role: "pm" },
-      redirectTo,
-    });
-    if (inviteErr && !/already.*registered/i.test(inviteErr.message)) throw new Error(inviteErr.message);
+    const token = crypto.randomUUID().replace(/-/g, "") + crypto.randomUUID().replace(/-/g, "");
+    const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString();
+    const inviteUrl = `${SITE}/invite/${token}`;
 
-    let newUserId = invited?.user?.id;
-    if (!newUserId) {
-      const { data: list } = await supabaseAdmin.auth.admin.listUsers();
-      newUserId = list?.users.find((u) => u.email?.toLowerCase() === data.email.toLowerCase())?.id;
-    }
-    if (!newUserId) throw new Error("Could not create or locate user");
-
-    await supabaseAdmin.from("user_roles").upsert(
-      { user_id: newUserId, role: "pm" },
-      { onConflict: "user_id,role", ignoreDuplicates: true },
-    );
-    await supabaseAdmin.from("profiles").update({
-      full_name: data.full_name,
-      phone: data.phone || null,
-      department_id: data.department_id,
-    }).eq("id", newUserId);
-
-    const { data: dept } = await supabaseAdmin.from("departments").select("name").eq("id", data.department_id).maybeSingle();
-
-    await supabaseAdmin.from("pm_invitations").insert({
+    // Insert invitation with token (single-use, 7 days)
+    const { error: insErr } = await supabaseAdmin.from("pm_invitations").insert({
       email: data.email.toLowerCase(),
       full_name: data.full_name,
       phone: data.phone || null,
       department_id: data.department_id,
       invited_by: userId,
+      token,
+      expires_at: expiresAt,
+      status: "pending",
     });
+    if (insErr) throw new Error(insErr.message);
+
+    const { data: dept } = await supabaseAdmin.from("departments").select("name").eq("id", data.department_id).maybeSingle();
 
     await sendSystemEmail(supabaseAdmin, "pm_invitation", data.email, {
       fullName: data.full_name,
       department: dept?.name || null,
-      inviteUrl: redirectTo,
+      inviteUrl,
     });
 
-    return { ok: true, userId: newUserId };
+    return { ok: true, token, expiresAt };
   });
 
 /** PM sends or revises a quote. */

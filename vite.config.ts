@@ -9,11 +9,21 @@ import { mcpPlugin } from "@lovable.dev/mcp-js/stacks/tanstack/vite";
 
 export default defineConfig({
   tanstackStart: {
-    // Redirect TanStack Start's bundled server entry to src/server.ts (our SSR error wrapper).
-    // nitro/vite builds from this
     server: { entry: "server" },
   },
   vite: {
     plugins: [mcpPlugin()],
+    server: {
+      host: "0.0.0.0",
+      port: 3000,
+      allowedHosts: true,
+      hmr: {
+        clientPort: 443,
+      },
+    },
+    preview: {
+      host: "0.0.0.0",
+      port: 3000,
+    },
   },
 });

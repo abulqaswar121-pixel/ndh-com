@@ -1,12 +1,11 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
-import { Award, Download, Linkedin, IdCard } from "lucide-react";
+import { Award, Download, Linkedin } from "lucide-react";
 import { getCertificateDownloadUrl } from "@/lib/academy/certificate.functions";
 import { toast } from "sonner";
-import { StudentIdCard } from "./StudentIdCard";
 
 type Cert = {
   id: string;
@@ -20,8 +19,6 @@ type Cert = {
 export function Certificates() {
   const { user } = useAuth();
   const [certs, setCerts] = useState<Cert[]>([]);
-  const [profile, setProfile] = useState<{ full_name: string | null; avatar_url: string | null } | null>(null);
-  const [showIdFor, setShowIdFor] = useState<Cert | null>(null);
   const downloadFn = useServerFn(getCertificateDownloadUrl);
 
   useEffect(() => {
@@ -32,12 +29,6 @@ export function Certificates() {
       .eq("student_id", user.id)
       .order("issue_date", { ascending: false })
       .then(({ data }) => setCerts((data as unknown as Cert[]) || []));
-  }, [user]);
-
-  useEffect(() => {
-    if (!user) return;
-    supabase.from("profiles").select("full_name, avatar_url").eq("id", user.id).maybeSingle()
-      .then(({ data }) => setProfile(data));
   }, [user]);
 
   async function download(c: Cert) {
@@ -91,25 +82,10 @@ export function Certificates() {
                 <button onClick={() => shareOnLinkedIn(c)} className="inline-flex items-center gap-1 font-semibold text-primary hover:underline">
                   <Linkedin className="h-3.5 w-3.5" /> Add to LinkedIn
                 </button>
-                <button onClick={() => setShowIdFor(c)} className="inline-flex items-center gap-1 font-semibold text-primary hover:underline">
-                  <IdCard className="h-3.5 w-3.5" /> Student ID
-                </button>
               </div>
             </div>
           ))}
         </div>
-      )}
-
-      {showIdFor && (
-        <StudentIdCard
-          studentName={profile?.full_name || "NDH Student"}
-          studentNumber={showIdFor.certificate_number}
-          programName={showIdFor.course?.program_name || "NDH Program"}
-          programType={showIdFor.course?.program_type || "Certificate"}
-          avatarUrl={profile?.avatar_url || null}
-          verifyUrl={`${window.location.origin}/verify/${showIdFor.certificate_number}`}
-          onClose={() => setShowIdFor(null)}
-        />
       )}
     </div>
   );

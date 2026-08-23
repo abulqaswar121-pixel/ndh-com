@@ -65,25 +65,32 @@ export const inviteHod = createServerFn({ method: "POST" })
     if (!isAdmin && !isSuper) throw new Error("Forbidden");
 
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const tempPassword = `NDH-${crypto.randomUUID().slice(0, 12)}`;
-    const { data: created, error: cErr } = await supabaseAdmin.auth.admin.createUser({
-      email: data.email,
-      password: tempPassword,
-      email_confirm: true,
-      user_metadata: { full_name: data.full_name, role: "hod" },
-    });
-    if (cErr || !created.user) throw new Error(cErr?.message ?? "Failed to create user");
+    const { sendSystemEmail } = await import("@/lib/email/send-system.server");
+    const SITE = "https://ndh.com.ng";
 
-    await supabaseAdmin.from("profiles").update({
-      department_id: data.department_id,
+    const token = crypto.randomUUID().replace(/-/g, "") + crypto.randomUUID().replace(/-/g, "").slice(0,16);
+    const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString();
+    const inviteUrl = `${SITE}/invite/${token}`;
+
+    const { error } = await supabaseAdmin.from("hod_invitations").insert({
+      token,
+      email: data.email.toLowerCase(),
       full_name: data.full_name,
-    }).eq("id", created.user.id);
-    await supabaseAdmin.from("user_roles").insert({ user_id: created.user.id, role: "hod" });
-    await supabaseAdmin.from("departments").update({ hod_id: created.user.id }).eq("id", data.department_id);
-
-    const { data: link } = await supabaseAdmin.auth.admin.generateLink({
-      type: "recovery",
-      email: data.email,
+      department_id: data.department_id,
+      invited_by: userId,
+      expires_at: expiresAt,
+      status: "pending",
     });
-    return { ok: true, action_link: link?.properties?.action_link ?? null };
+    if (error) throw new Error(error.message);
+
+    const { data: dept } = await supabaseAdmin.from("departments").select("name").eq("id", data.department_id).maybeSingle();
+
+    // Use PM invitation template for HOD but with director wording (reuse talent template structure)
+    await sendSystemEmail(supabaseAdmin, "pm_invitation", data.email, {
+      fullName: data.full_name,
+      department: dept?.name || null,
+      inviteUrl,
+    });
+
+    return { ok: true, token, expiresAt, inviteUrl };
   });

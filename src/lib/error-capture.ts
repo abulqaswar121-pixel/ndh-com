@@ -1,3 +1,13 @@
+// Polyfill WebSocket for Node <22 (Supabase Realtime)
+try {
+  if (typeof (globalThis as any).WebSocket === "undefined") {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const ws = require("ws");
+    (globalThis as any).WebSocket = ws?.default ?? ws;
+  }
+} catch {}
+
+
 // Captures the original Error out-of-band so server.ts can recover the stack
 // when h3 has already swallowed the throw into a generic 500 Response.
 

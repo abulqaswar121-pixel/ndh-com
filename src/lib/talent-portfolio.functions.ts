@@ -20,7 +20,12 @@ export const listPublicTalents = createServerFn({ method: "GET" }).handler(async
     .eq("is_public", true)
     .not("public_slug", "is", null)
     .limit(100);
-  if (error) throw new Error(error.message);
+  if (error) {
+    // No real talents yet (or query failed) - return empty; the talent
+    // directory page already shows an honest "no talent matches yet, brief
+    // a project and a PM will match you directly" state for this case.
+    return [];
+  }
   const ids = (data ?? []).map((t) => t.user_id);
   if (ids.length === 0) return [];
   const { data: profs } = await sb.from("profiles").select("id, full_name, avatar_url").in("id", ids);

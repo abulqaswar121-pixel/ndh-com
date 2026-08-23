@@ -153,10 +153,17 @@ export function ChatWidget() {
         <button
           type="button"
           onClick={() => setOpen(true)}
-          className="fixed bottom-6 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg hover:scale-105 transition-transform"
-          aria-label="Open chat"
+          className="fixed bottom-6 right-6 z-50 group flex h-14 w-14 items-center justify-center rounded-full bg-[#0A0E2A] text-white shadow-xl ring-1 ring-white/10 hover:scale-105 transition-transform"
+          aria-label="Open NDH AI Assistant"
         >
-          <MessageCircle className="h-6 w-6" />
+          <div className="absolute inset-0 rounded-full bg-gradient-to-r from-teal-400 via-blue-500 to-purple-500 opacity-20 blur-xl group-hover:opacity-30 transition-opacity" />
+          <div className="relative flex h-10 w-10 items-center justify-center rounded-full bg-white text-black">
+            <span className="text-sm font-bold">AI</span>
+            <span className="absolute -top-1 -right-1 h-3 w-3">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
+            </span>
+          </div>
         </button>
       )}
 

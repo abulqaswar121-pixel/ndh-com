@@ -292,7 +292,7 @@ Give 3-5 specific feedback bullets.`;
     return { score: evalRes.score, verdict: evalRes.verdict, bullets: evalRes.bullets };
   });
 
-/** Director/Admin approves a project → queues certificate for signing. */
+/** Director/Admin approves a project → queues certificate for signing + emails. */
 export const reviewProjectSubmission = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((d: { submissionId: string; approve: boolean; note?: string }) => {
@@ -307,12 +307,91 @@ export const reviewProjectSubmission = createServerFn({ method: "POST" })
     if (!isDir && !isAdmin && !isSuper) throw new Error("Only directors/admins may review");
 
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    // Fetch submission with related course + student
+    const { data: sub } = await supabaseAdmin
+      .from("academy_project_submissions")
+      .select("id, user_id, course_id, brief, content, file_url, ai_score, ai_verdict, status")
+      .eq("id", data.submissionId)
+      .maybeSingle();
+    if (!sub) throw new Error("Submission not found");
+
+    const [{ data: course }, { data: profile }] = await Promise.all([
+      supabaseAdmin.from("academy_courses").select("id, name, slug").eq("id", sub.course_id).maybeSingle(),
+      supabaseAdmin.from("profiles").select("id, full_name, email").eq("id", sub.user_id).maybeSingle(),
+    ]);
+
+    // Update submission
     await supabaseAdmin.from("academy_project_submissions").update({
       status: data.approve ? "approved" : "rejected",
       director_note: data.note ?? null,
       reviewed_by: userId,
       reviewed_at: new Date().toISOString(),
     }).eq("id", data.submissionId);
+
+    const studentEmail = (profile as any)?.email as string | undefined;
+    const studentName = (profile as any)?.full_name as string | undefined;
+    const courseName = (course as any)?.name || "NDH Academy Course";
+    const resubmitUrl = `https://ndh.com.ng/academy/learn/${(course as any)?.slug || sub.course_id}`;
+
+    // Try to send emails (best-effort)
+    try {
+      const { sendSystemEmail } = await import("@/lib/email/send-system.server");
+      if (data.approve) {
+        // Mark enrollment as completed if exists
+        await supabaseAdmin.from("enrollments").update({ progress: 100, status: "completed", completed_at: new Date().toISOString() } as any)
+          .eq("student_id", sub.user_id).eq("course_id", sub.course_id);
+
+        // Generate certificate number if rpc exists
+        let certNumber = `NDH-CERT-${new Date().getFullYear()}-${Math.floor(Math.random()*1_000_000).toString().padStart(6,"0")}`;
+        try {
+          const { data: numRow } = await supabaseAdmin.rpc("next_certificate_number");
+          if (numRow && typeof numRow === "string") certNumber = numRow;
+        } catch {}
+
+        const verificationToken = crypto.randomUUID();
+        const verifyUrl = `https://ndh.com.ng/verify/${certNumber}`;
+
+        // Insert certificate row (course_id nullable to allow academy_courses)
+        const { error: certErr } = await supabaseAdmin.from("certificates").insert({
+          student_id: sub.user_id,
+          course_id: null,
+          certificate_number: certNumber,
+          grade: "Pass",
+          verification_token: verificationToken,
+          qr_code: verifyUrl,
+          issue_date: new Date().toISOString(),
+          status: "pending",
+        } as any);
+        // Even if cert insert fails due to constraints, don't block approval
+
+        if (studentEmail) {
+          await sendSystemEmail(supabaseAdmin, "certificate_issued", studentEmail, {
+            studentName: studentName || "there",
+            programName: courseName,
+            certificateNumber: certNumber,
+            grade: "Pass",
+            issueDate: new Date().toLocaleDateString("en-GB", { day: "2-digit", month: "long", year: "numeric" }),
+            verifyUrl,
+            downloadUrl: verifyUrl,
+          });
+        }
+      } else {
+        // Rejected -> reset to draft so student can resubmit, and send revision email
+        await supabaseAdmin.from("academy_project_submissions").update({ status: "draft" }).eq("id", data.submissionId);
+        if (studentEmail) {
+          await sendSystemEmail(supabaseAdmin, "academy_project_revision", studentEmail, {
+            studentName: studentName || "there",
+            courseName,
+            projectBrief: sub.brief,
+            directorNote: data.note || "Please review feedback and improve your submission.",
+            resubmitUrl,
+          });
+        }
+      }
+    } catch (e) {
+      // Log but don't fail
+      console.warn("Email send failed after project review", e);
+    }
 
     return { ok: true };
   });

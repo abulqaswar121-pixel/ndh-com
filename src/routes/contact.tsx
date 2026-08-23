@@ -26,7 +26,7 @@ export const Route = createFileRoute("/contact")({
         email: "support@ndh.com.ng",
         address: {
           "@type": "PostalAddress",
-          addressLocality: "Sokoto",
+          addressLocality: "Nigeria",
           addressCountry: "NG",
         },
         openingHoursSpecification: [{

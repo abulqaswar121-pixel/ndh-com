@@ -1,3 +1,9 @@
+// Polyfill WebSocket for Node <22 (Supabase Realtime needs it) — fixes preview SSR crash
+import ws from "ws";
+if (typeof (globalThis as any).WebSocket === "undefined") {
+  (globalThis as any).WebSocket = ws;
+}
+
 import { createStart, createMiddleware } from "@tanstack/react-start";
 
 import { renderErrorPage } from "./lib/error-page";

@@ -7,10 +7,8 @@ import { Button } from "@/components/ui/button";
 import { Plus, ListTodo, MessageSquare, Wallet, CheckCircle2, Clock } from "lucide-react";
 import { InstallAppBanner } from "@/components/site/InstallApp";
 import { SetPasswordNudge } from "@/components/auth/SetPasswordNudge";
-import {
-  verifyPaystackReference,
-  verifyMyPendingPayments,
-} from "@/lib/payments/verify.functions";
+import { Reveal, Stagger, StaggerItem } from "@/components/site/Reveal";
+import { verifyPaystackReference, verifyMyPendingPayments } from "@/lib/payments/verify.functions";
 import { toast } from "sonner";
 
 type Stats = { active: number; completed: number; totalSpent: number; unread: number };
@@ -37,8 +35,7 @@ export function ClientOverview({ onSubmit, onSeeTasks }: { onSubmit: () => void;
           if (res?.ok) {
             toast.success("Payment confirmed");
             const url = new URL(window.location.href);
-            url.searchParams.delete("reference");
-            url.searchParams.delete("trxref");
+            url.searchParams.delete("reference"); url.searchParams.delete("trxref");
             window.history.replaceState({}, "", url.toString());
             setReloadKey((k) => k + 1);
           }
@@ -46,7 +43,7 @@ export function ClientOverview({ onSubmit, onSeeTasks }: { onSubmit: () => void;
           const res: any = await verifyPending({});
           if (res?.updated > 0) setReloadKey((k) => k + 1);
         }
-      } catch {/* ignore */}
+      } catch {}
     })();
   }, [user, verifyRef, verifyPending]);
 
@@ -79,49 +76,48 @@ export function ClientOverview({ onSubmit, onSeeTasks }: { onSubmit: () => void;
     <div className="space-y-8">
       <InstallAppBanner />
       <SetPasswordNudge settingsHref="/dashboard/client?tab=settings" />
-      <div className="flex flex-wrap items-center justify-between gap-4">
-        <div>
-          <h1 className="text-3xl font-extrabold">Welcome back, {name.split(" ")[0]}.</h1>
-          <p className="mt-1 text-sm text-muted-foreground">Here's a snapshot of your projects with NDH.</p>
+      <Reveal>
+        <div className="flex flex-wrap items-center justify-between gap-4">
+          <div>
+            <h1 className="text-3xl font-extrabold tracking-tight">Welcome back, {name.split(" ")[0]}.</h1>
+            <p className="mt-1 text-sm text-muted-foreground">Here's a snapshot of your projects with NDH — official bureau.</p>
+          </div>
+          <div className="flex gap-2">
+            <Button variant="brand" onClick={onSubmit}><Plus className="h-4 w-4" /> Submit a Task</Button>
+            <Button variant="outline" onClick={onSeeTasks}><ListTodo className="h-4 w-4" /> View Tasks</Button>
+          </div>
         </div>
-        <div className="flex gap-2">
-          <Button variant="brand" onClick={onSubmit}><Plus className="h-4 w-4" /> Submit a Task</Button>
-          <Button variant="outline" onClick={onSeeTasks}><ListTodo className="h-4 w-4" /> View Tasks</Button>
-        </div>
-      </div>
+      </Reveal>
 
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <Stagger className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {cards.map((c) => (
-          <div key={c.label} className="rounded-2xl border border-border bg-card p-5">
-            <div className={`mb-3 inline-grid h-10 w-10 place-items-center rounded-xl bg-gradient-to-br ${c.color} text-white`}>
-              <c.icon className="h-5 w-5" />
+          <StaggerItem key={c.label}>
+            <div className="rounded-2xl border border-border bg-card p-5 shadow-sm transition hover:shadow-md">
+              <div className={`mb-3 inline-grid h-10 w-10 place-items-center rounded-xl bg-gradient-to-br ${c.color} text-white`}><c.icon className="h-5 w-5" /></div>
+              <div className="text-xs uppercase tracking-widest text-muted-foreground">{c.label}</div>
+              <div className="mt-1 text-2xl font-extrabold tracking-tight">{c.value}</div>
             </div>
-            <div className="text-xs uppercase tracking-widest text-muted-foreground">{c.label}</div>
-            <div className="mt-1 text-2xl font-extrabold">{c.value}</div>
-          </div>
+          </StaggerItem>
         ))}
-      </div>
+      </Stagger>
 
-      <div className="rounded-2xl border border-border bg-card">
-        <div className="border-b border-border px-5 py-4 text-sm font-semibold">Recent activity</div>
-        {activity.length === 0 ? (
-          <div className="px-5 py-10 text-center text-sm text-muted-foreground">
-            No activity yet. <button className="font-semibold text-foreground underline" onClick={onSubmit}>Submit your first task</button>.
-          </div>
-        ) : (
-          <ul className="divide-y divide-border">
-            {activity.map((a) => (
-              <li key={a.id} className="flex items-center justify-between px-5 py-3 text-sm">
-                <div>
-                  <div className="font-medium">{a.title}</div>
-                  <div className="text-xs text-muted-foreground">{new Date(a.created_at).toLocaleString()}</div>
-                </div>
-                <span className="rounded-full bg-secondary px-2.5 py-0.5 text-xs font-semibold capitalize">{a.status.replace("_", " ")}</span>
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
+      <Reveal>
+        <div className="rounded-2xl border border-border bg-card shadow-sm">
+          <div className="border-b border-border px-5 py-4 text-sm font-semibold">Recent activity</div>
+          {activity.length === 0 ? (
+            <div className="px-5 py-10 text-center text-sm text-muted-foreground">No activity yet. <button className="font-semibold text-foreground underline" onClick={onSubmit}>Submit your first task</button>.</div>
+          ) : (
+            <ul className="divide-y divide-border">
+              {activity.map((a) => (
+                <li key={a.id} className="flex items-center justify-between px-5 py-3 text-sm transition hover:bg-secondary/30">
+                  <div><div className="font-medium">{a.title}</div><div className="text-xs text-muted-foreground">{new Date(a.created_at).toLocaleString()}</div></div>
+                  <span className="rounded-full bg-secondary px-2.5 py-0.5 text-xs font-semibold capitalize">{a.status.replace("_", " ")}</span>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      </Reveal>
     </div>
   );
 }

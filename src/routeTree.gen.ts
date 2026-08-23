@@ -43,6 +43,8 @@ import { Route as TalentIndexRouteImport } from './routes/talent.index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as VerifyIdRouteImport } from './routes/verify.$id'
 import { Route as TalentSlugRouteImport } from './routes/talent.$slug'
+import { Route as InviteInvalidRouteImport } from './routes/invite.invalid'
+import { Route as InviteTokenRouteImport } from './routes/invite.$token'
 import { Route as EmailUnsubscribeRouteImport } from './routes/email/unsubscribe'
 import { Route as CaseStudiesSlugRouteImport } from './routes/case-studies.$slug'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
@@ -254,6 +256,16 @@ const VerifyIdRoute = VerifyIdRouteImport.update({
 const TalentSlugRoute = TalentSlugRouteImport.update({
   id: '/talent/$slug',
   path: '/talent/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InviteInvalidRoute = InviteInvalidRouteImport.update({
+  id: '/invite/invalid',
+  path: '/invite/invalid',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InviteTokenRoute = InviteTokenRouteImport.update({
+  id: '/invite/$token',
+  path: '/invite/$token',
   getParentRoute: () => rootRouteImport,
 } as any)
 const EmailUnsubscribeRoute = EmailUnsubscribeRouteImport.update({
@@ -543,6 +555,8 @@ export interface FileRoutesByFullPath {
   '/blog/$slug': typeof BlogSlugRoute
   '/case-studies/$slug': typeof CaseStudiesSlugRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
+  '/invite/$token': typeof InviteTokenRoute
+  '/invite/invalid': typeof InviteInvalidRoute
   '/talent/$slug': typeof TalentSlugRoute
   '/verify/$id': typeof VerifyIdRoute
   '/admin/': typeof AdminIndexRoute
@@ -621,6 +635,8 @@ export interface FileRoutesByTo {
   '/blog/$slug': typeof BlogSlugRoute
   '/case-studies/$slug': typeof CaseStudiesSlugRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
+  '/invite/$token': typeof InviteTokenRoute
+  '/invite/invalid': typeof InviteInvalidRoute
   '/talent/$slug': typeof TalentSlugRoute
   '/verify/$id': typeof VerifyIdRoute
   '/admin': typeof AdminIndexRoute
@@ -701,6 +717,8 @@ export interface FileRoutesById {
   '/blog/$slug': typeof BlogSlugRoute
   '/case-studies/$slug': typeof CaseStudiesSlugRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
+  '/invite/$token': typeof InviteTokenRoute
+  '/invite/invalid': typeof InviteInvalidRoute
   '/talent/$slug': typeof TalentSlugRoute
   '/verify/$id': typeof VerifyIdRoute
   '/admin/': typeof AdminIndexRoute
@@ -781,6 +799,8 @@ export interface FileRouteTypes {
     | '/blog/$slug'
     | '/case-studies/$slug'
     | '/email/unsubscribe'
+    | '/invite/$token'
+    | '/invite/invalid'
     | '/talent/$slug'
     | '/verify/$id'
     | '/admin/'
@@ -859,6 +879,8 @@ export interface FileRouteTypes {
     | '/blog/$slug'
     | '/case-studies/$slug'
     | '/email/unsubscribe'
+    | '/invite/$token'
+    | '/invite/invalid'
     | '/talent/$slug'
     | '/verify/$id'
     | '/admin'
@@ -938,6 +960,8 @@ export interface FileRouteTypes {
     | '/blog/$slug'
     | '/case-studies/$slug'
     | '/email/unsubscribe'
+    | '/invite/$token'
+    | '/invite/invalid'
     | '/talent/$slug'
     | '/verify/$id'
     | '/admin/'
@@ -1012,6 +1036,8 @@ export interface RootRouteChildren {
   AdminStudentAffairsRoute: typeof AdminStudentAffairsRoute
   AuthAcceptRoute: typeof AuthAcceptRoute
   EmailUnsubscribeRoute: typeof EmailUnsubscribeRoute
+  InviteTokenRoute: typeof InviteTokenRoute
+  InviteInvalidRoute: typeof InviteInvalidRoute
   TalentSlugRoute: typeof TalentSlugRoute
   AdminIndexRoute: typeof AdminIndexRoute
   TalentIndexRoute: typeof TalentIndexRoute
@@ -1265,6 +1291,20 @@ declare module '@tanstack/react-router' {
       path: '/talent/$slug'
       fullPath: '/talent/$slug'
       preLoaderRoute: typeof TalentSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/invite/invalid': {
+      id: '/invite/invalid'
+      path: '/invite/invalid'
+      fullPath: '/invite/invalid'
+      preLoaderRoute: typeof InviteInvalidRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/invite/$token': {
+      id: '/invite/$token'
+      path: '/invite/$token'
+      fullPath: '/invite/$token'
+      preLoaderRoute: typeof InviteTokenRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/email/unsubscribe': {
@@ -1709,6 +1749,8 @@ const rootRouteChildren: RootRouteChildren = {
   AdminStudentAffairsRoute: AdminStudentAffairsRoute,
   AuthAcceptRoute: AuthAcceptRoute,
   EmailUnsubscribeRoute: EmailUnsubscribeRoute,
+  InviteTokenRoute: InviteTokenRoute,
+  InviteInvalidRoute: InviteInvalidRoute,
   TalentSlugRoute: TalentSlugRoute,
   AdminIndexRoute: AdminIndexRoute,
   TalentIndexRoute: TalentIndexRoute,

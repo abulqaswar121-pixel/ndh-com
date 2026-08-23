@@ -42,7 +42,7 @@ export function BrandedLayout({
             {children}
             <Hr style={{ borderColor: "#e5e7eb", margin: "28px 0 16px" }} />
             <Text style={{ fontSize: 11, color: "#6b7280", lineHeight: "16px", margin: 0 }}>
-              Najeeb Digital Hub · Sokoto, Nigeria · {" "}
+              Najeeb Digital Hub · Nigeria · {" "}
               <Link href="mailto:support@ndh.com.ng" style={{ color: "#2E7CF6" }}>support@ndh.com.ng</Link>
               {" · "}
               <Link href="https://ndh.com.ng" style={{ color: "#2E7CF6" }}>ndh.com.ng</Link>

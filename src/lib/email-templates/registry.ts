@@ -7,6 +7,7 @@ import { PaymentReceivedTemplate } from './PaymentReceivedTemplate'
 import { TaskDeliveredTemplate } from './TaskDeliveredTemplate'
 import { EnrollmentConfirmedTemplate } from './EnrollmentConfirmedTemplate'
 import { CertificateIssuedTemplate } from './CertificateIssuedTemplate'
+import { AcademyProjectRevisionTemplate } from './AcademyProjectRevisionTemplate'
 import { template as talentInvitation } from './TalentInvitationTemplate'
 import { template as talentTaskAssigned } from './TalentTaskAssignedTemplate'
 import { template as talentRevision } from './TalentRevisionTemplate'
@@ -136,4 +137,16 @@ export const TEMPLATES: Record<string, TemplateEntry> = {
   pm_talent_submission: pmTalentSubmission,
   pm_overdue_alert: pmOverdueAlert,
   pm_weekly_report: pmWeeklyReport,
+  academy_project_revision: {
+    component: AcademyProjectRevisionTemplate,
+    subject: (d: Record<string, any>) => `Revision needed — ${d.courseName || 'your project'}`,
+    displayName: 'Academy Project — Revision Needed',
+    previewData: {
+      studentName: 'Aisha',
+      courseName: 'AI Graphic Design',
+      directorNote: 'Please improve the color contrast and add mockups.',
+      resubmitUrl: 'https://ndh.com.ng/academy/learn/ai-graphic-design',
+      projectBrief: 'Design a brand identity for a fintech startup...',
+    },
+  },
 }

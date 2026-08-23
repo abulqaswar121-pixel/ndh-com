@@ -206,7 +206,7 @@ function ApplyWizard() {
                         {COUNTRIES.map((c) => <option key={c}>{c}</option>)}
                       </select>
                     </Field>
-                    <Field label="City"><Input value={city} onChange={setCity} placeholder="Sokoto" /></Field>
+                    <Field label="City"><Input value={city} onChange={setCity} placeholder="Lagos" /></Field>
                     <Field label="Date of birth"><Input type="date" value={dob} onChange={setDob} /></Field>
                     <Field label="Gender">
                       <select value={gender} onChange={(e) => setGender(e.target.value)} className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm">

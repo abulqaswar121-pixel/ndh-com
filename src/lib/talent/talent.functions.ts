@@ -4,7 +4,7 @@ import { z } from "zod";
 
 const SITE = "https://ndh.com.ng";
 
-/** Admin/PM: invite a talent by email. Creates the auth user, talent record + sends branded email. */
+/** Admin/PM: invite a talent by email — 7-day single-use token per handoff 5B */
 export const inviteTalent = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((d: unknown) => z.object({
@@ -16,9 +16,7 @@ export const inviteTalent = createServerFn({ method: "POST" })
   }).parse(d))
   .handler(async ({ data, context }) => {
     const { userId, supabase } = context;
-    // Verify caller has staff role
-    const { data: roleRows } = await supabase
-      .from("user_roles").select("role").eq("user_id", userId);
+    const { data: roleRows } = await supabase.from("user_roles").select("role").eq("user_id", userId);
     const roles = (roleRows || []).map((r: any) => r.role);
     if (!roles.some((r: string) => ["pm","hod","admin","super_admin"].includes(r))) {
       throw new Error("Only PMs and admins can invite talents.");
@@ -27,40 +25,10 @@ export const inviteTalent = createServerFn({ method: "POST" })
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { sendSystemEmail } = await import("@/lib/email/send-system.server");
 
-    // Create or fetch user via admin invite
-    const redirectTo = `${SITE}/auth/accept`;
-    const { data: invited, error: inviteErr } = await supabaseAdmin.auth.admin.inviteUserByEmail(data.email, {
-      data: { full_name: data.full_name, role: "talent" },
-      redirectTo,
-    });
-    if (inviteErr && !/already.*registered/i.test(inviteErr.message)) {
-      throw new Error(inviteErr.message);
-    }
-    let userIdNew = invited?.user?.id;
-    if (!userIdNew) {
-      // user already exists — look up via admin
-      const { data: list } = await supabaseAdmin.auth.admin.listUsers();
-      userIdNew = list?.users.find((u) => u.email?.toLowerCase() === data.email.toLowerCase())?.id;
-    }
-    if (!userIdNew) throw new Error("Could not create or locate user");
+    const token = crypto.randomUUID().replace(/-/g, "") + crypto.randomUUID().replace(/-/g, "").slice(0,16);
+    const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString();
+    const inviteUrl = `${SITE}/invite/${token}`;
 
-    // Ensure talent role
-    await supabaseAdmin.from("user_roles")
-      .upsert({ user_id: userIdNew, role: "talent" }, { onConflict: "user_id,role", ignoreDuplicates: true });
-
-    // Create talents row (status invited until first login completes onboarding)
-    await supabaseAdmin.from("talents").upsert({
-      user_id: userIdNew,
-      department_id: data.department_id || null,
-      tier: data.tier,
-      skills: data.skills,
-      status: "invited",
-      invited_at: new Date().toISOString(),
-      invited_by: userId,
-    }, { onConflict: "user_id" });
-
-    // Record invitation metadata (token kept just for audit; magic link is the actual entry)
-    const token = crypto.randomUUID().replace(/-/g, "");
     await supabaseAdmin.from("talent_invitations").insert({
       token,
       email: data.email.toLowerCase(),
@@ -69,10 +37,9 @@ export const inviteTalent = createServerFn({ method: "POST" })
       tier: data.tier,
       skills: data.skills,
       invited_by: userId,
-      accepted_user_id: userIdNew,
+      expires_at: expiresAt,
     });
 
-    // Branded email (alongside Supabase's own magic link, which the user receives separately)
     let deptName: string | null = null;
     if (data.department_id) {
       const { data: d } = await supabaseAdmin.from("departments").select("name").eq("id", data.department_id).maybeSingle();
@@ -82,10 +49,10 @@ export const inviteTalent = createServerFn({ method: "POST" })
       fullName: data.full_name,
       department: deptName,
       tier: data.tier,
-      inviteUrl: redirectTo,
+      inviteUrl,
     });
 
-    return { ok: true, userId: userIdNew };
+    return { ok: true, token, expiresAt };
   });
 
 /** Talent: accept or decline a task assignment */
