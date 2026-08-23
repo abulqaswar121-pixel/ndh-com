@@ -1,170 +1,141 @@
-# Simplify portals + AI-run Academy (revised)
+# Full pre-launch review — everything currently wrong
 
-The old academy assumed multi-month diploma cohorts with instructors and modules. The new academy is short, self-serve AI courses (curated YouTube videos + your notes + AI-generated Exam + AI-generated Project + your signed certificate). Most staff dashboards built for the old model become dead weight.
-
-This plan aligns every portal with the new reality: **signup → pick course → pay → watch → AI Exam → AI Project → Director signs → certificate emailed**. Only two staff roles run the platform: Super Admin (you) and Academy Director. PMs handle Services only.
+I went through the pushed code, the build, the linter, the routes, the copy, and the live database. Here is everything I found, worst first. Nothing below is a guess — each item was verified.
 
 ---
 
-## Part 1 — How you create a course (Director dashboard)
+## BLOCKERS — the app will not build or work as-is
 
-One **Course Editor** screen, five tabs, no code — writes to existing tables:
+### 1. The build is failing (24 TypeScript errors)
+Three files reference things that do not exist:
 
-- **Basics** — title, short description, cover image, Published/Draft toggle.
-- **Pricing** — one row per region (Nigeria ₦, Africa $, Global $). New default range is a **service fee** (AI grading + certificate), not a video fee:
-  - Nigeria ₦4,900–₦9,900 · Africa $5–$12 · Global $9–$19. You can still set any number.
-- **Lessons** — add lessons: title + YouTube URL + optional notes. Drag to reorder.
-- **Learning Objectives** *(new, replaces manual quiz building)* — 4–8 short bullets describing what the student should master. This is what the AI reads to generate a fresh exam per student.
-- **Project theme** *(new, replaces one fixed brief)* — a short theme (e.g. "Build a marketing landing page using AI"). AI generates a unique brief per student from this theme.
+- `src/lib/hod/hod.functions.ts` and `src/lib/invites/invite.functions.ts` query a table called `hod_invitations` — **that table does not exist in the database.**
+- `src/lib/invites/invite.functions.ts` line 13 imports `default` from the types file, which has no default export.
+- `src/components/dashboard/director/InviteHodDialog.tsx` reads `r.action_link`, but the function returns `inviteUrl`.
+- `src/components/dashboard/student/Overview.tsx` imports `ShieldCheck` and then declares its own `ShieldCheck` — a name collision.
 
----
+### 2. Two migrations were written but never applied
+`supabase/migrations/20260812160000_invite_7day_hod.sql` and `20260812170000_seed_services_talents.sql` exist as files only. Confirmed against the live database: `hod_invitations` table = missing, `validate_invite_token()` function = missing. So **the whole invite-only signup flow (PM / Talent / Director) is dead at runtime**, not just at compile time.
 
-## Part 2 — Student journey (linear, one page per course)
+### 3. The invite migration has a serious security hole
+It creates read policies like:
 
-**New account flow:** signup → auto-assigned `student` role → land on **"Choose your course"** catalog (region-priced) → pick one → pay → immediately enrolled → taken to that course's learning page. No detour through a dashboard shell.
-
-**Course page** — one clean vertical layout, each step unlocks the next:
-1. **Lessons** — each YouTube video ticks when finished (`ended` event or ≥90% for long videos). Progress bar shows watched ÷ total.
-2. **Exam** — locked until every lesson is watched.
-3. **Project** — locked until Exam is passed.
-4. **Certificate** — issued after Director signs.
-
-Progress stored in a new `academy_lesson_progress` table.
-
----
-
-## Part 3 — AI-generated Exam (unique per student)
-
-- **Trigger:** student clicks "Start Exam" → server function calls Lovable AI (`google/gemini-3.6-flash`) with the course's learning objectives + lesson notes → AI returns a fresh exam.
-- **Structure** (kept the same across students, only the content varies):
-  - 5 multiple-choice (auto-graded)
-  - 3 short-answer, 1–3 sentences (AI-graded against objectives)
-  - 1 short essay, ~150 words (AI-graded against objectives)
-- **Timing:** 45-minute countdown, single sitting, autosaves.
-- **Attempts:** 1 per day, max 3 total. Pass = 70%.
-- **Anti-cheat:** because each paper is unique, sharing answers is useless.
-- Stored in `academy_exam_attempts` with the generated paper + answers + AI scores.
-
----
-
-## Part 4 — AI-generated Project brief + AI grading
-
-- On unlock, student clicks "Get my brief" → AI generates a unique brief from the theme you set → student sees it. Same student re-visits = same brief (cached).
-- **Submission:** text write-up + optional link + optional file upload.
-- **Grading:** AI (`google/gemini-3.6-flash`) with structured output → `{ score, passed, strengths[], gaps[], verdict }`. Cached per submission — never re-graded (cost guard). Rate limit: 2 project submissions/day per student.
-- If AI passes it, a certificate auto-drafts with status `pending_countersign` and student sees "Certificate pending Director signature" — no dead end.
-
----
-
-## Part 5 — Director certification queue
-
-**Director dashboard gets three tabs:**
-
-1. **Courses** — the Course Editor above.
-2. **Progress** — live table per course: student name, % watched, exam score, project status, certificate status.
-3. **Certificates queue** — one-line rows: learner, course, exam %, AI project score + brief feedback, link to their submission. Buttons: **Approve & sign** (signs + emails via existing `CertificateIssuedTemplate`) · **Reject with note** (kicks project back with your feedback, resets project only).
-
-Founder countersign stays available as an optional extra — Director signature is final for AI Schools. **PMs are blocked** from the queue and its RPCs via RLS + UI.
-
----
-
-## Part 6 — Portal access & role granting (the missing piece)
-
-| Role | How they get in |
-|---|---|
-| Student | Public `/signup` → auto `student` role → catalog → pay → in. No approval. |
-| Client | Public `/signup?as=client` → auto `client` role → client dashboard. No approval. |
-| Talent | Applies via `/talent-application` → Super Admin reviews → clicks **Invite as Talent** → email invite → signup through link → `talent` role granted. |
-| PM | Super Admin → **Invite PM** → email invite → signup through link → `pm` role. No public path. |
-| Academy Director | Super Admin → **Grant Director** (picks an existing user) → done. No public path. |
-| Super Admin | Fixed/seeded. No UI to create another. |
-
-**Invite tokens:** existing `pm_invitations` / `talent_invitations` tables already support this; extend the same pattern for Director grants. Every token single-use, 7-day expiry, invalid-token page.
-
-**User Management screen (Super Admin):** search any user → view roles → grant/revoke → audit log entry.
-
----
-
-## Part 7 — Collapse redundant staff portals
-
-**Keep:** Super Admin · Academy Director · PM · Talent · Client · Student.
-**Retire (redirect to keep old links working):**
-- `/dashboard/hod` → `/dashboard/academy-director`
-- `/dashboard/registrar` → `/dashboard/academy-director`
-- `/dashboard/student-affairs` → `/dashboard/academy-director`
-- `/dashboard/instructor` → `/dashboard/academy-director`
-- `/dashboard/finance` → `/dashboard/super-admin?tab=finance`
-
-Roles stay in the DB enum (no destructive migration); the UI just stops surfacing them. Sidebar links to retired dashboards are removed.
-
-**Student dashboard simplified:** My Courses · Certificates · Profile. Student ID card + Transcripts removed (old diploma leftovers).
-
----
-
-## Portals after the change
-
-```text
-Super Admin   → Bureau · Academy · CMS · Users & Invites · Finance · Settings
-Director      → Courses · Progress · Certificates queue · Pricing
-PM            → Tasks · Quotes · Talent · Messages
-Talent        → My Tasks · Earnings · Portfolio · Settings
-Client        → Submit · My Tasks · Billing · Messages
-Student       → My Courses · Certificates · Profile
+```sql
+CREATE POLICY ... FOR SELECT TO anon, authenticated USING (true);
 ```
 
----
+on `pm_invitations`, `talent_invitations`, and `hod_invitations`. That lets **any anonymous visitor list every invite token and email address** — meaning anyone on the internet could read a pending Director token and sign themselves up as staff. This must not be applied as written. Token validation belongs in the `SECURITY DEFINER` function only, with no anon SELECT on the tables.
 
-## Technical section
+### 4. The Academy has no content — students would pay for nothing
+Live database counts:
 
-### New tables (one migration, with GRANTs + RLS)
-- `academy_lesson_progress(user_id, lesson_id, watched_at, PK(user_id, lesson_id))` — student writes/reads own; Director reads all.
-- `academy_exam_attempts(id, user_id, course_id, paper jsonb, answers jsonb, mcq_score, ai_short_score, ai_essay_score, total_score, passed, started_at, submitted_at, created_at)` — student reads/writes own; Director reads all.
-- `academy_project_submissions(id, user_id, course_id, brief text, content, file_url, ai_score, ai_feedback jsonb, ai_verdict, status, reviewed_by, reviewed_at, created_at, updated_at)` — student reads/writes own; Director reads all + updates status. `status` ∈ `submitted | approved | rejected`.
-- Extend `academy_courses` with `learning_objectives text[]` and `project_theme text`.
-- Extend `certificates` with `status` (`pending_countersign | director_signed | founder_signed | issued`) — reuses existing `director_signed_*` / `founder_signed_*` columns.
+| Thing | Count | Problem |
+|---|---|---|
+| Academy courses | 23 | Site says "40" everywhere |
+| **Academy lessons** | **0** | No videos at all |
+| Courses with learning objectives | 0 of 23 | AI exam has nothing to generate from |
+| Courses with a project theme | 0 of 23 | AI project brief cannot be generated |
+| Pricing rows | 15 | 8 courses have no price |
+| Certificates issued | 0 | Untested end-to-end |
 
-### New server functions
-`src/lib/academy/learning.functions.ts`:
-- `markLessonWatched({ lesson_id })`
-- `startExam({ course_id })` — AI-generates a paper from `learning_objectives` + lesson notes, stores it, returns the paper (no correct answers).
-- `submitExam({ attempt_id, answers })` — auto-grades MCQ, AI-grades short-answer + essay against objectives, computes total.
-- `getMyProjectBrief({ course_id })` — returns cached brief or generates one from `project_theme`.
-- `submitProject({ course_id, content, file_url? })` — AI-grades; on `passed` upserts `pending_countersign` certificate.
+A student can sign up, pay, and land on an empty course page. The AI exam and AI project will fail or produce nonsense because they read objectives and themes that are all null.
 
-`src/lib/academy/director-queue.functions.ts`:
-- `certificateQueue()` · `directorApprove({ certificate_id })` (wraps existing `signCertificate`) · `directorReject({ submission_id, note })` · `courseProgress({ course_id })`.
-
-`src/lib/admin/users.functions.ts` (extend existing admin surface):
-- `grantRole({ user_id, role })` · `revokeRole({ user_id, role })` · `searchUsers({ q })` — Super Admin only, writes to audit log.
-
-### AI wiring
-- Use existing `src/lib/ai-gateway.server.ts` + `google/gemini-3.6-flash`.
-- Structured output via `Output.object` with **small, unconstrained** schemas per `ai-sdk-agent-patterns`. Enforce lengths/limits in the prompt + clamp in code, not in the schema.
-- Wrap every generation in `NoObjectGeneratedError.isInstance` fallback that parses `error.text`.
-- Rate limits enforced in server functions (per-user, per-day).
-
-### Route changes
-- Convert `hod.tsx`, `registrar.tsx`, `student-affairs.tsx`, `instructor.tsx`, `finance.tsx` under `_authenticated/dashboard/` to `beforeLoad → redirect` files (same pattern as `admin.pm.tsx`).
-- Update `signup.tsx` post-auth redirect: `student` → `/academy` (catalog) instead of dashboard.
-- Rewrite `student.course.$id.tsx` as the new linear learning page.
-- Add `admin.users.tsx` in Super Admin for user + role management.
-
-### UI polish
-- Course Editor: `src/components/dashboard/director/CourseEditor.tsx` — 5 tabs (Basics · Pricing · Lessons · Learning Objectives · Project Theme), drag-reorder lessons, "Preview as student" button.
-- Sidebar: `src/components/dashboard/Sidebar.tsx` — remove links to retired dashboards.
-- PM boundary audit: `pm.functions.ts` + RLS confirm PMs cannot read `certificates`, `academy_exam_attempts`, `academy_project_submissions`, `enrollments`, or write to `academy_courses`.
-
-### Emails
-- Reuse `CertificateIssuedTemplate` on approve.
-- New "Project needs revision" transactional template for rejects.
+### 5. Two competing pricing systems
+Prices live in **both** `academy_courses.region_prices` (jsonb) and the separate `academy_pricing` table (15 rows). Different parts of the app read different ones — `academy.tsx` and `CourseEditor.tsx` use `region_prices`; `index.tsx` and `DirectorShell.tsx` use `academy_pricing`. Editing a price in the Director dashboard will not change what some pages display. One of the two must win.
 
 ---
 
-## Defaults locked
+## TRUST & HONESTY — the biggest risk to being believed worldwide
 
-- Exam: 5 MCQ + 3 short-answer + 1 essay · **45 min** · pass **70%** · **3 attempts** (1/day).
-- Project: text + optional link + optional file · 2 submissions/day · AI-graded once per submission.
-- Founder countersign: **optional** — Director signature is final.
-- Student portal: **drop** Student ID card + Transcripts.
-- Default pricing band: ₦4,900–₦9,900 / $5–$12 / $9–$19 (fully editable).
-- Signup redirect: students → `/academy` catalog; clients → client dashboard.
+You asked for content honesty earlier and one commit removed the fabricated data. **The pushed seed migration puts it straight back**, and some is already live in the database.
+
+### 6. Fabricated statistics on the homepage (live right now)
+`homepage_stats` currently reads: **120 in-house talents · 800+ projects delivered · 15 countries served · 98% client satisfaction.**
+
+Reality in the same database: **1 talent record · 6 tasks total · 5 enrollments · 0 reviews · 17 user profiles.**
+
+If a serious international client verifies any of that, the whole site loses credibility instantly. The new seed file would have made it worse (1,247 tasks, 86 talents) and its own comment says "makes site look like 10M website" — that comment ships in the repo.
+
+### 7. Invented case studies and clients (12 published, live)
+Published client names include **Elva Bank, Kudra Financial, FlowLedger, Renta Africa, MaraStores Lagos, Sokoto AgriTech** and people like "Chinedu I." / "Tunde B." — none are real customers. The new seed file also adds a case study for a client company literally named **"PayStack Clone"**, which uses another company's trademark. Publishing invented case studies with named clients and hard metrics ("40% conversion lift", "200k views") is the single fastest way to get reported and delisted.
+
+### 8. Team page mixes real and invented people
+9 team members are published. Some are clearly your real team; others ("Chinwe Okafor", "Grace Adeyemi", "Aisha Muhammad") appear to be filler. Mixed real/fake bios are worse than a small honest team.
+
+### 9. "No Coming Soon" is written into the user-facing copy
+The phrase "No Coming Soon" / "no coming soon" appears **13 times in visible UI text** — the academy hero, the homepage badge, the student dashboard, the browse page, even a page title:
+
+> "NDH Academy — 6 AI Schools, 40 AI Courses, No Coming Soon"
+
+That was an internal instruction to me, not marketing copy. To a visitor it is meaningless and reads amateur. Same for "Curated from YouTube, implement tomorrow" — telling buyers the paid course videos are other people's YouTube content undercuts the price.
+
+### 10. "40 courses" claim is false and hardcoded in 9 files
+`academy.tsx`, `index.tsx`, `about.tsx`, `Navbar.tsx`, `Sidebar.tsx`, `AuthShell.tsx`, `start-project.tsx`, `Overview.tsx`, `BrowseCourses.tsx` all say 40. The database has 23. This number should be read from the database, never typed into copy.
+
+---
+
+## SECURITY — findings from the database scan
+
+### 11. Anyone can sign up as super_admin (critical)
+`handle_new_user()` takes the role straight from `raw_user_meta_data->>'role'` at signup. A visitor can craft a signup request with `role: "super_admin"` and get full admin access. New signups must always be forced to `client`/`student`; role grants only through admin-protected paths.
+
+### 12. Public talent profiles leak bank details, email and phone
+The `talents` "Anyone can view public talent profiles" policy returns **all columns including `bank_details` and `phone`** to anonymous visitors. The `profiles` public-talent policy leaks `email` and `phone` the same way. This directly contradicts the whole anonymous-talent design and is a data-protection problem.
+
+### 13. Paid lesson content is free to any signed-in user
+`academy_lessons` read policy is `USING (true)` — anyone who registers a free account can read every `video_url` and note for every paid course without enrolling. The paywall is cosmetic.
+
+### 14. Quiz answer keys are readable by anyone with an account
+`academy_quiz_questions` read policy is `USING (true)`, exposing `correct_index`. Answers can be harvested before the exam.
+
+### 15. Database linter: 18 warnings
+4 functions without a fixed `search_path`, 1 `SECURITY DEFINER` function callable by anonymous users, 13 callable by any signed-in user. Each needs either an internal permission check or `EXECUTE` revoked.
+
+---
+
+## PAGES, ROUTES & SEO
+
+### 16. The blog is switched off but still advertised
+`src/routes/blog.tsx` redirects to `/` — yet there are **8 published blog posts** in the database, `blog.$slug.tsx` still exists, and the sitemap lists `/blog` plus every post URL. Google will crawl a sitemap of redirects and dead ends. You asked for the blog to come back; right now it is off.
+
+### 17. Sitemap advertises redirect-only URLs
+`/academy/certificate-programs`, `/academy/diploma-programs`, `/academy/professional-programs` are all redirect stubs to `/academy`, but all three are listed as priority 0.8 pages. Search engines treat a sitemap full of redirects as a quality signal against you.
+
+### 18. Case studies page says "coming soon" while 12 are published
+The page renders an empty state; the database has 12 rows. Either the query is filtered wrong or the page was never re-enabled. (Given item 7, the right fix is to unpublish the fake ones — not to switch the page on.)
+
+### 19. Seven routes have no page metadata
+No title / description / social preview on: `academy.course.$slug.tsx`, `invite.$token.tsx`, `invite.invalid.tsx`, `_authenticated/academy.apply.$slug.tsx`, `_authenticated/academy.learn.$slug.tsx`, `_authenticated/portfolio.tsx`, `_authenticated/route.tsx`. The course detail page is the one that matters most — it is the page people will share.
+
+### 20. Nine dead dashboard routes still shipping
+`hod.tsx`, `registrar.tsx`, `student-affairs.tsx`, `instructor.tsx`, `finance.tsx` under `_authenticated/dashboard/`, plus `client.tsx`, `student.tsx`, `instructor.tsx` at the top level. The plan was to collapse these into Super Admin + Director; they are still there as real or half-real pages.
+
+---
+
+## CODE QUALITY & STYLING
+
+### 21. 8,554 lint problems
+About 8,200 are pure formatting (Prettier) and can be fixed automatically in one pass. The real ones underneath:
+- **317 uses of `any`** — type safety is effectively off in large parts of the app.
+- **15 React hook dependency warnings** — these are the classic cause of stale data and effects that fire at the wrong time.
+- **7 empty `catch {}` blocks** — errors silently swallowed, so failures look like "nothing happened".
+- The ESLint config still references a **Next.js rule** (`@next/next/no-img-element`) that does not exist in this project, so the config itself errors.
+
+### 22. 217 hardcoded colours bypassing the design system
+`text-white`, `bg-white`, `bg-[#...]`, and retired `teal-`/`indigo-`/`green-` utilities. Worst offenders: `Sidebar.tsx` (22), `academy.tsx` (21), `index.tsx` (19), `AuthShell.tsx` (16), `InstallApp.tsx` (15). This is why the academy page still shows the old teal/dark treatment while the rest of the site is white + Electric Blue — the two designs are visibly fighting each other.
+
+### 23. Payouts are not actually wired
+`src/lib/finance/payroll.functions.ts` line 145: `// TODO: live Paystack Transfers flow`. Talent earnings can be recorded but not paid out. If talents can see an "Earnings" screen, that promise is currently unbacked.
+
+---
+
+## Suggested order to fix
+
+1. **Make it build** — items 1, 2 (rewritten safely per item 3).
+2. **Stop the false claims** — items 6, 7, 8, 9, 10. This is a content/database cleanup, fast, and it is what "trusted worldwide" actually hinges on.
+3. **Close the security holes** — items 11, 12, 13, 14, 15.
+4. **Fill the Academy** — items 4, 5. Without lessons, objectives and themes, the product does not exist yet.
+5. **Fix routes and SEO** — items 16–20.
+6. **Polish** — items 21, 22, 23.
+
+Approve this and I will start at step 1 and work down, reporting at the end of each numbered step.
